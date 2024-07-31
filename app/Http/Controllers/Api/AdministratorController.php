@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Administrator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
 class AdministratorController extends Controller
 {
     /**
@@ -12,7 +13,8 @@ class AdministratorController extends Controller
      */
     public function index()
     {
-        //
+        $administrators = Administrator::all();
+        return response()->json($administrators);
     }
 
     /**
@@ -28,15 +30,27 @@ class AdministratorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+
+        $request->validate([
+            'type_document_id' => 'required|max:10',
+            'document_number' => 'required|max:10',
+            'email' => 'required|max:255|unique',
+            'password' => 'required|string|min:8'
+        ]);
+
+        $administrator = Administrator::create($request->all());
+
+        return response()->json($administrator);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Administrator $administrator)
+    public function show($id)
     {
-        //
+        $administrator = Administrator::findOrFail($id);
+        return response()->json($administrator);
     }
 
     /**
@@ -52,7 +66,16 @@ class AdministratorController extends Controller
      */
     public function update(Request $request, Administrator $administrator)
     {
-        //
+        $request->validate([
+            'type_document_id' => 'required|max:10',
+            'document_number' => 'required|max:10',
+            'email' => 'required|max:255|unique',
+            'password' => 'required|string|min:8'
+        ]);
+
+        $administrator->update($request->all());
+
+        return response()->json($administrator);
     }
 
     /**
@@ -60,6 +83,7 @@ class AdministratorController extends Controller
      */
     public function destroy(Administrator $administrator)
     {
-        //
+        $administrator->delete();
+        return response()->json($administrator);
     }
 }

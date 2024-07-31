@@ -13,7 +13,8 @@ class TypeDocumentController extends Controller
      */
     public function index()
     {
-        //
+        $typeDocuments=TypeDocument::all();
+        return response()->json($typeDocuments);
     }
 
     /**
@@ -29,15 +30,23 @@ class TypeDocumentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'code' => 'required|max:10',
+            'description' => 'required|string|max:255',
+        ]);
+
+        $typeDocument = TypeDocument::create($request->all());
+
+        return response()->json($typeDocument);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(TypeDocument $typeDocument)
+    public function show($id)
     {
-        //
+        $typeDocument = TypeDocument::findOrFail($id);
+        return response()->json($typeDocument);
     }
 
     /**
@@ -53,7 +62,14 @@ class TypeDocumentController extends Controller
      */
     public function update(Request $request, TypeDocument $typeDocument)
     {
-        //
+        $request->validate([
+            'code' => 'required|max:10',
+            'description' => 'required|string|max:255',
+        ]);
+
+        $typeDocument->update($request->all());
+
+        return response()->json($typeDocument);
     }
 
     /**
@@ -61,6 +77,7 @@ class TypeDocumentController extends Controller
      */
     public function destroy(TypeDocument $typeDocument)
     {
-        //
+        $typeDocument->delete();
+        return response()->json($typeDocument);
     }
 }
