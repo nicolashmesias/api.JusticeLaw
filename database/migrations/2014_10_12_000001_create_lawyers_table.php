@@ -14,9 +14,10 @@ return new class extends Migration
     {
         Schema::create('lawyers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('last_name');
-            $table->enum('document_type',[Lawyer::REGISTRO_CIVIL_DE_NACIMIENTO,Lawyer::TARJETA_DE_IDENTIDAD,Lawyer::CEDULA_CIUDADANIA,Lawyer::TARJETA_EXTRANJERIA,Lawyer::NIT,Lawyer::PASAPORTE])->default(Lawyer::CEDULA_CIUDADANIA)->nullable();
+            $table->string('names');
+            $table->string('last_names');
+            $table->unsignedBigInteger('type_document_id');
+            $table->foreign('type_document_id')->references('id')->on('type_documents');
             $table->string('document_number');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('lawyer_profiles', function (Blueprint $table) {
             $table->id();
-            $table->string('phone');
+
+            $table->foreign('lawyer_id')
+            ->references('id')
+            ->on('lawyer')->onDelete('cascade');
+
+            $table->string('biography');
+            $table->string('profile_photo');
+
             $table->timestamps();
         });
     }
