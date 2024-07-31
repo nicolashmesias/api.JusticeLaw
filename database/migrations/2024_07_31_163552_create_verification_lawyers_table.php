@@ -27,7 +27,6 @@ return new class extends Migration
             $table->unsignedBigInteger('lawyer_id');
             $table->foreign('lawyer_id')->references('id')->on('lawyer');
 
-            $table->enum(['']);
             $table->timestamps();
         });
     }
