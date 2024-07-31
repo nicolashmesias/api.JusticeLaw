@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\PerfilUsuario;
+use App\Models\Information;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
-class PerfilUsuarioController extends Controller
+class InformationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +34,7 @@ class PerfilUsuarioController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PerfilUsuario $perfilUsuario)
+    public function show(Information $information)
     {
         //
     }
@@ -43,7 +42,7 @@ class PerfilUsuarioController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(PerfilUsuario $perfilUsuario)
+    public function edit(Information $information)
     {
         //
     }
@@ -51,7 +50,7 @@ class PerfilUsuarioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, PerfilUsuario $perfilUsuario)
+    public function update(Request $request, Information $information)
     {
         //
     }
@@ -59,7 +58,7 @@ class PerfilUsuarioController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PerfilUsuario $perfilUsuario)
+    public function destroy(Information $information)
     {
         //
     }
