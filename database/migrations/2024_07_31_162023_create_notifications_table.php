@@ -17,7 +17,6 @@ return new class extends Migration
 
             $table->string('statement');
             $table->string('content');
-            $table->string('status');
             $table->date('date');
             $table->enum('status', [Notification::READ, Notification::UNREAD])->default(Notification::UNREAD)->nullable();
 

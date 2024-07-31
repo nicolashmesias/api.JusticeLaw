@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('overhaul__reviews', function (Blueprint $table) {
+        Schema::create('area_lawyers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('admin_id')->nullable();
+            $table->unsignedBigInteger('area_id')->nullable();
+            $table->unsignedBigInteger('lawyer_id')->nullable();
 
-            $table->foreign('review_id')
-            ->references('id')
-            ->on('reviews')->onDelete('cascade');
 
-            $table->foreign('admin_id')
+
+            $table->foreign('area_id')
             ->references('id')
-            ->on('admins')->onDelete('cascade');
+            ->on('areas')->onDelete('cascade');
+
+            $table->foreign('lawyer_id')
+            ->references('id')
+            ->on('lawyers')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('overhaul__reviews');
+        Schema::dropIfExists('area_lawyers');
     }
 };
