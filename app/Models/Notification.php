@@ -17,4 +17,7 @@ class Notification extends Model
       'date',
       'lawyer_id',
 ];
+
+const READ = 1 ;
+const UNREAD = 2;
 }
