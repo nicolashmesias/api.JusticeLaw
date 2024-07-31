@@ -38,7 +38,3 @@ Route::get('administrators', [AdministratorController::class,'index'])->name('ap
  Route::delete('typeDocuments/{typeDocument}', [TypeDocumentController::class,'destroy'])->name('api.v1.typeDocuments.delete');
 
 
-Route::get('dates',[AppointmentController::class,'index'])->name('api.v1.appointment.index');
-Route::post('dates',[AppointmentController::class,'store'])->name('api.v1.appointment.store');
-Route::get('dates/{appointment}',[AppointmentController::class,'show'])->name('api.v1.appointment.show');
-Route::put('dates/{appointment}',[AppointmentController::class,'update'])->name('api.v1.appointment.update');
