@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Models\Information;
+use App\Models\LawyerProfile;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-class InformationController extends Controller
+
+class LawyerProfileController extends Controller
 {
-    /**
+     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $informations=Information::all();
-        return response()->json($informations);
+        //
     }
 
     /**
@@ -35,7 +34,7 @@ class InformationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Information $information)
+    public function show(LawyerProfile $lawyerProfile)
     {
         //
     }
@@ -43,7 +42,7 @@ class InformationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Information $information)
+    public function edit(LawyerProfile $lawyerProfile)
     {
         //
     }
@@ -51,7 +50,7 @@ class InformationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Information $information)
+    public function update(Request $request, LawyerProfile $lawyerProfile)
     {
         //
     }
@@ -59,7 +58,7 @@ class InformationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Information $information)
+    public function destroy(LawyerProfile $lawyerProfile)
     {
         //
     }
