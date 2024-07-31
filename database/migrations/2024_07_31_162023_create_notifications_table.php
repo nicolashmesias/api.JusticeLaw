@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
 
-            $table->string('enunciado');
-            $table->string('contenido');
+            $table->string('statement');
+            $table->string('content');
             $table->string('status');
             $table->date('date');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('lawyer_id')->nullable();
-            $table->enum('status', ['read', 'unread'])->default('pending');
+            $table->enum('status', ['read', 'unread'])->default('pending')->nullable();
 
 
             $table->foreign('user_id')
@@ -31,7 +32,7 @@ return new class extends Migration
             $table->foreign('lawyer_id')
             ->references('id')
             ->on('lawyers')->onDelete('cascade');
-            
+
             $table->timestamps();
         });
     }
