@@ -23,6 +23,14 @@ class User extends Authenticatable
         'password',
     ];
 
+
+    const REGISTRO_CIVIL_DE_NACIMIENTO = 1;
+    const TARJETA_DE_IDENTIDAD = 2;
+    const TARJETA_EXTRANJERIA = 3;
+    const CEDULA_CIUDADANIA = 4;
+    const NIT = 5;
+    const PASAPORTE = 6;
+
     /**
      * The attributes that should be hidden for serialization.
      *
