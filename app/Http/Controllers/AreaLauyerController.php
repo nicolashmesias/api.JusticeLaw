@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Models\PerfilUsuario;
+use App\Models\Area_Lauyer;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class PerfilUsuarioController extends Controller
+class AreaLauyerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +34,7 @@ class PerfilUsuarioController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(PerfilUsuario $perfilUsuario)
+    public function show(Area_Lauyer $area_Lauyer)
     {
         //
     }
@@ -43,7 +42,7 @@ class PerfilUsuarioController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(PerfilUsuario $perfilUsuario)
+    public function edit(Area_Lauyer $area_Lauyer)
     {
         //
     }
@@ -51,7 +50,7 @@ class PerfilUsuarioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, PerfilUsuario $perfilUsuario)
+    public function update(Request $request, Area_Lauyer $area_Lauyer)
     {
         //
     }
@@ -59,7 +58,7 @@ class PerfilUsuarioController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PerfilUsuario $perfilUsuario)
+    public function destroy(Area_Lauyer $area_Lauyer)
     {
         //
     }
