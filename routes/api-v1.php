@@ -2,10 +2,12 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AppointmentController;
 
 use App\Http\Controllers\Api\AdministratorController;
 use App\Http\Controllers\Api\TypeDocumentController;
+use App\Http\Controllers\Api\DateController;
+use Symfony\Component\VarDumper\Caster\DateCaster;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -37,4 +39,8 @@ Route::get('administrators', [AdministratorController::class,'index'])->name('ap
  Route::put('typeDocuments/{typeDocument}', [TypeDocumentController::class,'update'])->name('api.v1.typeDocuments.update');
  Route::delete('typeDocuments/{typeDocument}', [TypeDocumentController::class,'destroy'])->name('api.v1.typeDocuments.delete');
 
-
+Route::get('dates',[DateController::class,'index'])->name('api.v1.dates.index');
+Route::post('dates',[DateController::class,'store'])->name('api.v1.dates.show');
+Route::get('dates',[DateController::class,'show'])->name('api.v1.dates.show');
+Route::put('dates',[DateController::class,'update'])->name('api.v1.dates.update');
+Route::delete('dates',[DateController::class,'delete'])->name('api.v1.dates.delete');
