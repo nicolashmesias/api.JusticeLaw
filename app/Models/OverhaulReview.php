@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Overhaul_Review extends Model
+class OverhaulReview extends Model
 {
     use HasFactory;
 }

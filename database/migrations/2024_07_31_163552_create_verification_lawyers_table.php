@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreign('city_id')->references('id')->on('cities');
 
             $table->unsignedBigInteger('lawyer_id');
-            $table->foreign('lawyer_id')->references('id')->on('lawyer');
+            $table->foreign('lawyer_id')->references('id')->on('lawyers');
 
             $table->timestamps();
         });
