@@ -7,12 +7,9 @@ use App\Http\Controllers\Api\AdministratorController;
 use App\Http\Controllers\Api\TypeDocumentController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\DateController;
-<<<<<<< HEAD
 use App\Http\Controllers\Api\ConsultingController;
 use App\Models\Consulting;
 use Symfony\Component\VarDumper\Caster\DateCaster;
-=======
->>>>>>> b9c31b6c344571bd91147aacb4c88489ecfafb9b
 
 /*
 |--------------------------------------------------------------------------
