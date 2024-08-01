@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Overhaul_Review;
+use App\Models\OverhaulReview;
 use Illuminate\Http\Request;
 
 class OverhaulReviewController extends Controller
@@ -34,7 +34,7 @@ class OverhaulReviewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Overhaul_Review $overhaul_Review)
+    public function show(OverhaulReview $overhaulReview)
     {
         //
     }
@@ -42,7 +42,7 @@ class OverhaulReviewController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Overhaul_Review $overhaul_Review)
+    public function edit(OverhaulReview $overhaulReview)
     {
         //
     }
@@ -50,7 +50,7 @@ class OverhaulReviewController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Overhaul_Review $overhaul_Review)
+    public function update(Request $request, OverhaulReview $overhaulReview)
     {
         //
     }
@@ -58,7 +58,7 @@ class OverhaulReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Overhaul_Review $overhaul_Review)
+    public function destroy(OverhaulReview $overhaulReview)
     {
         //
     }
