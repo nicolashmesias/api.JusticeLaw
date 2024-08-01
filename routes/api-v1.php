@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AdministratorController;
 use App\Http\Controllers\Api\TypeDocumentController;
 use App\Http\Controllers\Api\DateController;
+use App\Http\Controllers\Api\ConsultingController;
+use App\Models\Consulting;
 use Symfony\Component\VarDumper\Caster\DateCaster;
 
 /*
@@ -41,6 +43,13 @@ Route::get('administrators', [AdministratorController::class,'index'])->name('ap
 
 Route::get('dates',[DateController::class,'index'])->name('api.v1.dates.index');
 Route::post('dates',[DateController::class,'store'])->name('api.v1.dates.show');
-Route::get('dates',[DateController::class,'show'])->name('api.v1.dates.show');
-Route::put('dates',[DateController::class,'update'])->name('api.v1.dates.update');
-Route::delete('dates',[DateController::class,'delete'])->name('api.v1.dates.delete');
+Route::get('dates/{date}',[DateController::class,'show'])->name('api.v1.dates.show');
+Route::put('dates/{date}',[DateController::class,'update'])->name('api.v1.dates.update');
+Route::delete('dates/{date}',[DateController::class,'delete'])->name('api.v1.dates.delete');
+
+
+Route::get('consultings',[ConsultingController::class,'index'])->name('api.v1.consultings.index');
+Route::post('consultings',[ConsultingController::class,'store'])->name('api.v1.consultings.store');
+Route::get('consultings/{consulting}',[ConsultingController::class,'show'])->name('api.v1.consultings.show');
+Route::put('consultings/{consulting}',[ConsultingController::class,'update'])->name('api.v1.consultings.update');
+Route::delete('consultings/{consulting}',[ConsultingController::class,'delete'])->name('api.v1.consultings.delete');
