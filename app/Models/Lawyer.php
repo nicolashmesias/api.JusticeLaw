@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\Lawyer as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Lawyer extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -19,13 +19,17 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'last_name',
-        'type_document_id',
-        'document_number',
         'email',
         'password',
     ];
 
+
+    const REGISTRO_CIVIL_DE_NACIMIENTO = 1;
+    const TARJETA_DE_IDENTIDAD = 2;
+    const TARJETA_EXTRANJERIA = 3;
+    const CEDULA_CIUDADANIA = 4;
+    const NIT = 5;
+    const PASAPORTE = 6;
 
     /**
      * The attributes that should be hidden for serialization.
@@ -45,12 +49,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public function typeDocument(){
-        return $this->belongsTo(TypeDocument::class);
-    }
-
-    public function userProfile(){
-        return $this->hasOne(UserProfile::class);
-    }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OverhaulReview;
+use App\Models\Lawyer;
 use Illuminate\Http\Request;
 
-class OverhaulReviewController extends Controller
+class LawyerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class OverhaulReviewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(OverhaulReview $overhaulReview)
+    public function show(Lawyer $lawyer)
     {
         //
     }
@@ -42,7 +42,7 @@ class OverhaulReviewController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(OverhaulReview $overhaulReview)
+    public function edit(Lawyer $lawyer)
     {
         //
     }
@@ -50,7 +50,7 @@ class OverhaulReviewController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, OverhaulReview $overhaulReview)
+    public function update(Request $request, Lawyer $lawyer)
     {
         //
     }
@@ -58,7 +58,7 @@ class OverhaulReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(OverhaulReview $overhaulReview)
+    public function destroy(Lawyer $lawyer)
     {
         //
     }

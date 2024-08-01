@@ -13,4 +13,8 @@ class TypeDocument extends Model
         'code', 'description'
     ];
 
+    public function users(){
+        return $this->hasMany(User::class);
+    }
+
 }

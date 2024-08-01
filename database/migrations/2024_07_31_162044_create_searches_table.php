@@ -24,11 +24,11 @@ return new class extends Migration
             $table->foreign('lawyer_id')
             ->references('id')
             ->on('lawyers')->onDelete('cascade');
-            $table->timestamps();
+   
 
             $table->foreign('information_id')
             ->references('id')
-            ->on('informations')->onDelete('cascade');
+            ->on('information')->onDelete('cascade');
             $table->timestamps();
         });
     }

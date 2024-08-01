@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Notification;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,12 +15,13 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
 
-            $table->string('enunciado');
-            $table->string('contenido');
-            $table->string('status');
+            $table->string('statement');
+            $table->string('content');
             $table->date('date');
+            $table->enum('status', [Notification::READ, Notification::UNREAD])->default(Notification::UNREAD)->nullable();
+
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('lawyer_id')->nullable();
-            $table->enum('status', ['read', 'unread'])->default('pending');
 
 
             $table->foreign('user_id')
@@ -31,7 +33,7 @@ return new class extends Migration
             $table->foreign('lawyer_id')
             ->references('id')
             ->on('lawyers')->onDelete('cascade');
-            
+
             $table->timestamps();
         });
     }

@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Search extends Model
+class Date extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'statement',
-        'content',
-           'status',
-          'date',
-          'lawyer_id',
+        'date',
+        'state',
+        'startTime',
+        'endTime'
     ];
+    
 }

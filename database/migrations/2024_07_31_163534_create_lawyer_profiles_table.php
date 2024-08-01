@@ -11,20 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('area__lauyers', function (Blueprint $table) {
+        Schema::create('lawyer_profiles', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('area_id')->nullable();
-            $table->unsignedBigInteger('lawyer_id')->nullable();
 
-
-
-            $table->foreign('area_id')
-            ->references('id')
-            ->on('areas')->onDelete('cascade');
-
+            $table->unsignedBigInteger('lawyer_id');
             $table->foreign('lawyer_id')
             ->references('id')
             ->on('lawyers')->onDelete('cascade');
+
+            $table->string('biography');
+            $table->string('profile_photo');
+
             $table->timestamps();
         });
     }
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('area__lauyers');
+        Schema::dropIfExists('lawyer_profiles');
     }
 };

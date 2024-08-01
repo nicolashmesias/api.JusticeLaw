@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OverhaulReview;
+use App\Models\VerificationLawyer;
 use Illuminate\Http\Request;
 
-class OverhaulReviewController extends Controller
+class VerificationLawyerController extends Controller
 {
-    /**
+     /**
      * Display a listing of the resource.
      */
     public function index()
@@ -34,7 +34,7 @@ class OverhaulReviewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(OverhaulReview $overhaulReview)
+    public function show(VerificationLawyer $verificationLawyer)
     {
         //
     }
@@ -42,7 +42,7 @@ class OverhaulReviewController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(OverhaulReview $overhaulReview)
+    public function edit(VerificationLawyer $verificationLawyer)
     {
         //
     }
@@ -50,7 +50,7 @@ class OverhaulReviewController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, OverhaulReview $overhaulReview)
+    public function update(Request $request, VerificationLawyer $verificationLawyer)
     {
         //
     }
@@ -58,7 +58,7 @@ class OverhaulReviewController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(OverhaulReview $overhaulReview)
+    public function destroy(VerificationLawyer $verificationLawyer)
     {
         //
     }
