@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Area_Lauyer;
+use App\Models\AreaLawyer;
 use Illuminate\Http\Request;
 
-class AreaLauyerController extends Controller
+class AreaLawyerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class AreaLauyerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Area_Lauyer $area_Lauyer)
+    public function show(AreaLawyer $areaLawyer)
     {
         //
     }
@@ -42,7 +42,7 @@ class AreaLauyerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Area_Lauyer $area_Lauyer)
+    public function edit(AreaLawyer $areaLawyer)
     {
         //
     }
@@ -50,7 +50,7 @@ class AreaLauyerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Area_Lauyer $area_Lauyer)
+    public function update(Request $request, AreaLawyer $areaLawyer)
     {
         //
     }
@@ -58,7 +58,7 @@ class AreaLauyerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Area_Lauyer $area_Lauyer)
+    public function destroy(AreaLawyer $areaLawyer)
     {
         //
     }

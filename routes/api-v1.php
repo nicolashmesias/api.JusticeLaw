@@ -5,10 +5,14 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\AdministratorController;
 use App\Http\Controllers\Api\TypeDocumentController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\DateController;
+<<<<<<< HEAD
 use App\Http\Controllers\Api\ConsultingController;
 use App\Models\Consulting;
 use Symfony\Component\VarDumper\Caster\DateCaster;
+=======
+>>>>>>> b9c31b6c344571bd91147aacb4c88489ecfafb9b
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +44,12 @@ Route::get('administrators', [AdministratorController::class,'index'])->name('ap
  Route::get('typeDocuments/{typeDocument}', [TypeDocumentController::class,'show'])->name('api.v1.typeDocuments.show');
  Route::put('typeDocuments/{typeDocument}', [TypeDocumentController::class,'update'])->name('api.v1.typeDocuments.update');
  Route::delete('typeDocuments/{typeDocument}', [TypeDocumentController::class,'destroy'])->name('api.v1.typeDocuments.delete');
+
+ Route::get('users', [TypeDocumentController::class,'index'])->name('api.v1.users.index');
+ Route::post('users', [TypeDocumentController::class,'store'])->name('api.v1.users.store');
+ Route::get('users/{user}', [UserController::class,'show'])->name('api.v1.users.show');
+ Route::put('users/{user}', [UserController::class,'update'])->name('api.v1.users.update');
+ Route::delete('users/{user}', [UserController::class,'destroy'])->name('api.v1.users.delete');
 
 Route::get('dates',[DateController::class,'index'])->name('api.v1.dates.index');
 Route::post('dates',[DateController::class,'store'])->name('api.v1.dates.show');

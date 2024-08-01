@@ -22,7 +22,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -30,15 +30,27 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:30',
+            'last_name' => 'required|max:50',
+            'type_document_id' => 'required|max:10',
+            'document_number' => 'required|max:10',
+            'email' => 'required|max:255|unique:users',
+            'password' => 'required|string|min:8'
+        ]);
+
+        $user = User::create($request->all());
+
+        return response()->json($user);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        $user = User::findOrFail($id);
+        return response()->json($user);
     }
 
     /**
@@ -52,16 +64,30 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:30',
+            'last_name' => 'required|max:50',
+            'type_document_id' => 'required|max:10',
+            'document_number' => 'required|max:10',
+            'email' => 'required|max:255',
+            'password' => 'required|string|min:8'
+        ]);
+
+        // $request->merge(['password' => bcrypt($request->password)]);
+
+        $user->update($request->all());
+
+        return response()->json($user);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return response()->json($user);
     }
 }

@@ -35,7 +35,7 @@ class AdministratorController extends Controller
         $request->validate([
             'type_document_id' => 'required|max:10',
             'document_number' => 'required|max:10',
-            'email' => 'required|max:255|unique',
+            'email' => 'required|max:255',
             'password' => 'required|string|min:8'
         ]);
 
@@ -69,10 +69,11 @@ class AdministratorController extends Controller
         $request->validate([
             'type_document_id' => 'required|max:10',
             'document_number' => 'required|max:10',
-            'email' => 'required|max:255|unique',
+            'email' => 'required|max:255',
             'password' => 'required|string|min:8'
         ]);
 
+        $request->merge(['password' => bcrypt($request->password)]);
         $administrator->update($request->all());
 
         return response()->json($administrator);

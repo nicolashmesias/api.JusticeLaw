@@ -31,7 +31,7 @@ class TypeDocumentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'code' => 'required|max:10',
+            'code' => 'required|max:3',
             'description' => 'required|string|max:255',
         ]);
 
@@ -63,7 +63,7 @@ class TypeDocumentController extends Controller
     public function update(Request $request, TypeDocument $typeDocument)
     {
         $request->validate([
-            'code' => 'required|max:10',
+            'code' => 'required|max:3',
             'description' => 'required|string|max:255',
         ]);
 
