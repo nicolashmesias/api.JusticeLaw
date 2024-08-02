@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\TypeDocumentController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\DateController;
 use App\Http\Controllers\Api\ConsultingController;
+use App\Http\Controllers\Api\InformationController;
 use App\Models\Consulting;
 use Symfony\Component\VarDumper\Caster\DateCaster;
 
@@ -48,11 +49,18 @@ Route::get('administrators', [AdministratorController::class,'index'])->name('ap
  Route::put('typeDocuments/{typeDocument}', [TypeDocumentController::class,'update'])->name('api.v1.typeDocuments.update');
  Route::delete('typeDocuments/{typeDocument}', [TypeDocumentController::class,'destroy'])->name('api.v1.typeDocuments.delete');
 
- Route::get('users', [TypeDocumentController::class,'index'])->name('api.v1.users.index');
- Route::post('users', [TypeDocumentController::class,'store'])->name('api.v1.users.store');
+ Route::get('users', [UserController::class,'index'])->name('api.v1.users.index');
+ Route::post('users', [UserController::class,'store'])->name('api.v1.users.store');
  Route::get('users/{user}', [UserController::class,'show'])->name('api.v1.users.show');
  Route::put('users/{user}', [UserController::class,'update'])->name('api.v1.users.update');
  Route::delete('users/{user}', [UserController::class,'destroy'])->name('api.v1.users.delete');
+
+
+ Route::get('informations', [InformationController::class,'index'])->name('api.v1.informations.index');
+ Route::post('informations', [InformationController::class,'store'])->name('api.v1.informations.store');
+ Route::get('informations/{information}', [InformationController::class,'show'])->name('api.v1.informations.show');
+ Route::put('informations/{information}', [InformationController::class,'update'])->name('api.v1.informations.update');
+ Route::delete('informations/{information}', [InformationController::class,'destroy'])->name('api.v1.informations.delete');
 
 Route::get('dates',[DateController::class,'index'])->name('api.v1.dates.index');
 Route::post('dates',[DateController::class,'store'])->name('api.v1.dates.show');

@@ -29,15 +29,26 @@ class InformationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'name' => 'required|max:100',
+            'body' => 'required',
+            'cover_photo' => 'required',
+            'category' => 'required|max:1',
+        ]);
+
+        $information = Information::create($request->all());
+
+        return response()->json($information);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Information $information)
+    public function show($id)
     {
-        //
+        $information = Information::findOrFail($id);
+        return response()->json($information);
     }
 
     /**
@@ -53,7 +64,16 @@ class InformationController extends Controller
      */
     public function update(Request $request, Information $information)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:100',
+            'body' => 'required',
+            'cover_photo' => 'required',
+            'category' => 'required|max:1',
+        ]);
+
+        $information->update($request->all());
+
+        return response()->json($information);
     }
 
     /**
@@ -61,6 +81,7 @@ class InformationController extends Controller
      */
     public function destroy(Information $information)
     {
-        //
+        $information->delete();
+        return response()->json($information);
     }
 }
