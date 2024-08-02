@@ -17,14 +17,14 @@ return new class extends Migration
             $table->time('time');
             $table->double('price');
 
-            //$table->unsignedBigInteger('answer_id');
-            //$table->foreign('answer_id')->references('id')
-            //->on('answers')->onDelete('cascade');
+            $table->unsignedBigInteger('answer_id');
+            $table->foreign('answer_id')->references('id')
+            ->on('answers')->onDelete('cascade');
 
-            //$table->unsignedBigInteger('question_id');
-            //$table->foreign('question_id')->references('id')
-            //->on('questions')->onDelete('cascade');
-            //$table->timestamps();
+            $table->unsignedBigInteger('question_id');
+            $table->foreign('question_id')->references('id')
+            ->on('questions')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 
