@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Area;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\Controller;
 class AreaController extends Controller
 {
     /**
@@ -12,7 +12,9 @@ class AreaController extends Controller
      */
     public function index()
     {
-        //
+        $areas=Area::all();
+
+        return response()->json($areas);
     }
 
     /**
@@ -28,15 +30,22 @@ class AreaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',  
+        ]);
+
+        $areas=Area::create($request->all());
+        return response()->json($areas);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Area $area)
+    public function show(Area $id)
     {
-        //
+        $area=Area::included()->findOrFail($id);
+
+        return response()->json($area);
     }
 
     /**
@@ -44,7 +53,6 @@ class AreaController extends Controller
      */
     public function edit(Area $area)
     {
-        //
     }
 
     /**
@@ -52,7 +60,13 @@ class AreaController extends Controller
      */
     public function update(Request $request, Area $area)
     {
-        //
+        $request->validate([
+            'name'=>'required'
+        ]);
+
+        $area->update($request->all());
+
+        return response()->json($area);
     }
 
     /**
@@ -60,6 +74,7 @@ class AreaController extends Controller
      */
     public function destroy(Area $area)
     {
-        //
+        $area->delete();
+        return response()->json($area);
     }
 }
