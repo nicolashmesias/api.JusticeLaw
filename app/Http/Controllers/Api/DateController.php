@@ -22,7 +22,7 @@ class DateController extends Controller
     {
         $request->validate([
             'date'=>'required|max:255',
-            'state'=>'required|Strinf|max:255',
+            'state'=>'required|string|max:255',
             'startTime'=>'required|max:255',
             'endTime'=>'required|max:255',
         ]);
