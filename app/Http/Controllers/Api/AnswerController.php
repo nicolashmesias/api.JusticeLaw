@@ -12,7 +12,8 @@ class AnswerController extends Controller
      */
     public function index()
     {
-        
+        $answers = Answer::all();
+        return response()->json($answers);
     }
 
     /**
@@ -28,7 +29,19 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+
+        $request->validate([
+            'lawyer_id' => 'required|min:10',
+            'question_id' => 'required|max:210',
+            'affair' => 'required|max:255',
+            'content' => 'required|string|min:8',
+            'date_publication' => 'required|string|min:8'
+        ]);
+
+        $answer = Answer::create($request->all());
+
+        return response()->json($answer);
     }
 
     /**
@@ -36,7 +49,7 @@ class AnswerController extends Controller
      */
     public function show(Answer $answer)
     {
-        //
+        return response()->json($answer);
     }
 
     /**
@@ -44,7 +57,7 @@ class AnswerController extends Controller
      */
     public function edit(Answer $answer)
     {
-        //
+        
     }
 
     /**
@@ -52,7 +65,17 @@ class AnswerController extends Controller
      */
     public function update(Request $request, Answer $answer)
     {
-        //
+        $request->validate([
+            'lawyer_id' => 'required|min:10',
+            'question_id' => 'required|max:210',
+            'affair' => 'required|max:255',
+            'content' => 'required|string|min:8',
+            'date_publication' => 'required|string|min:8'
+        ]);
+
+        $answer->update($request->all());
+
+        return response()->json($answer);
     }
 
     /**
@@ -60,6 +83,7 @@ class AnswerController extends Controller
      */
     public function destroy(Answer $answer)
     {
-        //
+        $answer->delete();
+        return response()->json($answer);
     }
 }

@@ -33,8 +33,10 @@ Route::get('/', function () {
 
 
 Route::get('answers',[AnswerController::class,'index'])->name('api.v1.answers.index');
-Route::get('answers',[AnswerController::class,'store'])->name('api.v1.answers.store');
-Route::post('answers',[AnswerController::class,'show'])->name('api.v1.answers.show');
+Route::post('answers',[AnswerController::class,'store'])->name('api.v1.answers.store');
+Route::get('answers/{answer}',[AnswerController::class,'show'])->name('api.v1.answers.show');
+Route::put('answers/{answer}', [AnswerController::class,'update'])->name('api.v1.answers.update');
+Route::delete('answers/{answer}', [AnswerController::class,'destroy'])->name('api.v1.answers.delete');
 
 Route::get('administrators', [AdministratorController::class,'index'])->name('api.v1.administrators.index');
  Route::post('administrators', [AdministratorController::class,'store'])->name('api.v1.administrators.store');
