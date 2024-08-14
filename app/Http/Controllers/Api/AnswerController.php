@@ -47,8 +47,9 @@ class AnswerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Answer $answer)
+    public function show($id)
     {
+        $answer = Answer::findOrFail($id);
         return response()->json($answer);
     }
 

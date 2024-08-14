@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AnswerController;
-
 use App\Http\Controllers\Api\AdministratorController;
 use App\Http\Controllers\Api\TypeDocumentController;
 use App\Http\Controllers\Api\UserController;
@@ -65,7 +64,7 @@ Route::get('administrators', [AdministratorController::class,'index'])->name('ap
  Route::delete('informations/{information}', [InformationController::class,'destroy'])->name('api.v1.informations.delete');
 
 Route::get('dates',[DateController::class,'index'])->name('api.v1.dates.index');
-Route::post('dates',[DateController::class,'store'])->name('api.v1.dates.show');
+Route::post('dates',[DateController::class,'store'])->name('api.v1.dates.store');
 Route::get('dates/{date}',[DateController::class,'show'])->name('api.v1.dates.show');
 Route::put('dates/{date}',[DateController::class,'update'])->name('api.v1.dates.update');
 Route::delete('dates/{date}',[DateController::class,'delete'])->name('api.v1.dates.delete');
