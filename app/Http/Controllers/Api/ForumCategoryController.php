@@ -12,7 +12,8 @@ class ForumCategoryController extends Controller
      */
     public function index()
     {
-        //
+        $forumCategories = ForumCategory::all();
+        return response()->json($forumCategories);
     }
 
     /**
@@ -28,15 +29,23 @@ class ForumCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|min:10',
+            'description' => 'required|max:210'
+        ]);
+
+        $forumCategory = ForumCategory::create($request->all());
+
+        return response()->json($forumCategory);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ForumCategory $forumCategory)
+    public function show($id)
     {
-        //
+        $forumCategory = ForumCategory::findOrFail($id);
+        return response()->json($forumCategory);
     }
 
     /**
@@ -52,7 +61,14 @@ class ForumCategoryController extends Controller
      */
     public function update(Request $request, ForumCategory $forumCategory)
     {
-        //
+        $request->validate([
+            'name' => 'required|min:10',
+            'description' => 'required|max:210'
+        ]);
+
+        $forumCategory->update($request->all());
+
+        return response()->json($forumCategory);
     }
 
     /**
@@ -60,6 +76,7 @@ class ForumCategoryController extends Controller
      */
     public function destroy(ForumCategory $forumCategory)
     {
-        //
+        $forumCategory->delete();
+        return response()->json($forumCategory);
     }
 }

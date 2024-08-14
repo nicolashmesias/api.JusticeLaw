@@ -29,8 +29,6 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        
-
         $request->validate([
             'lawyer_id' => 'required|min:10',
             'question_id' => 'required|max:210',

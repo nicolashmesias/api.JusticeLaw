@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\ConsultingController;
 use App\Http\Controllers\Api\InformationController;
 use App\Http\Controllers\Api\AreaController;
 use App\Http\Controllers\Api\AreaLAwyerController;
+use App\Http\Controllers\Api\ForumCategoryController;
+use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Models\Area;
 use App\Models\AreaLawyer;
@@ -43,6 +45,18 @@ Route::post('answers',[AnswerController::class,'store'])->name('api.v1.answers.s
 Route::get('answers/{answer}',[AnswerController::class,'show'])->name('api.v1.answers.show');
 Route::put('answers/{answer}', [AnswerController::class,'update'])->name('api.v1.answers.update');
 Route::delete('answers/{answer}', [AnswerController::class,'destroy'])->name('api.v1.answers.delete');
+
+Route::get('questions',[QuestionController::class,'index'])->name('api.v1.questions.index');
+Route::post('questions',[QuestionController::class,'store'])->name('api.v1.questions.store');
+Route::get('questions/{question}',[QuestionController::class,'show'])->name('api.v1.questions.show');
+Route::put('questions/{question}', [QuestionController::class,'update'])->name('api.v1.questions.update');
+Route::delete('questions/{question}', [QuestionController::class,'destroy'])->name('api.v1.questions.delete');
+
+Route::get('forumCategories',[ForumCategoryController::class,'index'])->name('api.v1.forumCategories.index');
+Route::post('forumCategories',[ForumCategoryController::class,'store'])->name('api.v1.forumCategories.store');
+Route::get('forumCategories/{forumCategory}',[ForumCategoryController::class,'show'])->name('api.v1.forumCategories.show');
+Route::put('forumCategories/{forumCategory}', [ForumCategoryController::class,'update'])->name('api.v1.forumCategories.update');
+Route::delete('forumCategories/{forumCategory}', [ForumCategoryController::class,'destroy'])->name('api.v1.forumCategories.delete');
 
 Route::get('administrators', [AdministratorController::class,'index'])->name('api.v1.administrators.index');
  Route::post('administrators', [AdministratorController::class,'store'])->name('api.v1.administrators.store');
@@ -83,19 +97,19 @@ Route::put('consultings/{consulting}',[ConsultingController::class,'update'])->n
 Route::delete('consultings/{consulting}',[ConsultingController::class,'delete'])->name('api.v1.consultings.delete');
 
 Route::get('areas',[AreaController::class,'index'])->name('api.v1.areas.index');
-Route::post('areas',[AreaController::class,'store'])->name('api.v1.areas.show');
+Route::post('areas',[AreaController::class,'store'])->name('api.v1.areas.store');
 Route::get('areas/{area}',[AreaController::class,'show'])->name('api.v1.areas.show');
 Route::put('areas/{area}',[AreaController::class,'update'])->name('api.v1.areas.update');
 Route::delete('areas/{area}',[AreaController::class,'delete'])->name('api.v1.areas.delete');
 
 Route::get('areasLawyer',[AreaLawyerController::class,'index'])->name('api.v1.areasLawyer.index');
-Route::post('areasLawyer',[AreaLawyerController::class,'store'])->name('api.v1.areasLawyer.show');
+Route::post('areasLawyer',[AreaLawyerController::class,'store'])->name('api.v1.areasLawyer.store');
 Route::get('areasLawyer/{areaLawyer}',[AreaLawyerController::class,'show'])->name('api.v1.areasLawyer.show');
 Route::put('areasLawyer/{areaLawyer}',[AreaLawyerController::class,'update'])->name('api.v1.areasLawyer.update');
 Route::delete('areasLawyer/{areaLawyer}',[AreaLawyerController::class,'delete'])->name('api.v1.areasLawyer.delete');
 
 Route::get('reviews',[ReviewController::class,'index'])->name('api.v1.reviews.index');
-Route::post('reviews',[ReviewController::class,'store'])->name('api.v1.reviews.show');
+Route::post('reviews',[ReviewController::class,'store'])->name('api.v1.reviews.store');
 Route::get('reviews/{review}',[ReviewController::class,'show'])->name('api.v1.rivews.show');
 Route::put('reviews/{rivew}',[ReviewController::class,'update'])->name('api.v1.rivews.update');
 Route::delete('reviews/{review}',[ReviewController::class,'delete'])->name('api.v1.rivews.delete');

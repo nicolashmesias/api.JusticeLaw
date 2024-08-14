@@ -12,7 +12,8 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        $questions = Question::all();
+        return response()->json($questions);
     }
 
     /**
@@ -28,15 +29,26 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'affair' => 'required|max:255',
+            'content' => 'required|string|min:8',
+            'date_publication' => 'required|string|min:8',
+            'user_id' => 'required|min:10',
+            'forum_category_id' => 'required|max:210'
+        ]);
+
+        $question = Question::create($request->all());
+
+        return response()->json($question);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Question $question)
+    public function show( $id)
     {
-        //
+        $question = Question::findOrFail($id);
+        return response()->json($question);
     }
 
     /**
@@ -52,7 +64,17 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Question $question)
     {
-        //
+        $request->validate([
+            'lawyer_id' => 'required|min:10',
+            'question_id' => 'required|max:210',
+            'affair' => 'required|max:255',
+            'content' => 'required|string|min:8',
+            'date_publication' => 'required|string|min:8'
+        ]);
+
+        $question->update($request->all());
+
+        return response()->json($question);
     }
 
     /**
@@ -60,6 +82,7 @@ class QuestionController extends Controller
      */
     public function destroy(Question $question)
     {
-        //
+        $question->delete();
+        return response()->json($question);
     }
 }
