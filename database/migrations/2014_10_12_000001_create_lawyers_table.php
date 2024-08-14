@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('names');
             $table->string('last_names');
             $table->unsignedBigInteger('type_document_id');
-            $table->foreign('type_document_id')->references('id')->on('type_documents');
+            $table->foreign('type_document_id')->references('id')->on('type_documents')->onDelete('cascade');
             $table->string('document_number');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

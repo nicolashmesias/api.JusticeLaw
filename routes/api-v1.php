@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\ConsultingController;
 use App\Http\Controllers\Api\InformationController;
 use App\Http\Controllers\Api\AreaController;
 use App\Http\Controllers\Api\AreaLAwyerController;
+use App\Http\Controllers\Api\ForumCategoryController;
+use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Models\Area;
 use App\Models\AreaLawyer;
@@ -42,6 +44,18 @@ Route::post('answers',[AnswerController::class,'store'])->name('api.v1.answers.s
 Route::get('answers/{answer}',[AnswerController::class,'show'])->name('api.v1.answers.show');
 Route::put('answers/{answer}', [AnswerController::class,'update'])->name('api.v1.answers.update');
 Route::delete('answers/{answer}', [AnswerController::class,'destroy'])->name('api.v1.answers.delete');
+
+Route::get('questions',[QuestionController::class,'index'])->name('api.v1.questions.index');
+Route::post('questions',[QuestionController::class,'store'])->name('api.v1.questions.store');
+Route::get('questions/{question}',[QuestionController::class,'show'])->name('api.v1.questions.show');
+Route::put('questions/{question}', [QuestionController::class,'update'])->name('api.v1.questions.update');
+Route::delete('questions/{question}', [QuestionController::class,'destroy'])->name('api.v1.questions.delete');
+
+Route::get('forumCategories',[ForumCategoryController::class,'index'])->name('api.v1.forumCategories.index');
+Route::post('forumCategories',[ForumCategoryController::class,'store'])->name('api.v1.forumCategories.store');
+Route::get('forumCategories/{forumCategory}',[ForumCategoryController::class,'show'])->name('api.v1.forumCategories.show');
+Route::put('forumCategories/{forumCategory}', [ForumCategoryController::class,'update'])->name('api.v1.forumCategories.update');
+Route::delete('forumCategories/{forumCategory}', [ForumCategoryController::class,'destroy'])->name('api.v1.forumCategories.delete');
 
 Route::get('administrators', [AdministratorController::class,'index'])->name('api.v1.administrators.index');
  Route::post('administrators', [AdministratorController::class,'store'])->name('api.v1.administrators.store');
