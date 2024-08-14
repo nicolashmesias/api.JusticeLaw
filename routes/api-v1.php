@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\DateController;
 use App\Http\Controllers\Api\ConsultingController;
 use App\Http\Controllers\Api\InformationController;
 use App\Http\Controllers\Api\AreaController;
-use App\Http\Controllers\Api\AreaLAwyerController;
+use App\Http\Controllers\Api\AreaLawyerController;
 use App\Http\Controllers\Api\ForumCategoryController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ReviewController;

@@ -16,10 +16,10 @@ class Question extends Model
         'user_id',
         'forum_category_id'
     ];
-    public function forumCategories(){
+    public function forumCategory(){
         return $this->belongsTo('App\Models\ForumCategory');
     }
-    public function users(){
+    public function user(){
         return $this->belongsTo('App\Models\User');
     }
 
