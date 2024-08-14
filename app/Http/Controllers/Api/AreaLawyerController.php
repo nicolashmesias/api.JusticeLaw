@@ -12,7 +12,6 @@ class AreaLawyerController extends Controller
     public function index()
     {
         $areasLawyer=AreaLawyer::all();
-
         return response()->json($areasLawyer); 
     }
 
@@ -30,7 +29,7 @@ class AreaLawyerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required',  
+            'area_id' => 'required',  
             'lawyer_id' => 'required',  
         ]);
 
@@ -62,7 +61,7 @@ class AreaLawyerController extends Controller
     public function update(Request $request, AreaLawyer $areaLawyer)
     {
         $request->validate([
-            'user_id'=>'required',
+            'area_id'=>'required',
             'lawyer_id'=>'required'
         ]);
 
