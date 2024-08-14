@@ -3,14 +3,19 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AnswerController;
-
 use App\Http\Controllers\Api\AdministratorController;
 use App\Http\Controllers\Api\TypeDocumentController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\DateController;
 use App\Http\Controllers\Api\ConsultingController;
 use App\Http\Controllers\Api\InformationController;
+use App\Http\Controllers\Api\AreaController;
+use App\Http\Controllers\Api\AreaLAwyerController;
+use App\Http\Controllers\Api\ReviewController;
+use App\Models\Area;
+use App\Models\AreaLawyer;
 use App\Models\Consulting;
+use App\Models\Review;
 use Symfony\Component\VarDumper\Caster\DateCaster;
 
 /*
@@ -76,3 +81,21 @@ Route::post('consultings',[ConsultingController::class,'store'])->name('api.v1.c
 Route::get('consultings/{consulting}',[ConsultingController::class,'show'])->name('api.v1.consultings.show');
 Route::put('consultings/{consulting}',[ConsultingController::class,'update'])->name('api.v1.consultings.update');
 Route::delete('consultings/{consulting}',[ConsultingController::class,'delete'])->name('api.v1.consultings.delete');
+
+Route::get('areas',[AreaController::class,'index'])->name('api.v1.areas.index');
+Route::post('areas',[AreaController::class,'store'])->name('api.v1.areas.show');
+Route::get('areas/{area}',[AreaController::class,'show'])->name('api.v1.areas.show');
+Route::put('areas/{area}',[AreaController::class,'update'])->name('api.v1.areas.update');
+Route::delete('areas/{area}',[AreaController::class,'delete'])->name('api.v1.areas.delete');
+
+Route::get('areasLawyer',[AreaLawyerController::class,'index'])->name('api.v1.areasLawyer.index');
+Route::post('areasLawyer',[AreaLawyerController::class,'store'])->name('api.v1.areasLawyer.show');
+Route::get('areasLawyer/{areaLawyer}',[AreaLawyerController::class,'show'])->name('api.v1.areasLawyer.show');
+Route::put('areasLawyer/{areaLawyer}',[AreaLawyerController::class,'update'])->name('api.v1.areasLawyer.update');
+Route::delete('areasLawyer/{areaLawyer}',[AreaLawyerController::class,'delete'])->name('api.v1.areasLawyer.delete');
+
+Route::get('reviews',[ReviewController::class,'index'])->name('api.v1.reviews.index');
+Route::post('reviews',[ReviewController::class,'store'])->name('api.v1.reviews.show');
+Route::get('reviews/{review}',[ReviewController::class,'show'])->name('api.v1.rivews.show');
+Route::put('reviews/{rivew}',[ReviewController::class,'update'])->name('api.v1.rivews.update');
+Route::delete('reviews/{review}',[ReviewController::class,'delete'])->name('api.v1.rivews.delete');
