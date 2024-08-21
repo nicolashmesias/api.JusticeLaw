@@ -12,4 +12,8 @@ class ForumCategory extends Model
     'name',
     'description'
     ];
+    
+    public function questions(){
+        return $this->hasMany('App\Models\Question');
+    }
 }

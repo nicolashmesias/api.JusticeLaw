@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Api;
 use App\Models\AreaLawyer;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\Controller;
 class AreaLawyerController extends Controller
 {
     /**
@@ -12,7 +11,8 @@ class AreaLawyerController extends Controller
      */
     public function index()
     {
-        //
+        $areasLawyer=AreaLawyer::all();
+        return response()->json($areasLawyer); 
     }
 
     /**
@@ -28,15 +28,23 @@ class AreaLawyerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'area_id' => 'required',  
+            'lawyer_id' => 'required',  
+        ]);
+
+        $areasLawyer=AreaLawyer::create($request->all());
+        return response()->json($areasLawyer);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(AreaLawyer $areaLawyer)
+    public function show(AreaLawyer $id)
     {
-        //
+        $areasLawyer=AreaLawyer::included()->findOrFail($id);
+
+        return response()->json($areasLawyer);
     }
 
     /**
@@ -52,7 +60,14 @@ class AreaLawyerController extends Controller
      */
     public function update(Request $request, AreaLawyer $areaLawyer)
     {
-        //
+        $request->validate([
+            'area_id'=>'required',
+            'lawyer_id'=>'required'
+        ]);
+
+        $areaLawyer->update($request->all());
+
+        return response()->json($areaLawyer);
     }
 
     /**
@@ -60,6 +75,7 @@ class AreaLawyerController extends Controller
      */
     public function destroy(AreaLawyer $areaLawyer)
     {
-        //
+        $areaLawyer->delete();
+        return response()->json($areaLawyer);
     }
 }
