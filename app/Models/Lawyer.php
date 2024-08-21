@@ -89,4 +89,7 @@ class Lawyer extends Model
         return $this->hasOne(VerificationLawyer::class);
     }
 
+    public function dates(){
+        return $this->belongsToMany(Date::class);
+    }
 }
