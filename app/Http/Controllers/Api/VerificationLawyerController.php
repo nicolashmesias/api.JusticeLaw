@@ -12,7 +12,8 @@ class VerificationLawyerController extends Controller
      */
     public function index()
     {
-        //
+        $verificationLawyers = VerificationLawyer::all();
+        return response()->json($verificationLawyers);
     }
 
     /**
@@ -28,15 +29,26 @@ class VerificationLawyerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'cell_phone' => 'required|min:10',
+            'country_id' => 'required|max:210',
+            'state_id' => 'required|max:255',
+            'city_id' => 'required|string|min:8',
+            'lawyer_id' => 'required|numeric|min:8'
+        ]);
+
+        $verificationLawyer = VerificationLawyer::create($request->all());
+
+        return response()->json($verificationLawyer);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(VerificationLawyer $verificationLawyer)
+    public function show($id)
     {
-        //
+        $verificationLawyer = VerificationLawyer::findOrFail($id);
+        return response()->json($verificationLawyer);
     }
 
     /**
@@ -52,7 +64,16 @@ class VerificationLawyerController extends Controller
      */
     public function update(Request $request, VerificationLawyer $verificationLawyer)
     {
-        //
+        $request->validate([
+            'cell_phone' => 'required|min:10',
+            'country_id' => 'required|max:210',
+            'state_id' => 'required|max:255',
+            'city_id' => 'required|string|min:8',
+            'lawyer_id' => 'required|numeric|min:8'
+        ]);
+        $verificationLawyer->update($request->all());
+
+        return response()->json($verificationLawyer);
     }
 
     /**
@@ -60,6 +81,7 @@ class VerificationLawyerController extends Controller
      */
     public function destroy(VerificationLawyer $verificationLawyer)
     {
-        //
+        $verificationLawyer->delete();
+        return response()->json($verificationLawyer);
     }
 }

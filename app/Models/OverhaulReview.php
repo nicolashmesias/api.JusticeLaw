@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class OverhaulReview extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+    
+        'review_id',
+        'administrators_id',
+
+
+    ];
+
 }
