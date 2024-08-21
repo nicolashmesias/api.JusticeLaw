@@ -12,4 +12,6 @@ class Administrator extends Model
     protected $fillable = [
         'type_document_id', 'document_number', 'email', 'password'
     ];
+
+    
 }

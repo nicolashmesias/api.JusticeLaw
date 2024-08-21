@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\LawyerProfile;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class LawyerProfileController extends Controller
 {
@@ -63,7 +64,7 @@ class LawyerProfileController extends Controller
     public function update(Request $request, LawyerProfile $lawyerProfile)
     {
         $request->validate([
-          
+
             'profile_photo' => 'required',
             'biography' => 'required',
             'lawyer_id'=>'required'

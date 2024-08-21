@@ -11,27 +11,18 @@ use App\Http\Controllers\Api\DropdownController;
 use App\Http\Controllers\Api\DateController;
 use App\Http\Controllers\Api\ConsultingController;
 use App\Http\Controllers\Api\InformationController;
-
-
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\SearchController;
-use App\Models\Consulting;
-use App\Models\Notification;
-use App\Models\Search;
 use App\Http\Controllers\Api\AreaController;
 use App\Http\Controllers\Api\AreaLawyerController;
 use App\Http\Controllers\Api\ForumCategoryController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ReviewController;
-
-use App\Http\Controllers\VerificationLawyerController;
-
+use App\Http\Controllers\Api\VerificationLawyerController;
 use App\Http\Controllers\Api\LawyerController;
-
-
 use App\Http\Controllers\Api\OverhaulReviewController;
-use App\Http\Controllers\LawyerProfileController;
-use Symfony\Component\VarDumper\Caster\DateCaster;
+use App\Http\Controllers\Api\LawyerProfileController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -101,25 +92,29 @@ Route::get('countries/{country}', [DropdownController::class, 'showCountry'])->n
 Route::put('countries/{country}', [DropdownController::class, 'updateCountry'])->name('api.v1.countries.update');
 Route::delete('countries/{country}', [DropdownController::class, 'destroyCountry'])->name('api.v1.countries.delete');
 
+Route::get('states', [DropdownController::class, 'indexState'])->name('api.v1.states.index');
+Route::post('states', [DropdownController::class, 'storeState'])->name('api.v1.states.store');
+Route::get('states/{state}', [DropdownController::class, 'showState'])->name('api.v1.states.show');
+Route::put('states/{state}', [DropdownController::class, 'updateState'])->name('api.v1.states.update');
+Route::delete('states/{state}', [DropdownController::class, 'destroyState'])->name('api.v1.states.delete');
 
-
-
-
+Route::get('cities', [DropdownController::class, 'indexCity'])->name('api.v1.cities.index');
+Route::post('cities', [DropdownController::class, 'storeCity'])->name('api.v1.cities.store');
+Route::get('cities/{city}', [DropdownController::class, 'showCity'])->name('api.v1.cities.show');
+Route::put('cities/{city}', [DropdownController::class, 'updateCity'])->name('api.v1.cities.update');
+Route::delete('cities/{city}', [DropdownController::class, 'destroyCity'])->name('api.v1.cities.delete');
 
 Route::get('informations', [InformationController::class, 'index'])->name('api.v1.informations.index');
 Route::post('informations', [InformationController::class, 'store'])->name('api.v1.informations.store');
 Route::get('informations/{information}', [InformationController::class, 'show'])->name('api.v1.informations.show');
 Route::put('informations/{information}', [InformationController::class, 'update'])->name('api.v1.informations.update');
 Route::delete('informations/{information}', [InformationController::class, 'destroy'])->name('api.v1.informations.delete');
- 
 
 Route::get('dates', [DateController::class, 'index'])->name('api.v1.dates.index');
 Route::post('dates', [DateController::class, 'store'])->name('api.v1.dates.store');
 Route::get('dates/{date}', [DateController::class, 'show'])->name('api.v1.dates.show');
 Route::put('dates/{date}', [DateController::class, 'update'])->name('api.v1.dates.update');
 Route::delete('dates/{date}', [DateController::class, 'delete'])->name('api.v1.dates.delete');
-
-
 
 Route::get('searchs',[SearchController::class,'index'])->name('api.v1.searchs.index');
 Route::post('searchs',[SearchController::class,'store'])->name('api.v1.searchs.store');
@@ -139,16 +134,11 @@ Route::get('consultings/{consulting}', [ConsultingController::class, 'show'])->n
 Route::put('consultings/{consulting}', [ConsultingController::class, 'update'])->name('api.v1.consultings.update');
 Route::delete('consultings/{consulting}', [ConsultingController::class, 'delete'])->name('api.v1.consultings.delete');
 
- 
-
-
- 
 Route::get('reviews',[ReviewController::class,'index'])->name('api.v1.reviews.index');
 Route::post('reviews',[ReviewController::class,'store'])->name('api.v1.reviews.store');
 Route::get('reviews/{review}',[ReviewController::class,'show'])->name('api.v1.rivews.show');
 Route::put('reviews/{rivew}',[ReviewController::class,'update'])->name('api.v1.rivews.update');
 Route::delete('reviews/{review}',[ReviewController::class,'delete'])->name('api.v1.rivews.delete');
-
 
 Route::get('verificationLawyers',[VerificationLawyerController::class,'index'])->name('api.v1.verificationLawyers.index');
 Route::post('verificationLawyers',[VerificationLawyerController::class,'store'])->name('api.v1.verificationLawyers.store');
@@ -157,10 +147,10 @@ Route::put('verificationLawyers/{verificationLawyer}',[VerificationLawyerControl
 Route::delete('verificationLawyers/{verificationLawyer}',[VerificationLawyerController::class,'delete'])->name('api.v1.verificationLawyers  .delete');
 
 Route::get('overhaulreviews',[OverhaulReviewController::class,'index'])->name('api.v1.overhaulreviews.index');
-Route::post('overhaulreviews',[ReviewController::class,'store'])->name('api.v1.overhaulreviews.store');
-Route::get('overhaulreviews/{overhaulreview}',[ReviewController::class,'show'])->name('api.v1.overhaulreviews.show');
-Route::put('overhaulreviews/{overhaulreview}',[ReviewController::class,'update'])->name('api.v1.overhaulreviews.update');
-Route::delete('overhaulreviews/{overhaulreview}',[ReviewController::class,'delete'])->name('api.v1.overhaulreviews.delete');
+Route::post('overhaulreviews',[OverhaulReviewController::class,'store'])->name('api.v1.overhaulreviews.store');
+Route::get('overhaulreviews/{overhaulreview}',[OverhaulReviewController::class,'show'])->name('api.v1.overhaulreviews.show');
+Route::put('overhaulreviews/{overhaulreview}',[OverhaulReviewController::class,'update'])->name('api.v1.overhaulreviews.update');
+Route::delete('overhaulreviews/{overhaulreview}',[OverhaulReviewController::class,'delete'])->name('api.v1.overhaulreviews.delete');
 
 Route::get('lawyerprofiles',[LawyerProfileController::class,'index'])->name('api.v1.lawyerprofiles.index');
 Route::post('lawyerprofiles',[LawyerProfileController::class,'store'])->name('api.v1.lawyerprofiles.store');
@@ -168,13 +158,11 @@ Route::get('lawyerprofiles/{lawyerprofile}',[LawyerProfileController::class,'sho
 Route::put('lawyerprofiles/{lawyerprofile}',[LawyerProfileController::class,'update'])->name('api.v1.lawyerprofiles.update');
 Route::delete('lawyerprofiles/{lawyerprofile}',[LawyerProfileController::class,'delete'])->name('api.v1.lawyerprofiles.delete');
 
-
 Route::get('notifications', [NotificationController::class, 'index'])->name('api.v1.notifications.index');
 Route::post('notifications', [NotificationController::class, 'store'])->name('api.v1.notifications.store');
 Route::get('notifications/{notification}', [NotificationController::class, 'show'])->name('api.v1.notifications.show');
 Route::put('notifications/{notification}', [NotificationController::class, 'update'])->name('api.v1.notifications.update');
 Route::delete('notifications/{notification}', [NotificationController::class, 'delete'])->name('api.v1.notifications.delete');
-
 
 Route::get('searchs', [SearchController::class, 'index'])->name('api.v1.searchs.index');
 Route::post('searchs', [SearchController::class, 'store'])->name('api.v1.searchs.store');
@@ -199,10 +187,6 @@ Route::post('reviews', [ReviewController::class, 'store'])->name('api.v1.reviews
 Route::get('reviews/{review}', [ReviewController::class, 'show'])->name('api.v1.rivews.show');
 Route::put('reviews/{rivew}', [ReviewController::class, 'update'])->name('api.v1.rivews.update');
 Route::delete('reviews/{review}', [ReviewController::class, 'delete'])->name('api.v1.rivews.delete');
-
- 
-
-
 
 Route::get('lawyers', [LawyerController::class, 'index'])->name('api.v1.lawyers.index');
 Route::post('lawyers', [LawyerController::class, 'store'])->name('api.v1.lawyers.store');
