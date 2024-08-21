@@ -17,16 +17,12 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('lawyer_id')->nullable();
             $table->unsignedBigInteger('information_id')->nullable();
-
             $table->foreign('user_id')
             ->references('id')
             ->on('users')->onDelete('cascade');
-
             $table->foreign('lawyer_id')
             ->references('id')
             ->on('lawyers')->onDelete('cascade');
-   
-
             $table->foreign('information_id')
             ->references('id')
             ->on('information')->onDelete('cascade');

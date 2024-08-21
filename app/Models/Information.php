@@ -18,4 +18,9 @@ class Information extends Model
     protected $fillable = [
         'name', 'body','cover_photo', 'category'
     ];
+
+    public function searches()
+    {
+        return $this->hasMany(Search::class);
+    }
 }

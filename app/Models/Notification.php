@@ -20,4 +20,13 @@ class Notification extends Model
 
 const READ = 1 ;
 const UNREAD = 2;
+
+
+public function lawyer(){
+    return $this->belongsTo(Lawyer::class);
+}
+
+public function user(){
+    return $this->belongsTo(User::class);
+}
 }

@@ -14,4 +14,22 @@ class Search extends Model
         'lawyer_id',
         'information_id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+   
+    public function lawyer()
+    {
+        return $this->belongsTo(Lawyer::class);
+    }
+
+
+    public function information()
+    {
+        return $this->belongsTo(Information::class);
+    }
+
 }
