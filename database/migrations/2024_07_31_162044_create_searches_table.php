@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('searches', function (Blueprint $table) {
             $table->id();
+            $table->date('fecha');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('lawyer_id')->nullable();
             $table->unsignedBigInteger('information_id')->nullable();
