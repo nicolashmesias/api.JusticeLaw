@@ -12,7 +12,8 @@ class LawyerProfileController extends Controller
      */
     public function index()
     {
-        //
+        $lawyerprofile = LawyerProfile::all();
+        return response()->json($lawyerprofile);
     }
 
     /**
@@ -28,15 +29,24 @@ class LawyerProfileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'profile_photo' => 'required',
+            'biography' => 'required',
+            'lawyer_id'=>'required'
+        ]);
+
+        $lawyerprofile = LawyerProfile::create($request->all());
+
+        return response()->json($lawyerprofile);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(LawyerProfile $lawyerProfile)
+    public function show( $id)
     {
-        //
+        $lawyerProfile = LawyerProfile::findOrFail($id);
+        return response()->json($lawyerProfile);
     }
 
     /**
@@ -52,7 +62,17 @@ class LawyerProfileController extends Controller
      */
     public function update(Request $request, LawyerProfile $lawyerProfile)
     {
-        //
+        $request->validate([
+          
+            'profile_photo' => 'required',
+            'biography' => 'required',
+            'lawyer_id'=>'required'
+
+        ]);
+
+        $lawyerProfile->update($request->all());
+
+        return response()->json($lawyerProfile);
     }
 
     /**
@@ -60,6 +80,7 @@ class LawyerProfileController extends Controller
      */
     public function destroy(LawyerProfile $lawyerProfile)
     {
-        //
+        $lawyerProfile->delete();
+        return response()->json($lawyerProfile);
     }
 }

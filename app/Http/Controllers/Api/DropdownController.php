@@ -4,11 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use App\Models\City;
 use App\Models\State;
 
+
 class DropdownController extends Controller
 {
+    public function indexCountry()
+    {
+        $countries=Country::all();
+        return response()->json($countries);
+
+
+    }
     /**
      * Display a listing of the resource.
      */
@@ -16,12 +25,19 @@ class DropdownController extends Controller
     {
         $cities = City::all();
         return response()->json($cities);
+
     }
 
     /**
      * Show the form for creating a new resource.
      */
+
+    public function createCountry(){
+
+
+    }
     public function createCity()
+
     {
         //
     }
@@ -29,6 +45,20 @@ class DropdownController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+    public function storeCountry(Request $request)
+    {
+
+        $request->validate([
+            'name' => 'required|max:255',
+        ]);
+
+        $country = Country::create($request->all());
+
+        return response()->json($country);
+
+    }
+
     public function storeCity(Request $request)
     {
         $request->validate([
@@ -39,28 +69,57 @@ class DropdownController extends Controller
         $city = City::create($request->all());
 
         return response()->json($city);
+
     }
 
     /**
      * Display the specified resource.
      */
+
+    public function showCountry($id)
+    {
+        $country = Country::findOrFail($id);
+        return response()->json($country);
+    }
+
     public function showCity($id)
     {
         $city = City::findOrFail($id);
         return response()->json($city);
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
+    public function editCountry(Country $country)
+    {
+        //
+
+    }
+
     public function editCity(city $city)
     {
-        
+
+
     }
 
     /**
      * Update the specified resource in storage.
      */
+
+    public function updateCountry(Request $request, Country $country)
+    {
+        $request->validate([
+            'name' => 'required|max:255',
+        ]);
+
+        $country->update($request->all());
+
+        return response()->json($country);
+
+    }
+
     public function updateCity(Request $request, City $city)
     {
         $request->validate([
@@ -71,11 +130,20 @@ class DropdownController extends Controller
         $city->update($request->all());
 
         return response()->json($city);
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
+
+    public function destroyCountry(Country $country)
+    {
+        $country->delete();
+        return response()->json($country);
+
+    }
+
     public function destroyCity(City $city)
     {
         $city->delete();
@@ -128,7 +196,7 @@ class DropdownController extends Controller
      */
     public function editState(city $city)
     {
-        
+
     }
 
     /**
@@ -153,5 +221,7 @@ class DropdownController extends Controller
     {
         $state->delete();
         return response()->json($state);
+
     }
+    
 }
