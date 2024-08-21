@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('lawyers', function (Blueprint $table) {
             $table->id();
-            $table->string('names');
+            $table->string('name');
             $table->string('last_names');
             $table->unsignedBigInteger('type_document_id');
             $table->foreign('type_document_id')->references('id')->on('type_documents')->onDelete('cascade');

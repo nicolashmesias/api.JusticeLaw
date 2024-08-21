@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\AreaLawyerController;
 use App\Http\Controllers\Api\ForumCategoryController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ReviewController;
+use App\Http\Controllers\Api\LawyerController;
 
 use Symfony\Component\VarDumper\Caster\DateCaster;
 
@@ -142,3 +143,10 @@ Route::post('reviews', [ReviewController::class, 'store'])->name('api.v1.reviews
 Route::get('reviews/{review}', [ReviewController::class, 'show'])->name('api.v1.rivews.show');
 Route::put('reviews/{rivew}', [ReviewController::class, 'update'])->name('api.v1.rivews.update');
 Route::delete('reviews/{review}', [ReviewController::class, 'delete'])->name('api.v1.rivews.delete');
+
+
+Route::get('lawyers', [LawyerController::class, 'index'])->name('api.v1.lawyers.index');
+Route::post('lawyers', [LawyerController::class, 'store'])->name('api.v1.lawyers.store');
+Route::get('lawyers/{lawyer}', [DateController::class, 'show'])->name('api.v1.lawyers.show');
+Route::put('lawyers/{lawyer}', [DateController::class, 'update'])->name('api.v1.lawyers.update');
+Route::delete('lawyers/{lawyer}', [DateController::class, 'delete'])->name('api.v1.lawyers.delete');
