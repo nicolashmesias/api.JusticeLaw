@@ -9,23 +9,17 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\DateController;
 use App\Http\Controllers\Api\ConsultingController;
 use App\Http\Controllers\Api\InformationController;
-<<<<<<< HEAD
+
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\SearchController;
-use App\Models\Consulting;
-use App\Models\Notification;
-use App\Models\Search;
-=======
+
+
 use App\Http\Controllers\Api\AreaController;
 use App\Http\Controllers\Api\AreaLawyerController;
 use App\Http\Controllers\Api\ForumCategoryController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ReviewController;
-use App\Models\Area;
-use App\Models\AreaLawyer;
-use App\Models\Consulting;
-use App\Models\Review;
->>>>>>> 6e758fc94133701354e1d2ed0eaacdddd9d77198
+
 use Symfony\Component\VarDumper\Caster\DateCaster;
 
 /*
@@ -103,7 +97,7 @@ Route::get('consultings/{consulting}',[ConsultingController::class,'show'])->nam
 Route::put('consultings/{consulting}',[ConsultingController::class,'update'])->name('api.v1.consultings.update');
 Route::delete('consultings/{consulting}',[ConsultingController::class,'delete'])->name('api.v1.consultings.delete');
 
-<<<<<<< HEAD
+
 
 Route::get('notifications',[NotificationController::class,'index'])->name('api.v1.notifications.index');
 Route::post('notifications',[NotificationController::class,'store'])->name('api.v1.notifications.store');
@@ -117,7 +111,7 @@ Route::post('searchs',[SearchController::class,'store'])->name('api.v1.searchs.s
 Route::get('searchs/{search}',[SearchController::class,'show'])->name('api.v1.searchs.show');
 Route::put('searchs/{search}',[SearchController::class,'update'])->name('api.v1.searchs.update');
 Route::delete('searchs/{search}',[SearchController::class,'delete'])->name('api.v1.searchs.delete');
-=======
+
 Route::get('areas',[AreaController::class,'index'])->name('api.v1.areas.index');
 Route::post('areas',[AreaController::class,'store'])->name('api.v1.areas.store');
 Route::get('areas/{area}',[AreaController::class,'show'])->name('api.v1.areas.show');
@@ -135,4 +129,4 @@ Route::post('reviews',[ReviewController::class,'store'])->name('api.v1.reviews.s
 Route::get('reviews/{review}',[ReviewController::class,'show'])->name('api.v1.rivews.show');
 Route::put('reviews/{rivew}',[ReviewController::class,'update'])->name('api.v1.rivews.update');
 Route::delete('reviews/{review}',[ReviewController::class,'delete'])->name('api.v1.rivews.delete');
->>>>>>> 6e758fc94133701354e1d2ed0eaacdddd9d77198
+
