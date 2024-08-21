@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\AnswerController;
 use App\Http\Controllers\Api\AdministratorController;
 use App\Http\Controllers\Api\TypeDocumentController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\UserProfileController;
+use App\Http\Controllers\Api\DropdownController;
 use App\Http\Controllers\Api\DateController;
 use App\Http\Controllers\Api\ConsultingController;
 use App\Http\Controllers\Api\InformationController;
@@ -74,6 +76,20 @@ Route::get('administrators', [AdministratorController::class,'index'])->name('ap
  Route::get('users/{user}', [UserController::class,'show'])->name('api.v1.users.show');
  Route::put('users/{user}', [UserController::class,'update'])->name('api.v1.users.update');
  Route::delete('users/{user}', [UserController::class,'destroy'])->name('api.v1.users.delete');
+
+ Route::get('usersProfile', [UserProfileController::class,'index'])->name('api.v1.usersProfile.index');
+ Route::post('usersProfile', [UserProfileController::class,'store'])->name('api.v1.usersProfile.store');
+ Route::get('usersProfile/{userProfile}', [UserProfileController::class,'show'])->name('api.v1.usersProfile.show');
+ Route::put('usersProfile/{userProfile}', [UserProfileController::class,'update'])->name('api.v1.usersProfile.update');
+ Route::delete('usersProfile/{userProfile}', [UserProfileController::class,'destroy'])->name('api.v1.usersProfile.delete');
+
+
+ Route::get('countries', [DropdownController::class,'indexCountry'])->name('api.v1.countries.index');
+ Route::post('countries', [DropdownController::class,'storeCountry'])->name('api.v1.countries.store');
+ Route::get('countries/{country}', [DropdownController::class,'showCountry'])->name('api.v1.countries.show');
+ Route::put('countries/{country}', [DropdownController::class,'updateCountry'])->name('api.v1.countries.update');
+ Route::delete('countries/{country}', [DropdownController::class,'destroyCountry'])->name('api.v1.countries.delete');
+
 
 
  Route::get('informations', [InformationController::class,'index'])->name('api.v1.informations.index');

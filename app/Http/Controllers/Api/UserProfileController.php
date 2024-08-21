@@ -29,15 +29,28 @@ class UserProfileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'cell_phone' => 'required|max:10',
+            'country_id' => 'required|max:10',
+            'state_id' => 'required|max:10',
+            'city_id' => 'required|max:10',
+            'profile_photo' => 'required|max:255|unique:users',
+            'user_id' => 'required|string|max:10'
+        ]);
+
+        $userProfile = UserProfile::create($request->all());
+
+        return response()->json($userProfile);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(UserProfile $userProfile)
+    public function show($id)
     {
-        //
+        $userProfile = UserProfile::findOrFail($id);
+        return response()->json($userProfile);
     }
 
     /**
@@ -53,7 +66,18 @@ class UserProfileController extends Controller
      */
     public function update(Request $request, UserProfile $userProfile)
     {
-        //
+        $request->validate([
+            'cell_phone' => 'required|max:10',
+            'country_id' => 'required|max:10',
+            'state_id' => 'required|max:10',
+            'city_id' => 'required|max:10',
+            'profile_photo' => 'required|max:255|unique:users',
+            'user_id' => 'required|string|max:10'
+        ]);
+
+        $userProfile->update($request->all());
+
+        return response()->json($userProfile);
     }
 
     /**
@@ -61,6 +85,7 @@ class UserProfileController extends Controller
      */
     public function destroy(UserProfile $userProfile)
     {
-        //
+        $userProfile->delete();
+        return response()->json($userProfile);
     }
 }
