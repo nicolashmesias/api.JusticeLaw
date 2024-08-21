@@ -35,7 +35,7 @@ class UserProfileController extends Controller
             'country_id' => 'required|max:10',
             'state_id' => 'required|max:10',
             'city_id' => 'required|max:10',
-            'profile_photo' => 'required|max:255|unique:users',
+            'profile_photo' => 'required|max:255',
             'user_id' => 'required|string|max:10'
         ]);
 
@@ -71,7 +71,7 @@ class UserProfileController extends Controller
             'country_id' => 'required|max:10',
             'state_id' => 'required|max:10',
             'city_id' => 'required|max:10',
-            'profile_photo' => 'required|max:255|unique:users',
+            'profile_photo' => 'required|max:255',
             'user_id' => 'required|string|max:10'
         ]);
 

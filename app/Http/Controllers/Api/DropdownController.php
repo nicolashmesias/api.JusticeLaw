@@ -62,7 +62,7 @@ class DropdownController extends Controller
     public function storeCity(Request $request)
     {
         $request->validate([
-            'state_id' => 'required|min:10',
+            'state_id' => 'required|max:10',
             'name' => 'required|max:210'
         ]);
 
@@ -123,7 +123,7 @@ class DropdownController extends Controller
     public function updateCity(Request $request, City $city)
     {
         $request->validate([
-            'status_id' => 'required|min:20',
+            'state_id' => 'required|max:10',
             'name' => 'required|max:210',
         ]);
 
@@ -173,13 +173,13 @@ class DropdownController extends Controller
     public function storeState(Request $request)
     {
         $request->validate([
-            'country_id' => 'required|min:10',
+            'country_id' => 'required|max:10',
             'name' => 'required|max:210'
         ]);
 
-        $city = City::create($request->all());
+        $state = State::create($request->all());
 
-        return response()->json($city);
+        return response()->json($state);
     }
 
     /**
@@ -205,7 +205,7 @@ class DropdownController extends Controller
     public function updateState(Request $request, State $state)
     {
         $request->validate([
-            'country_id' => 'required|min:20',
+            'country_id' => 'required|max:10',
             'name' => 'required|max:210',
         ]);
 
@@ -223,5 +223,5 @@ class DropdownController extends Controller
         return response()->json($state);
 
     }
-    
+
 }
