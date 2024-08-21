@@ -210,3 +210,4 @@ Route::get('lawyers/{lawyer}', [LawyerController::class, 'show'])->name('api.v1.
 Route::put('lawyers/{lawyer}', [LawyerController::class, 'update'])->name('api.v1.lawyers.update');
 Route::delete('lawyers/{lawyer}', [LawyerController::class, 'delete'])->name('api.v1.lawyers.delete');
 
+n
