@@ -12,7 +12,8 @@ class OverhaulReviewController extends Controller
      */
     public function index()
     {
-        //
+        $overhaulReview = OverhaulReview::all();
+        return response()->json($overhaulReview);
     }
 
     /**
@@ -28,15 +29,24 @@ class OverhaulReviewController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+    
+            'administrators_id' => 'required',
+            'review_id'=>'required'
+        ]);
+
+        $overhaulReview = OverhaulReview::create($request->all());
+
+        return response()->json($overhaulReview);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(OverhaulReview $overhaulReview)
+    public function show($id )
     {
-        //
+        $overhaulReview = OverhaulReview::findOrFail($id);
+        return response()->json($overhaulReview);
     }
 
     /**
@@ -52,7 +62,16 @@ class OverhaulReviewController extends Controller
      */
     public function update(Request $request, OverhaulReview $overhaulReview)
     {
-        //
+        $request->validate([
+
+             'administrators_id' => 'required',
+            'review_id'=>'required'
+                        
+        ]);
+
+        $overhaulReview->update($request->all());
+
+        return response()->json($overhaulReview);
     }
 
     /**
@@ -60,6 +79,7 @@ class OverhaulReviewController extends Controller
      */
     public function destroy(OverhaulReview $overhaulReview)
     {
-        //
+        $overhaulReview->delete();
+        return response()->json($overhaulReview);
     }
 }
