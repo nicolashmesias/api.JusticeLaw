@@ -9,10 +9,9 @@ class Search extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'statement',
-        'content',
-           'status',
-          'date',
-          'lawyer_id',
+        'fecha',
+        'user_id',
+        'lawyer_id',
+        'information_id'
     ];
 }
