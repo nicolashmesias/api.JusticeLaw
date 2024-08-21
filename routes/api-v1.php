@@ -19,7 +19,7 @@ use App\Http\Controllers\Api\AreaLawyerController;
 use App\Http\Controllers\Api\ForumCategoryController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ReviewController;
-
+use App\Http\Controllers\VerificationLawyerController;
 use Symfony\Component\VarDumper\Caster\DateCaster;
 
 /*
@@ -130,3 +130,8 @@ Route::get('reviews/{review}',[ReviewController::class,'show'])->name('api.v1.ri
 Route::put('reviews/{rivew}',[ReviewController::class,'update'])->name('api.v1.rivews.update');
 Route::delete('reviews/{review}',[ReviewController::class,'delete'])->name('api.v1.rivews.delete');
 
+Route::get('verificationLawyers',[VerificationLawyerController::class,'index'])->name('api.v1.verificationLawyers.index');
+Route::post('verificationLawyers',[VerificationLawyerController::class,'store'])->name('api.v1.verificationLawyers.store');
+Route::get('verificationLawyers/{verificationLawyer}',[VerificationLawyerController::class,'show'])->name('api.v1.verificationLawyers.show');
+Route::put('verificationLawyers/{verificationLawyer}',[VerificationLawyerController::class,'update'])->name('api.v1.verificationLawyers.update');
+Route::delete('verificationLawyers/{verificationLawyer}',[VerificationLawyerController::class,'delete'])->name('api.v1.verificationLawyers  .delete');
