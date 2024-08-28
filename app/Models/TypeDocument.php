@@ -17,4 +17,11 @@ class TypeDocument extends Model
         return $this->hasMany(User::class);
     }
 
+    public function administrators(){
+        return $this->hasMany(Administrator::class);
+    }
+
+    public function lawyers(){
+        return $this->hasMany(Lawyer::class);
+    }
 }

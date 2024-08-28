@@ -12,4 +12,14 @@ class Administrator extends Model
     protected $fillable = [
         'type_document_id', 'document_number', 'email', 'password'
     ];
+
+    public function typeDocument(){
+        return $this->belongsTo(TypeDocument::class);
+    }
+
+    public function overhaulReviews()
+    {
+        return $this->hasMany(OverhaulReview::class, 'administrators_id');
+    }
+    
 }

@@ -33,7 +33,7 @@ class QuestionController extends Controller
             'affair' => 'required|max:255',
             'content' => 'required|string|min:8',
             'date_publication' => 'required|string|min:8',
-            'user_id' => 'required|min:10',
+            'user_id' => 'required|max:10',
             'forum_category_id' => 'required|max:210'
         ]);
 
@@ -68,7 +68,7 @@ class QuestionController extends Controller
             'lawyer_id' => 'required|min:10',
             'question_id' => 'required|max:210',
             'affair' => 'required|max:255',
-            'content' => 'required|string|min:8',
+            'content' => 'required|string|max:8',
             'date_publication' => 'required|string|min:8'
         ]);
 

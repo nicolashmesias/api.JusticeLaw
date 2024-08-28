@@ -23,7 +23,7 @@ class LawyerController extends Controller
           'name' => 'required|max:30',
             'last_names' => 'required|max:50',
             'type_document_id' => 'required|max:10',
-            'document_number' => 'required|max:10',
+            'document_number' => 'required|max:13',
             'email' => 'required|max:255|unique:users',
             'password' => 'required|string|min:8'
         ]);
@@ -46,7 +46,7 @@ class LawyerController extends Controller
             'name' => 'required|max:30',
             'last_name' => 'required|max:50',
             'type_document_id' => 'required|max:10',
-            'document_number' => 'required|max:10',
+            'document_number' => 'required|max:13',
             'email' => 'required|max:255',
             'password' => 'required|string|min:8'
         ]);

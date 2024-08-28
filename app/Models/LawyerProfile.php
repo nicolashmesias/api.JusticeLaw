@@ -16,4 +16,8 @@ class LawyerProfile extends Model
     ];
 
 
+    public function lawyer(){
+        return $this->belongsTo(Lawyer::class);
+    }
+    
 }

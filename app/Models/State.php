@@ -12,4 +12,20 @@ class State extends Model
     protected $fillable = [
         'name', 'country_id'
     ];
+
+    public function users(){
+        return $this->hasMany(User::class);
+    }
+
+    public function cities(){
+        return $this->hasMany(City::class);
+    }
+
+    public function country(){
+        return $this->belongsTo(Country::class);
+   }
+   public function verificationLawyers()
+    {
+        return $this->hasMany(VerificationLawyer::class);
+    }
 }

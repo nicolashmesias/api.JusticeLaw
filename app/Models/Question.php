@@ -23,4 +23,12 @@ class Question extends Model
         return $this->belongsTo('App\Models\User');
     }
 
+    public function answers(){
+        return $this->hasMany('App\Models\Answer');
+    }
+
+    public function consultings()
+    {
+        return $this->hasMany(Consulting::class, 'question_id');
+    }
 }

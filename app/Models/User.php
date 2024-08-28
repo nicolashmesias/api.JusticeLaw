@@ -53,4 +53,21 @@ class User extends Authenticatable
     public function userProfile(){
         return $this->hasOne(UserProfile::class);
     }
+
+    public function questions(){
+        return $this->hasMany(Question::class);
+    }
+
+    public function notifications(){
+        return $this->hasMany(Notification::class);
+    }
+
+    public function searches(){
+        return $this->hasMany(Search::class);
+    }
+
+    public function reviews(){
+        return $this->hasMany(Review::class);
+    }
+
 }

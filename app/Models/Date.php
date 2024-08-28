@@ -14,5 +14,9 @@ class Date extends Model
         'startTime',
         'endTime'
     ];
-    
+
+
+    public function lawyers(){
+        return $this->belongsToMany(Lawyer::class);
+    }
 }

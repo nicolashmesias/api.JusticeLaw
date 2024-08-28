@@ -12,4 +12,13 @@ class AreaLawyer extends Model
         'area_id',
         'lawyer_id'
     ];
+
+    public function area(){
+        return $this->belongsTo(Area::class);
+    }
+
+    public function lawyer(){
+        return $this->belongsTo(Lawyer::class);
+    }
+    
 }

@@ -16,4 +16,17 @@ class Answer extends Model
         'lawyer_id',
         'question_id'
     ];
+
+    public function question(){
+        return $this->belongsTo(Question::class);
+    }
+
+    public function lawyer(){
+        return $this->belongsTo(Lawyer::class);
+    }
+
+    public function consultings()
+    {
+        return $this->hasMany(Consulting::class, 'answer_id');
+    }
 }

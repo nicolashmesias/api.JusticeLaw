@@ -14,4 +14,18 @@ class Review extends Model
         'user_id',
         'lawyer_id'
     ];
+
+    public function lawyer(){
+        return $this->belongsTo(Lawyer::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function overhaulReviews()
+    {
+        return $this->hasMany(OverhaulReview::class, 'review_id');
+    }
+
 }

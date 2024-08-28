@@ -12,7 +12,8 @@ class ForumCategoryController extends Controller
      */
     public function index()
     {
-        $forumCategories = ForumCategory::all();
+        // $forumCategories = ForumCategory::all();
+        $forumCategories = ForumCategory::included()->get();
         return response()->json($forumCategories);
     }
 
