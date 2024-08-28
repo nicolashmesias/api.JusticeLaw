@@ -56,6 +56,9 @@ class Lawyer extends Model
 
     protected $allowIncluded = ['typeDocument','lawyerProfile', 'verificationLawyer','verificationLawyer.country','verificationLawyer.state','verificationLawyer.city','areas','reviews.user','answers','notifications','searches','searches.information'];
 
+    protected $allowFilter = ['id', 'name', 'last_names','type_document_id', 'document_number', 'email', 'password'];
+
+
     public function typeDocument(){
         return $this->belongsTo(TypeDocument::class);
     }
@@ -116,6 +119,29 @@ class Lawyer extends Model
 
         //http://api.codersfree1.test/v1/categories?included=posts
 
+
+    }
+
+    public function scopeFilter(Builder $query)
+    {
+
+        if (empty($this->allowFilter) || empty(request('filter'))) {
+            return;
+        }
+
+        $filters = request('filter');
+        $allowFilter = collect($this->allowFilter);
+
+        foreach ($filters as $filter => $value) {
+
+            if ($allowFilter->contains($filter)) {
+
+                $query->where($filter, 'LIKE', '%' . $value . '%');//nos retorna todos los registros que conincidad, asi sea en una porcion del texto
+            }
+        }
+
+        //http://api.codersfree1.test/v1/categories?filter[name]=depo
+        //http://api.codersfree1.test/v1/categories?filter[name]=posts&filter[id]=2
 
     }
 
