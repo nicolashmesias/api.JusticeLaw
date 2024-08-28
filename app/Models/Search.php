@@ -14,7 +14,7 @@ class Search extends Model
     protected $fillable = ['fecha', 'user_id', 'lawyer_id','information_id' ];
 
     protected $allowIncluded = ['users']; //las posibles Querys que se pueden realizar
-    
+
     protected $allowFilter = ['id', 'fecha', 'user_id'];
     protected $allowSort = ['id', 'fecha', 'user_id'];
 
@@ -26,7 +26,7 @@ class Search extends Model
         return $this->belongsTo(User::class);
     }
 
-   
+
     public function lawyer()
     {
         return $this->belongsTo(Lawyer::class);
@@ -39,17 +39,17 @@ class Search extends Model
     }
 
 
- 
+
 
     /////////////////////////////////////////////////////////////////////////////
     public function scopeIncluded(Builder $query)
     {
-       
+
         if(empty($this->allowIncluded)||empty(request('included'))){// validamos que la lista blanca y la variable included enviada a travez de HTTP no este en vacia.
             return;
         }
 
-        
+
         $relations = explode(',', request('included')); //['posts','relation2']//recuperamos el valor de la variable included y separa sus valores por una coma
 
         return $relations;
@@ -76,7 +76,7 @@ class Search extends Model
 
     public function scopeFilter(Builder $query)
     {
-        
+
         if (empty($this->allowFilter) || empty(request('filter'))) {
             return;
         }
@@ -96,11 +96,11 @@ class Search extends Model
         //http://api.codersfree1.test/v1/categories?filter[name]=posts&filter[id]=2
 
     }
-    
+
 
     public function scopeSort(Builder $query)
     {
-       
+
      if (empty($this->allowSort) || empty(request('sort'))) {
             return;
         }
@@ -109,8 +109,8 @@ class Search extends Model
         $allowSort = collect($this->allowSort);
 
       foreach ($sortFields as $sortField) {
-           
-            $direction = 'asc'; 
+
+            $direction = 'asc';
 
             if(substr($sortField, 0,1)=='-'){ //cambiamos la consulta a 'desc'si el usuario antecede el menos (-) en el valor de la variable sort
                 $direction = 'desc';
@@ -122,20 +122,20 @@ class Search extends Model
         }
         //http://api.codersfree1.test/v1/categories?sort=name
     }
- 
+
     public function scopeGetOrPaginate(Builder $query)
     {
       if (request('perPage')) {
             $perPage = intval(request('perPage'));//transformamos la cadena que llega en un numero.
-            
+
             if($perPage){//como la funcion intval retorna 0 si no puede hacer la conversion 0  es = false
                 return $query->paginate($perPage);//retornamos la cuonsulta de acuerdo a la ingresado en la vaiable $perPage
             }
 
-            
+
          }
            return $query->get();//sino se pasa el valor de $perPage en la URL se pasan todos los registros.
-        //http://api.codersfree1.test/v1/categories?perPage=2    
+        //http://api.codersfree1.test/v1/categories?perPage=2
     }
 
 }
