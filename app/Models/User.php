@@ -27,6 +27,9 @@ class User extends Authenticatable
     ];
 
     protected $allowIncluded = ['typeDocument','userProfile','userProfile.country','userProfile.state','userProfile.city','notifications','searches','searches.information'];
+    
+    
+    protected $allowFilter = ['id', 'name', 'statement','status', 'date'];
 
     /**
      * The attributes that should be hidden for serialization.
