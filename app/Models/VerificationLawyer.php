@@ -8,7 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class VerificationLawyer extends Model
 {
     use HasFactory;
-
+    public $fillable =[
+        'cell_phone',
+        'country_id',
+        'state_id',
+        'city_id',
+        'lawyer_id'
+    ];
     public function country(){
         return $this->belongsTo(Country::class);
     }
@@ -24,5 +30,5 @@ class VerificationLawyer extends Model
     public function city(){
         return $this->belongsTo(City::class);
     }
-    
+
 }

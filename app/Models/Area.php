@@ -9,10 +9,12 @@ class Area extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+    ];
 
-    public function lawyers()
-    {
-        return $this->belongsToMany(Lawyer::class, 'area_lawyers', 'area_id', 'lawyer_id');
+    public function lawyers(){
+        return $this->belongsToMany(Lawyer::class);
     }
+
 }
