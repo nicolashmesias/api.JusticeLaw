@@ -14,7 +14,7 @@ class ForumCategory extends Model
     'description'
     ];
 
-    protected $allowIncluded = ['questions', 'questions.user','answers','answers.lawyer'];
+    protected $allowIncluded = ['questions', 'questions.user','lawyerProfile','answers.lawyer'];
 
     public function questions(){
         return $this->hasMany('App\Models\Question');
