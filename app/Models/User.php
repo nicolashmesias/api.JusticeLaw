@@ -26,7 +26,7 @@ class User extends Authenticatable
         'password',
     ];
 
-    protected $allowIncluded = ['typeDocument','userProfile','userProfile.country','userProfile.state','userProfile.city','notifications','searches','searches.information'];
+    protected $allowIncluded = ['typeDocument','userProfile','userProfile.country','userProfile.state','userProfile.city','questions.lawyer','reviews','notifications','searches','searches.information'];
     
     
     protected $allowFilter = ['id', 'name', 'statement','status', 'date'];
