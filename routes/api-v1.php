@@ -180,7 +180,7 @@ Route::delete('areasLawyer/{areaLawyer}', [AreaLawyerController::class, 'delete'
 
 Route::get('reviews', [ReviewController::class, 'index'])->name('api.v1.reviews.index');
 Route::post('reviews', [ReviewController::class, 'store'])->name('api.v1.reviews.store');
-Route::get('reviews/{review}', [ReviewController::class, 'show'])->name('api.v1.rivews.show');
+Route::get('reviews/{review}', [ReviewController::class, 'show'])->name('api.v1.riv ews.show');
 Route::put('reviews/{rivew}', [ReviewController::class, 'update'])->name('api.v1.rivews.update');
 Route::delete('reviews/{review}', [ReviewController::class, 'delete'])->name('api.v1.rivews.delete');
 
