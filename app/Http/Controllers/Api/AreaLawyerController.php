@@ -21,6 +21,8 @@ class AreaLawyerController extends Controller
     public function create()
     {
 
+        request();
+
     }
 
     /**

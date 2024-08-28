@@ -122,17 +122,13 @@ Route::get('searchs/{search}',[SearchController::class,'show'])->name('api.v1.se
 Route::put('searchs/{search}',[SearchController::class,'update'])->name('api.v1.searchs.update');
 Route::delete('searchs/{search}',[SearchController::class,'delete'])->name('api.v1.searchs.delete');
 
-Route::get('areas',[AreaController::class,'index'])->name('api.v1.areas.index');
-Route::post('areas',[AreaController::class,'store'])->name('api.v1.areas.store');
-Route::get('areas/{area}',[AreaController::class,'show'])->name('api.v1.areas.show');
-Route::put('areas/{area}',[AreaController::class,'update'])->name('api.v1.areas.update');
-Route::delete('areas/{area}',[AreaController::class,'delete'])->name('api.v1.areas.delete');
 
 Route::get('consultings', [ConsultingController::class, 'index'])->name('api.v1.consultings.index');
 Route::post('consultings', [ConsultingController::class, 'store'])->name('api.v1.consultings.store');
 Route::get('consultings/{consulting}', [ConsultingController::class, 'show'])->name('api.v1.consultings.show');
 Route::put('consultings/{consulting}', [ConsultingController::class, 'update'])->name('api.v1.consultings.update');
 Route::delete('consultings/{consulting}', [ConsultingController::class, 'delete'])->name('api.v1.consultings.delete');
+
 
 Route::get('reviews',[ReviewController::class,'index'])->name('api.v1.reviews.index');
 Route::post('reviews',[ReviewController::class,'store'])->name('api.v1.reviews.store');
