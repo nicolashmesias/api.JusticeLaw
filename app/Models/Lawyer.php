@@ -54,7 +54,7 @@ class Lawyer extends Model
         'email_verified_at' => 'datetime',
     ];
 
-    protected $allowIncluded = ['typeDocument','lawyerProfile', 'verificationLawyer','verificationLawyer.country','verificationLawyer.state','verificationLawyer.city','areas','reviews.user','answers'];
+    protected $allowIncluded = ['typeDocument','lawyerProfile', 'verificationLawyer','verificationLawyer.country','verificationLawyer.state','verificationLawyer.city','areas','reviews.user','answers','notifications','searches','searches.information'];
 
     protected $allowFilter = ['id', 'name', 'last_names','type_document_id', 'document_number', 'email', 'password'];
 
