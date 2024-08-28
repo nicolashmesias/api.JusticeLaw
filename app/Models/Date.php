@@ -19,6 +19,7 @@ class Date extends Model
 
 
     protected $allowIncluded =['lawyers'];
+
     public function lawyers(){
         return $this->belongsToMany(Lawyer::class);
     }
@@ -44,7 +45,7 @@ class Date extends Model
         }
         $query->with($relations); //se ejecuta el query con lo que tiene $relations en ultimas es el valor en la url de included
 
-        //http://api.codersfree1.test/v1/categories?included=posts
+        
 
 
     }
