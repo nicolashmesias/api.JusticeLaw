@@ -12,7 +12,8 @@ class UserProfileController extends Controller
      */
     public function index()
     {
-        $usersProfile=UserProfile::all();
+        // $usersProfile=UserProfile::all();
+        $usersProfile = UserProfile::included()->get();
         return response()->json($usersProfile);
     }
 

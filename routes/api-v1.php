@@ -152,11 +152,11 @@ Route::get('overhaulreviews/{overhaulreview}',[OverhaulReviewController::class,'
 Route::put('overhaulreviews/{overhaulreview}',[OverhaulReviewController::class,'update'])->name('api.v1.overhaulreviews.update');
 Route::delete('overhaulreviews/{overhaulreview}',[OverhaulReviewController::class,'delete'])->name('api.v1.overhaulreviews.delete');
 
-Route::get('lawyerprofiles',[LawyerProfileController::class,'index'])->name('api.v1.lawyerprofiles.index');
-Route::post('lawyerprofiles',[LawyerProfileController::class,'store'])->name('api.v1.lawyerprofiles.store');
-Route::get('lawyerprofiles/{lawyerprofile}',[LawyerProfileController::class,'show'])->name('api.v1.lawyerprofiles.show');
-Route::put('lawyerprofiles/{lawyerprofile}',[LawyerProfileController::class,'update'])->name('api.v1.lawyerprofiles.update');
-Route::delete('lawyerprofiles/{lawyerprofile}',[LawyerProfileController::class,'delete'])->name('api.v1.lawyerprofiles.delete');
+Route::get('lawyerProfiles',[LawyerProfileController::class,'index'])->name('api.v1.lawyerProfiles.index');
+Route::post('lawyerProfiles',[LawyerProfileController::class,'store'])->name('api.v1.lawyerProfiles.store');
+Route::get('lawyerProfiles/{lawyerprofile}',[LawyerProfileController::class,'show'])->name('api.v1.lawyerProfiles.show');
+Route::put('lawyerProfiles/{lawyerprofile}',[LawyerProfileController::class,'update'])->name('api.v1.lawyerProfiles.update');
+Route::delete('lawyerProfiles/{lawyerprofile}',[LawyerProfileController::class,'delete'])->name('api.v1.lawyerProfiles.delete');
 
 Route::get('notifications', [NotificationController::class, 'index'])->name('api.v1.notifications.index');
 Route::post('notifications', [NotificationController::class, 'store'])->name('api.v1.notifications.store');

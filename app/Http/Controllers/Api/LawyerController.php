@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Date;
 use App\Models\Lawyer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -11,10 +10,10 @@ class LawyerController extends Controller
 {
     public function index()
     {
-        $lawyers=Lawyer::all();
-
+        // $lawyers=Lawyer::all();
+        $lawyers = Lawyer::included()->get();
         return response()->json($lawyers);
-    
+
     }
 
     public function store(Request $request)
@@ -24,7 +23,7 @@ class LawyerController extends Controller
             'last_names' => 'required|max:50',
             'type_document_id' => 'required|max:10',
             'document_number' => 'required|max:13',
-            'email' => 'required|max:255|unique:users',
+            'email' => 'required|max:255|unique:lawyers',
             'password' => 'required|string|min:8'
         ]);
 
@@ -44,14 +43,14 @@ class LawyerController extends Controller
     {
         $request->validate([
             'name' => 'required|max:30',
-            'last_name' => 'required|max:50',
+            'last_names' => 'required|max:50',
             'type_document_id' => 'required|max:10',
             'document_number' => 'required|max:13',
             'email' => 'required|max:255',
             'password' => 'required|string|min:8'
         ]);
 
-        
+
         $lawyer->update($request->all());
 
         return response()->json($lawyer);

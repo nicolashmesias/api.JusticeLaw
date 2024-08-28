@@ -32,10 +32,10 @@ class VerificationLawyerController extends Controller
     {
         $request->validate([
             'cell_phone' => 'required|min:10',
-            'country_id' => 'required|max:210',
-            'state_id' => 'required|max:255',
-            'city_id' => 'required|string|min:8',
-            'lawyer_id' => 'required|numeric|min:8'
+            'country_id' => 'required',
+            'state_id' => 'required',
+            'city_id' => 'required',
+            'lawyer_id' => 'required'
         ]);
 
         $verificationLawyer = VerificationLawyer::create($request->all());
@@ -67,10 +67,10 @@ class VerificationLawyerController extends Controller
     {
         $request->validate([
             'cell_phone' => 'required|min:10',
-            'country_id' => 'required|max:210',
-            'state_id' => 'required|max:255',
-            'city_id' => 'required|string|min:8',
-            'lawyer_id' => 'required|numeric|min:8'
+            'country_id' => 'required',
+            'state_id' => 'required',
+            'city_id' => 'required',
+            'lawyer_id' => 'required'
         ]);
         $verificationLawyer->update($request->all());
 
