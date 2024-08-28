@@ -27,6 +27,9 @@ class User extends Authenticatable
     ];
 
     protected $allowIncluded = ['typeDocument','userProfile','userProfile.country','userProfile.state','userProfile.city','notifications','searches','searches.information'];
+    
+    
+    protected $allowFilter = ['id', 'name', 'statement','status', 'date'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -96,6 +99,30 @@ class User extends Authenticatable
 
 
     }
+
+
+    public function scopeFilter(Builder $query)
+    {
+        
+        if (empty($this->allowFilter) || empty(request('filter'))) {
+            return;
+        }
+
+        $filters = request('filter');
+        $allowFilter = collect($this->allowFilter);
+
+        foreach ($filters as $filter => $value) {
+
+            if ($allowFilter->contains($filter)) {
+
+                $query->where($filter, 'LIKE', '%' . $value . '%');//nos retorna todos los registros que conincidad, asi sea en una porcion del texto
+            }
+        }
+
+   
+
+    }
+    
 
 
 }

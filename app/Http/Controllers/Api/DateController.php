@@ -14,6 +14,7 @@ class DateController extends Controller
     public function index()
     {
         $dates=Date::all();
+        $forumCategories = Date::included()->get();
 
         return response()->json($dates);
     }
