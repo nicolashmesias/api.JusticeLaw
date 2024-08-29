@@ -10,7 +10,7 @@ class Administrator extends Model
     use HasFactory;
 
     protected $fillable = [
-        'type_document_id', 'document_number', 'emali', 'password'
+        'type_document_id', 'document_number', 'email', 'password'
     ];
 
     public function typeDocument(){
@@ -21,7 +21,7 @@ class Administrator extends Model
     {
         return $this->hasMany(OverhaulReview::class, 'administrators_id');
     }
-    
+
     protected $allowIncluded = ['overhaulReview.review','typeDocument'];
 
     public function scopeIncluded(Builder $query)

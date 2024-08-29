@@ -31,7 +31,7 @@ class ForumCategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|min:10',
+            'name' => 'required',
             'description' => 'required|max:210'
         ]);
 
@@ -63,7 +63,7 @@ class ForumCategoryController extends Controller
     public function update(Request $request, ForumCategory $forumCategory)
     {
         $request->validate([
-            'name' => 'required|min:10',
+            'name' => 'required',
             'description' => 'required|max:210'
         ]);
 

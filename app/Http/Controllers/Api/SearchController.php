@@ -30,12 +30,10 @@ class SearchController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            
+
             'fecha' => 'required',
-            'user_id' => 'required',
-            'lawyer_id' => 'required',
             'information_id' => 'required',
-            
+
         ]);
 
         $search = Search::create($request->all());
@@ -68,10 +66,8 @@ class SearchController extends Controller
         $request->validate([
 
             'fecha' => 'required',
-            'user_id' => 'required',
-            'lawyer_id' => 'required',
             'information_id' => 'required',
-                        
+
         ]);
 
         $search->update($request->all());

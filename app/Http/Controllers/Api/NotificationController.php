@@ -29,9 +29,9 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $request->validate([
-            '  statement' => 'required',
+            'statement' => 'required',
             'content' => 'required',
             'status' => 'required',
             'date' => 'required',
@@ -66,7 +66,7 @@ class NotificationController extends Controller
     public function update(Request $request, Notification $notification)
     {
         $request->validate([
-            '  statement' => 'required',
+            'statement' => 'required',
             'content' => 'required',
             'status' => 'required',
             'date' => 'required',

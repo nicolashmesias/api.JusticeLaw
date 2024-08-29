@@ -13,21 +13,25 @@ return new class extends Migration
     {
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
             $table->string('name');
+            $table->string('phonecode');
             $table->timestamps();
         });
 
         Schema::create('states', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('country_id');
+            $table->unsignedBigInteger('country_id');
+            $table->foreign('country_id')->references('id')->on('countries');
             $table->timestamps();
         });
 
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('state_id');
+            $table->unsignedBigInteger('state_id');
+            $table->foreign('state_id')->references('id')->on('states');
             $table->timestamps();
         });
     }

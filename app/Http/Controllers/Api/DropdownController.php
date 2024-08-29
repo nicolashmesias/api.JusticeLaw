@@ -50,7 +50,9 @@ class DropdownController extends Controller
     {
 
         $request->validate([
+            'code'=>'required|max:2',
             'name' => 'required|max:255',
+            'phonecode' => 'required|max:4'
         ]);
 
         $country = Country::create($request->all());
@@ -111,7 +113,9 @@ class DropdownController extends Controller
     public function updateCountry(Request $request, Country $country)
     {
         $request->validate([
+            'code'=>'required|max:2',
             'name' => 'required|max:255',
+            'phonecode' => 'required|max:4'
         ]);
 
         $country->update($request->all());

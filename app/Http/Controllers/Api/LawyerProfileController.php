@@ -13,8 +13,8 @@ class LawyerProfileController extends Controller
      */
     public function index()
     {
-        $lawyerprofile = LawyerProfile::all();
-        return response()->json($lawyerprofile);
+        $lawyerProfile = LawyerProfile::all();
+        return response()->json($lawyerProfile);
     }
 
     /**
@@ -36,9 +36,9 @@ class LawyerProfileController extends Controller
             'lawyer_id'=>'required'
         ]);
 
-        $lawyerprofile = LawyerProfile::create($request->all());
+        $lawyerProfile = LawyerProfile::create($request->all());
 
-        return response()->json($lawyerprofile);
+        return response()->json($lawyerProfile);
     }
 
     /**
