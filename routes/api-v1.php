@@ -22,7 +22,7 @@ use App\Http\Controllers\Api\VerificationLawyerController;
 use App\Http\Controllers\Api\LawyerController;
 use App\Http\Controllers\Api\OverhaulReviewController;
 use App\Http\Controllers\Api\LawyerProfileController;
-
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +42,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
 
 Route::get('answers', [AnswerController::class, 'index'])->name('api.v1.answers.index');
 Route::post('answers', [AnswerController::class, 'store'])->name('api.v1.answers.store');

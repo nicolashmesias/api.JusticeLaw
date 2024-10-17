@@ -10,9 +10,9 @@ class LawyerController extends Controller
 {
     public function index()
     {
-        // $lawyers=Lawyer::all();
+         $lawyers=Lawyer::all();
         // $lawyers = Lawyer::included()->get();
-        $lawyers=Lawyer::included()->filter();
+        //$lawyers=Lawyer::included()->filter();
         return response()->json($lawyers);
 
     }

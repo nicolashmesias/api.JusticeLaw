@@ -27,21 +27,35 @@ class QuestionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'affair' => 'required|max:255',
-            'content' => 'required|string|min:8',
-            'date_publication' => 'required|string|min:8',
-            'user_id' => 'required|max:10',
-            'forum_category_id' => 'required|max:210'
-        ]);
-
-        $question = Question::create($request->all());
-
-        return response()->json($question);
-    }
-
+   
+     public function store(Request $request)
+     {
+        {
+            // Validar los datos enviados desde el cliente
+            $validatedData = $request->validate([
+                'affair' => 'required|string|max:255',
+                'user_id' => 'required|integer',
+                'forum_category_id' => 'required|integer',
+                'date_publication' => 'required|date',
+                'content' => 'required|string',
+            ]);
+    
+            // Crear una nueva pregunta en la base de datos
+            $question = Question::create([
+                'affair' => $validatedData['affair'],
+                'user_id' => $validatedData['user_id'],
+                'forum_category_id' => $validatedData['forum_category_id'],
+                'date_publication' => $validatedData['date_publication'],
+                'content' => $validatedData['content'],
+            ]);
+    
+            // Responder con un mensaje de éxito y los datos creados
+            return response()->json([
+                'message' => 'Pregunta creada con éxito.',
+                'data' => $question
+            ], 201);
+        }
+     }
     /**
      * Display the specified resource.
      */
