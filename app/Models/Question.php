@@ -10,13 +10,9 @@ class Question extends Model
     use HasFactory;
 
     
-    public $fillable =[
-        'affair',
-        'content',
-        'date_publication',
-        'user_id',
-        'forum_category_id'
-    ];
+    public $fillable = ['affair', 'content', 'forum_category_id', 'user_id', 'date_publication'];
+
+
     public function forumCategory(){
         return $this->belongsTo('App\Models\ForumCategory');
     }
