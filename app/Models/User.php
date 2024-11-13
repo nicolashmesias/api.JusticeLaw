@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Builder;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -29,8 +29,8 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     protected $allowIncluded = ['typeDocument','userProfile','userProfile.country','userProfile.state','userProfile.city','questions.lawyer','reviews','notifications','searches','searches.information'];
-    
-    
+
+
     protected $allowFilter = ['id', 'name', 'statement','status', 'date'];
 
     /**
@@ -61,7 +61,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-    
+
     public function typeDocument(){
         return $this->belongsTo(TypeDocument::class);
     }
@@ -115,7 +115,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function scopeFilter(Builder $query)
     {
-        
+
         if (empty($this->allowFilter) || empty(request('filter'))) {
             return;
         }
@@ -131,10 +131,10 @@ class User extends Authenticatable implements JWTSubject
             }
         }
 
-   
+
 
     }
-    
+
 
 
 }
