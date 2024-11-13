@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Builder;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject; 
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -57,11 +57,12 @@ class User extends Authenticatable implements JWTSubject
         return $this->getKey();
     }
 
+
     public function getJWTCustomClaims()
     {
         return [];
     }
-    
+
     public function typeDocument(){
         return $this->belongsTo(TypeDocument::class);
     }
