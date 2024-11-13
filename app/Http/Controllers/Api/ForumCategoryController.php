@@ -48,7 +48,6 @@ class ForumCategoryController extends Controller
         $forumCategory = ForumCategory::findOrFail($id);
         return response()->json($forumCategory);
     }
-    
 
     /**
      * Show the form for editing the specified resource.
