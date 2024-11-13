@@ -49,19 +49,18 @@ Route::get('/', function () {
 //     return $request->user();
 // });
 
-Route::group([], function () {
-    Route::post('register', [AuthController::class, 'register']);
-    Route::post('login', [AuthController::class, 'login']);
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+], function ($router) {
+    Route::post('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
+    Route::post('/me', [AuthController::class, 'me'])->name('me');
 });
-
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-
-Route::group(['middleware' => 'auth:api'], function() {
-    Route::post('refresh',[AuthController::class,'refresh'])->name('refresh');
-  
-});
-
-Route::post('me',[AuthController::class,'me'])->name('me');
 
 Route::get('answers', [AnswerController::class, 'index'])->name('api.v1.answers.index');
 Route::post('answers', [AnswerController::class, 'store'])->name('api.v1.answers.store');
