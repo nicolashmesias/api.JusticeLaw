@@ -220,10 +220,10 @@ Route::middleware('auth:api')->post('/refresh-token', function () {
 
 //grupo de rutas de notificaciones
 Route::middleware(['auth:api'])->group(function () {
-    Route::get('/notifications', [NotificationController::class, 'api.v1.notifications.index']); // Listar notificaciones no leídas
-    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'api.v1.notifications.markAsRead']); // Marcar como leída
-    Route::delete('/notifications/{id}', [NotificationController::class, 'api.v1.notifications.destroy']); // Eliminar notificación
-    Route::post('/notifications/{id}/archive', [NotificationController::class, 'api.v1.notifications.archive']); // Archivar notificación
-    Route::delete('/notifications', [NotificationController::class, 'api.v1.notifications.destroyAll']); // Eliminar todas
-    Route::post('/notifications/archive-all', [NotificationController::class, 'api.v1.notifications.archiveAll']); // Archivar todas
+    Route::get('/notifications', [NotificationController::class, 'index']); // Listar notificaciones no leídas
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']); // Marcar como leída
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']); // Eliminar notificación
+    Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']); // Archivar notificación
+    Route::delete('/notifications', [NotificationController::class, 'destroyAll']); // Eliminar todas
+    Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']); // Archivar todas
 });
