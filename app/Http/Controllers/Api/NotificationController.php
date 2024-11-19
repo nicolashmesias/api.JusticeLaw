@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Notifications\NewNotification;
+use Illuminate\Notifications\DatabaseNotification;
+
 class NotificationController extends Controller
 {
      /**
@@ -13,15 +16,15 @@ class NotificationController extends Controller
     public function index()
     {
         $user = auth()->user(); // Usuario autenticado
-        $notificaciones = $user->unreadNotifications->paginate(10); // paginar notificaciones 10 por consulta 
-        $notificaciones = $user->unreadNotifications; // Relación directa
-        $notificaciones = cache()->remember("user_{$user->id}_notifications", 60, function () use ($user) {
+        $notificacions = $user->unreadNotifications->paginate(10); // paginar notificaciones 10 por consulta 
+        $notificacions = $user->unreadNotifications; // Relación directa
+        $notificacions = cache()->remember("user_{$user->id}_notifications", 60, function () use ($user) {
             return $user->unreadNotifications->get();
         });
 
         return response()->json([
             'success' => true,
-            'notifications' => $notificaciones,
+            'notifications' => $notificacions,
         ]);
     }
 
@@ -131,4 +134,36 @@ class NotificationController extends Controller
             'message' => 'Todas las notificaciones fueron archivadas',
         ]);
     }
+
+    // manejo de likes en notificaciones 
+    public function likeNotification($id)
+    {
+    $notification = DatabaseNotification::findOrFail($id);
+    $userId = auth()->id();
+
+    // Extraer datos actuales
+    $data = $notification->data;
+
+    // Manejar "me gusta"
+    if (!isset($data['likes'])) {
+        $data['likes'] = [];
+    }
+
+    if (in_array($userId, $data['likes'])) {
+        // Si el usuario ya dio "me gusta", eliminarlo
+        $data['likes'] = array_diff($data['likes'], [$userId]);
+        $message = 'Me gusta eliminado';
+    } else {
+        // Si no, añadirlo
+        $data['likes'][] = $userId;
+        $message = 'Me gusta añadido';
+    }
+
+    // Guardar cambios
+    $notification->data = $data;
+    $notification->save();
+
+    return response()->json(['message' => $message, 'likes_count' => count($data['likes'])]);
+    }
+
 }
