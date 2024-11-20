@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('affair');
             $table->text('content');
             $table->date('date_publication');
+            $table->string('archive')->nullable();
             $table->unsignedBigInteger('lawyer_id');
             $table->foreign('lawyer_id')->references('id')->on('lawyers')->onDelete('cascade');
             $table->unsignedBigInteger('question_id');

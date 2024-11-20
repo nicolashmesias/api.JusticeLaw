@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('affair');
             $table->text('content');
             $table->date('date_publication');
+            $table->string('archive')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('forum_category_id');
