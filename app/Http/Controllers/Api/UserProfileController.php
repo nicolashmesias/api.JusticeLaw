@@ -96,13 +96,12 @@ class UserProfileController extends Controller
     $user = auth()->user(); // Obtener el usuario autenticado
 
     $validatedData = $request->validate([
-        'cell_phone' => 'required|string|max:15',
-        'country_id' => 'required|exists:countries,id',
-        'state_id' => 'required|exists:states,id',
-        'city_id' => 'required|exists:cities,id',
+        'cell_phone' => 'nullable|string|max:15',
+        'country_id' => 'nullable|exists:countries,id',
+        'state_id' => 'nullable|exists:states,id',
+        'city_id' => 'nullable|exists:cities,id',
         'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
     ]);
-
     // Subir la foto si se proporciona
     if ($request->hasFile('photo')) {
         $path = $request->file('photo')->store('profile_photos', 'public');
