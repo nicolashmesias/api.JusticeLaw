@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\AreaController;
 use App\Http\Controllers\Api\AreaLawyerController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ForgetPasswordController;
 use App\Http\Controllers\Api\ForumCategoryController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ReviewController;
@@ -210,3 +211,4 @@ Route::get('lawyers/{lawyer}', [LawyerController::class, 'show'])->name('api.v1.
 Route::put('lawyers/{lawyer}', [LawyerController::class, 'update'])->name('api.v1.lawyers.update');
 Route::delete('lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('api.v1.lawyers.delete');
 
+Route::post('/password', [ForgetPasswordController::class, 'store'])->name('api.v1.password.store');
