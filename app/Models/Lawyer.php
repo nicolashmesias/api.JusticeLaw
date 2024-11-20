@@ -75,10 +75,6 @@ class Lawyer extends Model
         return $this->hasMany(Answer::class);
     }
 
-    public function notifications(){
-        return $this->hasMany(Notification::class);
-    }
-
     public function searches(){
         return $this->hasMany(Search::class);
     }

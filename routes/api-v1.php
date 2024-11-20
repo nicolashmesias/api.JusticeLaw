@@ -50,19 +50,18 @@ Route::get('/', function () {
 //     return $request->user();
 // });
 
-Route::group([], function () {
-    Route::post('register', [AuthController::class, 'register']);
-    Route::post('login', [AuthController::class, 'login']);
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+], function ($router) {
+    Route::post('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
+    Route::post('/me', [AuthController::class, 'me'])->name('me');
 });
-
-Route::post('logout', [AuthController::class, 'logout'])->name('logout');
-
-Route::group(['middleware' => 'auth:api'], function() {
-    Route::post('refresh',[AuthController::class,'refresh'])->name('refresh');
-  
-});
-
-Route::post('me',[AuthController::class,'me'])->name('me');
 
 Route::get('answers', [AnswerController::class, 'index'])->name('api.v1.answers.index');
 Route::post('answers', [AnswerController::class, 'store'])->name('api.v1.answers.store');
@@ -105,6 +104,8 @@ Route::post('usersProfile', [UserProfileController::class, 'store'])->name('api.
 Route::get('usersProfile/{userProfile}', [UserProfileController::class, 'show'])->name('api.v1.usersProfile.show');
 Route::put('usersProfile/{userProfile}', [UserProfileController::class, 'update'])->name('api.v1.usersProfile.update');
 Route::delete('usersProfile/{userProfile}', [UserProfileController::class, 'destroy'])->name('api.v1.usersProfile.delete');
+
+Route::post('/profile', [UserProfileController::class, 'updateUserProfile'])->middleware('auth');
 
 
 Route::get('countries', [DropdownController::class, 'indexCountry'])->name('api.v1.countries.index');
@@ -211,4 +212,26 @@ Route::get('lawyers/{lawyer}', [LawyerController::class, 'show'])->name('api.v1.
 Route::put('lawyers/{lawyer}', [LawyerController::class, 'update'])->name('api.v1.lawyers.update');
 Route::delete('lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('api.v1.lawyers.delete');
 
+
 Route::post('/password', [ForgetPasswordController::class, 'store'])->name('api.v1.password.store');
+
+
+//Endpoints para notificaciones
+
+//obtener nuevo token cuando expira
+Route::middleware('auth:api')->post('/refresh-token', function () {
+    $token = auth()->refresh;
+    return response()->json(['token' => $token]);
+});
+
+//grupo de rutas de notificaciones
+Route::middleware(['auth:api'])->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index']); // Listar notificaciones no leídas
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']); // Marcar como leída
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']); // Eliminar notificación
+    Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']); // Archivar notificación
+    Route::delete('/notifications', [NotificationController::class, 'destroyAll']); // Eliminar todas
+    Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']); // Archivar todas
+    Route::post('/notifications/{id}/like', [NotificationController::class, 'likeNotification']);
+});
+

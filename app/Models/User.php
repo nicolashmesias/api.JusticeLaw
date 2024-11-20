@@ -8,7 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Builder;
-use Tymon\JWTAuth\Contracts\JWTSubject;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use App\Models\UserProfile;
+
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -29,8 +31,8 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     protected $allowIncluded = ['typeDocument','userProfile','userProfile.country','userProfile.state','userProfile.city','questions.lawyer','reviews','notifications','searches','searches.information'];
-    
-    
+
+
     protected $allowFilter = ['id', 'name', 'statement','status', 'date'];
 
     /**
@@ -61,12 +63,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-    
+
     public function typeDocument(){
         return $this->belongsTo(TypeDocument::class);
     }
 
-    public function userProfile(){
+    public function profile(){
         return $this->hasOne(UserProfile::class);
     }
 
@@ -74,8 +76,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Question::class);
     }
 
-    public function notifications(){
-        return $this->hasMany(Notification::class);
+    public function notifications()
+    {
+        return $this->morphMany(\Illuminate\Notifications\DatabaseNotification::class, 'notifiable');
     }
 
     public function searches(){
@@ -115,7 +118,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function scopeFilter(Builder $query)
     {
-        
+
         if (empty($this->allowFilter) || empty(request('filter'))) {
             return;
         }
@@ -131,10 +134,10 @@ class User extends Authenticatable implements JWTSubject
             }
         }
 
-   
+
 
     }
-    
+
 
 
 }
