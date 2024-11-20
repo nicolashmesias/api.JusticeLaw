@@ -67,6 +67,7 @@ Route::post('forumCategories', [ForumCategoryController::class, 'store'])->name(
 Route::get('forumCategories/{forumCategory}', [ForumCategoryController::class, 'show'])->name('api.v1.forumCategories.show');
 Route::put('forumCategories/{forumCategory}', [ForumCategoryController::class, 'update'])->name('api.v1.forumCategories.update');
 Route::delete('forumCategories/{forumCategory}', [ForumCategoryController::class, 'destroy'])->name('api.v1.forumCategories.delete');
+Route::get('/trends', [ForumCategoryController::class, 'getTrends']);
 
 Route::get('administrators', [AdministratorController::class, 'index'])->name('api.v1.administrators.index');
 Route::post('administrators', [AdministratorController::class, 'store'])->name('api.v1.administrators.store');

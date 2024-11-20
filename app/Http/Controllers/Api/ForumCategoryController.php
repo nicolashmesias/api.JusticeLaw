@@ -49,6 +49,14 @@ class ForumCategoryController extends Controller
         return response()->json($forumCategory);
     }
 
+    public function showView($id)
+{
+    $category = ForumCategory::findOrFail($id);
+    $category->increment('views'); // Incrementa el contador de visitas
+    return view('foro.categoria', compact('category')); // Muestra la vista con la categoría
+}
+
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -80,4 +88,11 @@ class ForumCategoryController extends Controller
         $forumCategory->delete();
         return response()->json($forumCategory);
     }
+
+    public function getTrends()
+    {
+        $trendingItems = ForumCategory::orderBy('views', 'desc')->take(5)->get();
+        return response()->json($trendingItems);
+    }
+
 }
