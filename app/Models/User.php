@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Builder;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use App\Models\UserProfile;
+
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -66,7 +68,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(TypeDocument::class);
     }
 
-    public function userProfile(){
+    public function profile(){
         return $this->hasOne(UserProfile::class);
     }
 

@@ -14,6 +14,9 @@ class UserProfile extends Model
         'cell_phone', 'country_id','state_id', 'city_id','profile_photo', 'user_id'
     ];
 
+    protected $table = 'user_profiles'; // Si la tabla no sigue las convenciones
+
+    
     protected $allowIncluded = ['user','country','state','city'];
 
     public function user(){

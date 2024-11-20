@@ -104,6 +104,8 @@ Route::get('usersProfile/{userProfile}', [UserProfileController::class, 'show'])
 Route::put('usersProfile/{userProfile}', [UserProfileController::class, 'update'])->name('api.v1.usersProfile.update');
 Route::delete('usersProfile/{userProfile}', [UserProfileController::class, 'destroy'])->name('api.v1.usersProfile.delete');
 
+Route::post('/profile', [UserProfileController::class, 'updateUserProfile'])->middleware('auth');
+
 
 Route::get('countries', [DropdownController::class, 'indexCountry'])->name('api.v1.countries.index');
 Route::post('countries', [DropdownController::class, 'storeCountry'])->name('api.v1.countries.store');
@@ -212,7 +214,7 @@ Route::delete('lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('a
 
 //Endpoints para notificaciones
 
-//obtener nuevo token cuando expira 
+//obtener nuevo token cuando expira
 Route::middleware('auth:api')->post('/refresh-token', function () {
     $token = auth()->refresh;
     return response()->json(['token' => $token]);
