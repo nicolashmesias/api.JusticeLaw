@@ -228,4 +228,5 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']); // Archivar notificación
     Route::delete('/notifications', [NotificationController::class, 'destroyAll']); // Eliminar todas
     Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']); // Archivar todas
+    Route::post('/notifications/{id}/like', [NotificationController::class, 'likeNotification']);
 });
