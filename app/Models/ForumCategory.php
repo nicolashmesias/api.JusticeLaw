@@ -11,7 +11,8 @@ class ForumCategory extends Model
     use HasFactory;
     public $fillable =[
     'name',
-    'description'
+    'description',
+    'views'
     ];
 
     protected $allowIncluded = ['questions', 'questions.user','lawyerProfile','answers.lawyer'];
