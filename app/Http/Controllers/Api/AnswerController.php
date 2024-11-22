@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
+use App\Notifications\NewNotification;
+use App\Models\Question;
 use Illuminate\Http\Request;
 
 class AnswerController extends Controller
@@ -37,7 +39,17 @@ class AnswerController extends Controller
             'date_publication' => 'required|string|min:8'
         ]);
 
+        // Crear la nueva respuesta
         $answer = Answer::create($request->all());
+
+        // Obtener la pregunta asociada a la respuesta
+        $question = Question::findOrFail($request->input('question_id'));
+
+        // Enviar la notificación al usuario que hizo la pregunta
+        $question->user->notify(new NewNotification(
+            'Alguien ha respondido a tu pregunta: "' . $question->title . '"'
+        ));
+        
 
         return response()->json($answer);
     }

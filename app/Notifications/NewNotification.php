@@ -28,8 +28,8 @@ class NewNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return['database'];
-        return ['mail'];
+        
+        return ['database','mail'];
     }
 
     public function toDatabase ($notifiable)
@@ -58,7 +58,7 @@ class NewNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'message' => $this->message, // informacion de la notificacion 
         ];
     }
 }
