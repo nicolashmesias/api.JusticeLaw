@@ -110,7 +110,7 @@ class UserProfileController extends Controller
 
     $user->profile()->updateOrCreate(['user_id' => $user->id], $validatedData);
 
-    return response()->json(['message' => 'Perfil actualizado con éxito'], 200);
-}
+    return response()->json([ 'message' => 'Perfil actualizado con éxito', 'photo' => asset('storage/' . $path) ], 200);
 
+}
 }
