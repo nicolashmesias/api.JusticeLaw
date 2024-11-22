@@ -10,11 +10,61 @@ class InformationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $informations=Information::all();
-        return response()->json($informations);
+        // Obtiene todos los registros de la base de datos
+        $informations = Information::query();
+    
+        // Si hay una búsqueda en el request, aplica un filtro
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $informations->where('title', 'like', '%' . $search . '%')
+                         ->orWhere('content', 'like', '%' . $search . '%');
+        }
+    
+        // Recupera los datos
+        $informations = $informations->get();
+    
+        // Si no hay datos, retorna un mensaje vacío
+        if ($informations->isEmpty()) {
+            return view('information.index', ['informations' => [], 'message' => 'No se encontraron resultados.']);
+        }
+    
+        // Retorna la vista con los datos
+        return view('information.index', compact('informations'));
     }
+    
+
+    
+
+public function view(Request $request)
+{
+    // Obtén el parámetro de búsqueda
+    $query = $request->input('query'); 
+
+    if ($query) {
+        // Realiza la búsqueda
+        $informations = Information::where('name', 'like', "%{$query}%")
+            ->orWhere('body', 'like', "%{$query}%")
+            ->get();
+    } else {
+        // Obtiene todas las informaciones si no hay búsqueda
+        $informations = Information::all();
+    }
+
+    // Maneja el caso en el que no se encuentren resultados
+    if ($informations->isEmpty()) {
+        return view('information.index', [
+            'informations' => [],
+            'message' => 'No se encontraron resultados para tu búsqueda.'
+        ]);
+    }
+
+    // Retorna la vista con las informaciones encontradas
+    return view('information.index', compact('informations'));
+}
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -23,7 +73,7 @@ class InformationController extends Controller
     {
         //
     }
-
+ 
     /**
      * Store a newly created resource in storage.
      */
