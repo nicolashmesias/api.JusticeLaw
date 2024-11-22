@@ -75,7 +75,6 @@ Route::get('questions/{question}', [QuestionController::class, 'show'])->name('a
 Route::put('questions/{question}', [QuestionController::class, 'update'])->name('api.v1.questions.update');
 Route::delete('questions/{question}', [QuestionController::class, 'destroy'])->name('api.v1.questions.delete');
 
-Route::get('questionslogin', [QuestionController::class, 'indexlogin'])->name('api.v1.questionslogin.index');
 
 
 Route::get('forumCategories', [ForumCategoryController::class, 'index'])->name('api.v1.forumCategories.index');
