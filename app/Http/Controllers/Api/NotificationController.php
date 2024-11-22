@@ -14,19 +14,33 @@ class NotificationController extends Controller
      * Obtener notificaciones no leídas del usuario autenticado.
      */
     public function index()
-    {
-        $user = auth()->user(); // Usuario autenticado
-        $notificacions = $user->unreadNotifications->paginate(10); // paginar notificaciones 10 por consulta 
-        $notificacions = $user->unreadNotifications; // Relación directa
-        $notificacions = cache()->remember("user_{$user->id}_notifications", 60, function () use ($user) {
-            return $user->unreadNotifications->get();
+{
+    try {
+        // Obtener usuario autenticado
+        $user = auth()->user();
+
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'Usuario no autenticado.'], 401);
+        }
+
+        // Obtener notificaciones no leídas
+        $notifications = cache()->remember("user_{$user->id}_unread_notifications", 60, function () use ($user) {
+            return $user->unreadNotifications->take(10)->get(); // Tomar las primeras 10 notificaciones
         });
 
         return response()->json([
             'success' => true,
-            'notifications' => $notificacions,
+            'notifications' => $notifications,
         ]);
+
+    } catch (\Exception $e) {
+        // Manejo de excepciones
+        return response()->json([
+            'success' => false,
+            'error' => $e->getMessage(),
+        ], 500);
     }
+}
 
     /**
      * Marcar una notificación como leída.

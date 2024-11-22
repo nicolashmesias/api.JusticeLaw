@@ -228,7 +228,12 @@ Route::middleware('auth:api')->post('/refresh-token', function () {
 });
 
 //grupo de rutas de notificaciones
-Route::middleware(['auth:api'])->group(function () {
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+],function ($router) {
     Route::get('/notifications', [NotificationController::class, 'index']); // Listar notificaciones no leídas
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']); // Marcar como leída
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']); // Eliminar notificación
