@@ -216,7 +216,7 @@ Route::get('lawyers/{lawyer}', [LawyerController::class, 'show'])->name('api.v1.
 Route::put('lawyers/{lawyer}', [LawyerController::class, 'update'])->name('api.v1.lawyers.update');
 Route::delete('lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('api.v1.lawyers.delete');
 
-
+Route::post('v1/validate-code', [ForgetPasswordController::class, 'validateCode'])->name('api.v1.validate-code');
 Route::post('/password', [ForgetPasswordController::class, 'store'])->name('api.v1.password.store');
 
 
