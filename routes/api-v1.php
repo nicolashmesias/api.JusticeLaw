@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\AreaController;
 use App\Http\Controllers\Api\AreaLawyerController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ForgetPasswordController;
 use App\Http\Controllers\Api\ForumCategoryController;
 use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\ReviewController;
@@ -74,11 +75,14 @@ Route::get('questions/{question}', [QuestionController::class, 'show'])->name('a
 Route::put('questions/{question}', [QuestionController::class, 'update'])->name('api.v1.questions.update');
 Route::delete('questions/{question}', [QuestionController::class, 'destroy'])->name('api.v1.questions.delete');
 
+
+
 Route::get('forumCategories', [ForumCategoryController::class, 'index'])->name('api.v1.forumCategories.index');
 Route::post('forumCategories', [ForumCategoryController::class, 'store'])->name('api.v1.forumCategories.store');
 Route::get('forumCategories/{forumCategory}', [ForumCategoryController::class, 'show'])->name('api.v1.forumCategories.show');
 Route::put('forumCategories/{forumCategory}', [ForumCategoryController::class, 'update'])->name('api.v1.forumCategories.update');
 Route::delete('forumCategories/{forumCategory}', [ForumCategoryController::class, 'destroy'])->name('api.v1.forumCategories.delete');
+Route::get('/trends', [ForumCategoryController::class, 'getTrends']);
 
 Route::get('administrators', [AdministratorController::class, 'index'])->name('api.v1.administrators.index');
 Route::post('administrators', [AdministratorController::class, 'store'])->name('api.v1.administrators.store');
@@ -103,6 +107,8 @@ Route::post('usersProfile', [UserProfileController::class, 'store'])->name('api.
 Route::get('usersProfile/{userProfile}', [UserProfileController::class, 'show'])->name('api.v1.usersProfile.show');
 Route::put('usersProfile/{userProfile}', [UserProfileController::class, 'update'])->name('api.v1.usersProfile.update');
 Route::delete('usersProfile/{userProfile}', [UserProfileController::class, 'destroy'])->name('api.v1.usersProfile.delete');
+
+Route::post('/profile', [UserProfileController::class, 'updateUserProfile'])->middleware('auth');
 
 
 Route::get('countries', [DropdownController::class, 'indexCountry'])->name('api.v1.countries.index');
@@ -212,16 +218,24 @@ Route::put('lawyers/{lawyer}', [LawyerController::class, 'update'])->name('api.v
 Route::delete('lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('api.v1.lawyers.delete');
 
 
+Route::post('/password', [ForgetPasswordController::class, 'store'])->name('api.v1.password.store');
+
+
 //Endpoints para notificaciones
 
-//obtener nuevo token cuando expira 
+//obtener nuevo token cuando expira
 Route::middleware('auth:api')->post('/refresh-token', function () {
     $token = auth()->refresh;
     return response()->json(['token' => $token]);
 });
 
 //grupo de rutas de notificaciones
-Route::middleware(['auth:api'])->group(function () {
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+],function ($router) {
     Route::get('/notifications', [NotificationController::class, 'index']); // Listar notificaciones no leídas
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']); // Marcar como leída
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']); // Eliminar notificación
@@ -230,3 +244,4 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']); // Archivar todas
     Route::post('/notifications/{id}/like', [NotificationController::class, 'likeNotification']);
 });
+

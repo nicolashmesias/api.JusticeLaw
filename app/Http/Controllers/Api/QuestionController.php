@@ -16,6 +16,12 @@ class QuestionController extends Controller
         return response()->json($questions);
     }
 
+    public function indexlogin()
+    {
+        $questions = Question::all();
+        return response()->json($questions);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

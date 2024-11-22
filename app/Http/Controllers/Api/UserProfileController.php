@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\UserProfile;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 class UserProfileController extends Controller
@@ -89,4 +90,27 @@ class UserProfileController extends Controller
         $userProfile->delete();
         return response()->json($userProfile);
     }
+
+    public function updateUserProfile(Request $request)
+{
+    $user = auth()->user(); // Obtener el usuario autenticado
+
+    $validatedData = $request->validate([
+        'cell_phone' => 'nullable|string|max:15',
+        'country_id' => 'nullable|exists:countries,id',
+        'state_id' => 'nullable|exists:states,id',
+        'city_id' => 'nullable|exists:cities,id',
+        'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
+    // Subir la foto si se proporciona
+    if ($request->hasFile('photo')) {
+        $path = $request->file('photo')->store('profile_photos', 'public');
+        $validatedData['photo_path'] = $path;
+    }
+
+    $user->profile()->updateOrCreate(['user_id' => $user->id], $validatedData);
+
+    return response()->json(['message' => 'Perfil actualizado con éxito'], 200);
+}
+
 }
