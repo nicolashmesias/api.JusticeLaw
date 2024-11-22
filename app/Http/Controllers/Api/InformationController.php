@@ -65,6 +65,19 @@ public function view(Request $request)
 }
 
 
+// En tu controlador
+public function search(Request $request)
+{
+    $query = $request->get('query');
+    
+    // Buscar las informaciones que coincidan con la búsqueda
+    $informations = Information::where('title', 'like', '%' . $query . '%')->get();
+
+    return response()->json($informations);
+}
+
+
+
 
     /**
      * Show the form for creating a new resource.

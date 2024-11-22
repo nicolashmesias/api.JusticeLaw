@@ -130,7 +130,9 @@ Route::put('cities/{city}', [DropdownController::class, 'updateCity'])->name('ap
 Route::delete('cities/{city}', [DropdownController::class, 'destroyCity'])->name('api.v1.cities.delete');
 
 Route::get('informations', [InformationController::class, 'index'])->name('api.v1.informations.index');
-Route::get('informations/view', [InformationController::class, 'view'])->name('api.v1.informations.view'); // Para la vista
+Route::get('informations/view', [InformationController::class, 'view'])->name('api.v1.informations.view');
+Route::get('/informations/search', [InformationController::class, 'search']);
+
 //Route::post('informations', [InformationController::class, 'store'])->name('api.v1.informations.store');
 //Route::get('informations/{information}', [InformationController::class, 'show'])->name('api.v1.informations.show');
 //Route::put('informations/{information}', [InformationController::class, 'update'])->name('api.v1.informations.update');
