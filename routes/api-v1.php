@@ -75,7 +75,6 @@ Route::get('questions/{question}', [QuestionController::class, 'show'])->name('a
 Route::put('questions/{question}', [QuestionController::class, 'update'])->name('api.v1.questions.update');
 Route::delete('questions/{question}', [QuestionController::class, 'destroy'])->name('api.v1.questions.delete');
 
-Route::get('questionslogin', [QuestionController::class, 'indexlogin'])->name('api.v1.questionslogin.index');
 
 
 Route::get('forumCategories', [ForumCategoryController::class, 'index'])->name('api.v1.forumCategories.index');
@@ -131,10 +130,12 @@ Route::put('cities/{city}', [DropdownController::class, 'updateCity'])->name('ap
 Route::delete('cities/{city}', [DropdownController::class, 'destroyCity'])->name('api.v1.cities.delete');
 
 Route::get('informations', [InformationController::class, 'index'])->name('api.v1.informations.index');
-Route::post('informations', [InformationController::class, 'store'])->name('api.v1.informations.store');
-Route::get('informations/{information}', [InformationController::class, 'show'])->name('api.v1.informations.show');
-Route::put('informations/{information}', [InformationController::class, 'update'])->name('api.v1.informations.update');
-Route::delete('informations/{information}', [InformationController::class, 'destroy'])->name('api.v1.informations.delete');
+Route::get('informations/view', [InformationController::class, 'view'])->name('api.v1.informations.view'); // Para la vista
+//Route::post('informations', [InformationController::class, 'store'])->name('api.v1.informations.store');
+//Route::get('informations/{information}', [InformationController::class, 'show'])->name('api.v1.informations.show');
+//Route::put('informations/{information}', [InformationController::class, 'update'])->name('api.v1.informations.update');
+//Route::delete('informations/{information}', [InformationController::class, 'destroy'])->name('api.v1.informations.delete');
+
 
 Route::get('dates', [DateController::class, 'index'])->name('api.v1.dates.index');
 Route::post('dates', [DateController::class, 'store'])->name('api.v1.dates.store');
@@ -229,7 +230,12 @@ Route::middleware('auth:api')->post('/refresh-token', function () {
 });
 
 //grupo de rutas de notificaciones
-Route::middleware(['auth:api'])->group(function () {
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'auth'
+
+],function ($router) {
     Route::get('/notifications', [NotificationController::class, 'index']); // Listar notificaciones no leídas
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']); // Marcar como leída
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']); // Eliminar notificación
