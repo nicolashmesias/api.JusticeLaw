@@ -231,17 +231,15 @@ Route::middleware('auth:api')->post('/refresh-token', function () {
 
 //grupo de rutas de notificaciones
 Route::group([
-
-    'middleware' => 'api',
+    'middleware' => ['auth:api'],
     'prefix' => 'auth'
-
-],function ($router) {
-    Route::get('/notifications', [NotificationController::class, 'index']); // Listar notificaciones no leídas
-    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']); // Marcar como leída
-    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']); // Eliminar notificación
-    Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']); // Archivar notificación
-    Route::delete('/notifications', [NotificationController::class, 'destroyAll']); // Eliminar todas
-    Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']); // Archivar todas
+], function ($router) {
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
+    Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']);
+    Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
+    Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
     Route::post('/notifications/{id}/like', [NotificationController::class, 'likeNotification']);
 });
 
