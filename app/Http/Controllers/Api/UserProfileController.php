@@ -145,7 +145,7 @@ class UserProfileController extends Controller
                 'state_id' => $stateId ?? '',
                 'city' => $cityName ?? '',
                 'city_id' => $cityId ?? '',
-                'photo' => $profile->profile_photo ? url('storage/profile_photos/' . $profile->profile_photo) : null,
+                'photo' => $profile->profile_photo ? url('storage/' . $profile->profile_photo) : null,
             ]);
         } else {
             return response()->json([
