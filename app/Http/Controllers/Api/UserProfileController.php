@@ -125,24 +125,26 @@ class UserProfileController extends Controller
 
     public function getProfile(Request $request)
     {
-
         $user = $request->user();
-
 
         $profile = $user->profile;
 
-
         if ($profile) {
-
             $countryName = $profile->country ? $profile->country->name : null;
+            $countryId = $profile->country ? $profile->country->id : null;
             $stateName = $profile->state ? $profile->state->name : null;
+            $stateId = $profile->state ? $profile->state->id : null;
             $cityName = $profile->city ? $profile->city->name : null;
+            $cityId = $profile->city ? $profile->city->id : null;
 
             return response()->json([
                 'cell_phone' => $profile->cell_phone ?? '',
                 'country' => $countryName ?? '',
+                'country_id' => $countryId ?? '',
                 'state' => $stateName ?? '',
-                'city' => $cityName ?? '', 
+                'state_id' => $stateId ?? '',
+                'city' => $cityName ?? '',
+                'city_id' => $cityId ?? '',
                 'photo' => $profile->profile_photo ? url('storage/profile_photos/' . $profile->profile_photo) : null,
             ]);
         } else {
