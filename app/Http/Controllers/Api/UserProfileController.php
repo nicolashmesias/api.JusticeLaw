@@ -123,24 +123,33 @@ class UserProfileController extends Controller
         ], 200);
     }
 
-        public function getProfile(Request $request)
-        {
-            $user = $request->user();
+    public function getProfile(Request $request)
+    {
 
-            $profile = $user->profile;
+        $user = $request->user();
 
-            if ($profile) {
-                return response()->json([
-                    'cell_phone' => $profile->cell_phone ?? '',
-                    'country_id' => $profile->country_id ?? '',
-                    'state_id' => $profile->state_id ?? '',
-                    'city_id' => $profile->city_id ?? '',
-                    'photo' => $profile->profile_photo ? url('storage/profile_photos/' . $profile->profile_photo) : null,
-                ]);
-            } else {
-                return response()->json([
-                    'message' => 'Perfil no encontrado',
-                ], 404);
-            }
+
+        $profile = $user->profile;
+
+
+        if ($profile) {
+
+            $countryName = $profile->country ? $profile->country->name : null;
+            $stateName = $profile->state ? $profile->state->name : null;
+            $cityName = $profile->city ? $profile->city->name : null;
+
+            return response()->json([
+                'cell_phone' => $profile->cell_phone ?? '',
+                'country' => $countryName ?? '',
+                'state' => $stateName ?? '',
+                'city' => $cityName ?? '', 
+                'photo' => $profile->profile_photo ? url('storage/profile_photos/' . $profile->profile_photo) : null,
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Perfil no encontrado',
+            ], 404);
         }
+    }
+
 }
