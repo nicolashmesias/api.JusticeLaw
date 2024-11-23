@@ -6,6 +6,8 @@ use App\Models\UserProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+
 class UserProfileController extends Controller
 {
     /**
@@ -95,26 +97,36 @@ class UserProfileController extends Controller
     {
         $user = auth()->user(); // Obtener el usuario autenticado
 
+        // Validar los datos recibidos
         $validatedData = $request->validate([
             'cell_phone' => 'nullable|string|max:15',
             'country_id' => 'nullable|exists:countries,id',
             'state_id' => 'nullable|exists:states,id',
             'city_id' => 'nullable|exists:cities,id',
-            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Máximo 2 MB
         ]);
 
-        // Subir la foto si se proporciona
+        // Procesar la imagen de perfil si se proporciona
         if ($request->hasFile('profile_photo')) {
+            // Eliminar la imagen anterior si existe
+            if ($user->profile && $user->profile->profile_photo) {
+                Storage::disk('public')->delete($user->profile->profile_photo);
+            }
+
+            // Guardar la nueva imagen en el almacenamiento público
             $path = $request->file('profile_photo')->store('profile_photos', 'public');
+
+            // Guardar el path en el array validado
             $validatedData['profile_photo'] = $path;
         }
 
+        // Actualizar o crear el perfil del usuario
         $user->profile()->updateOrCreate(['user_id' => $user->id], $validatedData);
 
-        // Devolver la URL completa de la foto
+        // Devolver la URL completa de la foto, o mantener la existente si no se cambió
         return response()->json([
             'message' => 'Perfil actualizado con éxito',
-            'photo' => $request->hasFile('profile_photo') ? asset('storage/' . $path) : $user->profile->profile_photo,
+            'photo' => isset($path) ? asset('storage/' . $path) : ($user->profile->profile_photo ? asset('storage/' . $user->profile->profile_photo) : null),
         ], 200);
     }
 
