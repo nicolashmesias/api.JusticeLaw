@@ -130,4 +130,18 @@ class UserProfileController extends Controller
         ], 200);
     }
 
+    // Controlador en backend
+public function getProfile(Request $request)
+{
+    $user = $request->user();
+
+    return response()->json([
+        'cell_phone' => $user->cell_phone ?? '',
+        'country_id' => $user->country_id ?? '',
+        'state_id' => $user->state_id ?? '',
+        'city_id' => $user->city_id ?? '',
+        'photo' => $user->profile_photo ? url('storage/profile_photos/' . $user->profile_photo) : null, 
+    ]);
+}
+
 }

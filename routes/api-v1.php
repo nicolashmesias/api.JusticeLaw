@@ -110,6 +110,9 @@ Route::delete('usersProfile/{userProfile}', [UserProfileController::class, 'dest
 
 Route::post('/profile', [UserProfileController::class, 'updateUserProfile'])->middleware('auth');
 
+Route::get('/profile', [UserProfileController::class, 'getProfile'])->middleware('auth');
+
+
 
 Route::get('countries', [DropdownController::class, 'indexCountry'])->name('api.v1.countries.index');
 Route::post('countries', [DropdownController::class, 'storeCountry'])->name('api.v1.countries.store');
@@ -244,4 +247,3 @@ Route::group([
     Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
     Route::post('/notifications/{id}/like', [NotificationController::class, 'likeNotification']);
 });
-
