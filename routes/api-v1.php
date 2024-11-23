@@ -110,7 +110,7 @@ Route::delete('usersProfile/{userProfile}', [UserProfileController::class, 'dest
 
 Route::post('/profile', [UserProfileController::class, 'updateUserProfile'])->middleware('auth');
 
-Route::get('/profile', [UserProfileController::class, 'getProfile'])->middleware('auth');
+Route::get('/getprofile', [UserProfileController::class, 'getProfile'])->middleware('auth');
 
 
 
