@@ -95,53 +95,52 @@ class UserProfileController extends Controller
 
     public function updateUserProfile(Request $request)
     {
-        $user = auth()->user(); // Obtener el usuario autenticado
+        $user = auth()->user(); 
 
-        // Validar los datos recibidos
         $validatedData = $request->validate([
             'cell_phone' => 'nullable|string|max:15',
             'country_id' => 'nullable|exists:countries,id',
             'state_id' => 'nullable|exists:states,id',
             'city_id' => 'nullable|exists:cities,id',
-            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Máximo 2 MB
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // Procesar la imagen de perfil si se proporciona
         if ($request->hasFile('profile_photo')) {
-            // Eliminar la imagen anterior si existe
             if ($user->profile && $user->profile->profile_photo) {
                 Storage::disk('public')->delete($user->profile->profile_photo);
             }
 
-            // Guardar la nueva imagen en el almacenamiento público
             $path = $request->file('profile_photo')->store('profile_photos', 'public');
 
-            // Guardar el path en el array validado
             $validatedData['profile_photo'] = $path;
         }
 
-        // Actualizar o crear el perfil del usuario
         $user->profile()->updateOrCreate(['user_id' => $user->id], $validatedData);
 
-        // Devolver la URL completa de la foto, o mantener la existente si no se cambió
         return response()->json([
             'message' => 'Perfil actualizado con éxito',
             'photo' => isset($path) ? asset('storage/' . $path) : ($user->profile->profile_photo ? asset('storage/' . $user->profile->profile_photo) : null),
         ], 200);
     }
 
-    // Controlador en backend
-public function getProfile(Request $request)
-{
-    $user = $request->user();
+    public function getProfile(Request $request)
+    {
+        $user = $request->user();
 
-    return response()->json([
-        'cell_phone' => $user->cell_phone ?? '',
-        'country_id' => $user->country_id ?? '',
-        'state_id' => $user->state_id ?? '',
-        'city_id' => $user->city_id ?? '',
-        'photo' => $user->profile_photo ? url('storage/profile_photos/' . $user->profile_photo) : null, 
-    ]);
-}
+        $profile = $user->profile;
 
+        if ($profile) {
+            return response()->json([
+                'cell_phone' => $profile->cell_phone ?? '',
+                'country_id' => $profile->country_id ?? '',
+                'state_id' => $profile->state_id ?? '',
+                'city_id' => $profile->city_id ?? '',
+                'photo' => $profile->profile_photo ? url('storage/profile_photos/' . $profile->profile_photo) : null,
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Perfil no encontrado',
+            ], 404);
+        }
+    }
 }
