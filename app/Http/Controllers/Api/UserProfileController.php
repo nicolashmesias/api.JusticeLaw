@@ -100,15 +100,21 @@ class UserProfileController extends Controller
             'country_id' => 'nullable|exists:countries,id',
             'state_id' => 'nullable|exists:states,id',
             'city_id' => 'nullable|exists:cities,id',
-            'photo_path' => 'nullable|string'
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
+        // Subir la foto si se proporciona
+        if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('profile_photos', 'public');
+            $validatedData['photo_path'] = $path;
+        }
 
         $user->profile()->updateOrCreate(['user_id' => $user->id], $validatedData);
 
-        // Devolver la URL de la foto
+        // Devolver la URL completa de la foto
         return response()->json([
             'message' => 'Perfil actualizado con éxito',
-            'photo_path' => $validatedData['photo_path'] ?? null
+            'photo' => $request->hasFile('photo') ? asset('storage/' . $path) : null
         ], 200);
     }
 
