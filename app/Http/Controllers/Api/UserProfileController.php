@@ -95,7 +95,7 @@ class UserProfileController extends Controller
 
     public function updateUserProfile(Request $request)
     {
-        $user = auth()->user(); 
+        $user = auth()->user();
 
         $validatedData = $request->validate([
             'cell_phone' => 'nullable|string|max:15',
@@ -123,24 +123,24 @@ class UserProfileController extends Controller
         ], 200);
     }
 
-    public function getProfile(Request $request)
-    {
-        $user = $request->user();
+        public function getProfile(Request $request)
+        {
+            $user = $request->user();
 
-        $profile = $user->profile;
+            $profile = $user->profile;
 
-        if ($profile) {
-            return response()->json([
-                'cell_phone' => $profile->cell_phone ?? '',
-                'country_id' => $profile->country_id ?? '',
-                'state_id' => $profile->state_id ?? '',
-                'city_id' => $profile->city_id ?? '',
-                'photo' => $profile->profile_photo ? url('storage/profile_photos/' . $profile->profile_photo) : null,
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Perfil no encontrado',
-            ], 404);
+            if ($profile) {
+                return response()->json([
+                    'cell_phone' => $profile->cell_phone ?? '',
+                    'country_id' => $profile->country_id ?? '',
+                    'state_id' => $profile->state_id ?? '',
+                    'city_id' => $profile->city_id ?? '',
+                    'photo' => $profile->profile_photo ? url('storage/profile_photos/' . $profile->profile_photo) : null,
+                ]);
+            } else {
+                return response()->json([
+                    'message' => 'Perfil no encontrado',
+                ], 404);
+            }
         }
-    }
 }
