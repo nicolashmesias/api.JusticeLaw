@@ -132,6 +132,11 @@ Route::get('cities/{city}', [DropdownController::class, 'showCity'])->name('api.
 Route::put('cities/{city}', [DropdownController::class, 'updateCity'])->name('api.v1.cities.update');
 Route::delete('cities/{city}', [DropdownController::class, 'destroyCity'])->name('api.v1.cities.delete');
 
+
+Route::get('/states/{countryId}', [DropdownController::class, 'indexStateByCountry']);
+Route::get('/cities/{stateId}', [DropdownController::class, 'indexCityByState']);
+
+
 Route::get('informations', [InformationController::class, 'index'])->name('api.v1.informations.index');
 Route::get('informations/view', [InformationController::class, 'view'])->name('api.v1.informations.view');
 Route::get('/informations/search', [InformationController::class, 'search']);
