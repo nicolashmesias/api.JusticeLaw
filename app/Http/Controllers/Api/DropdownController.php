@@ -30,16 +30,29 @@ class DropdownController extends Controller
 
     public function indexStateByCountry($countryId)
     {
-        $states = State::where('country_id', $countryId)->get();
-        return response()->json($states);
+        $country = Country::find($countryId);
+
+        if (!$country) {
+            return response()->json(['error' => 'Country not found'], 404);
+        }
+
+        $states = $country->states;
+
+        return response()->json($states); 
     }
 
     public function indexCityByState($stateId)
     {
-        $cities = City::where('state_id', $stateId)->get();
+        $state = State::find($stateId);
+
+        if (!$state) {
+            return response()->json(['error' => 'State not found'], 404);
+        }
+
+        $cities = $state->cities;
+
         return response()->json($cities);
     }
-
 
     /**
      * Show the form for creating a new resource.
