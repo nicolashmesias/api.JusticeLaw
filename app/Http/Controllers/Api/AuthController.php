@@ -1,11 +1,15 @@
 <?php
+
 namespace App\Http\Controllers\Api;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Models\Lawyer;
 use Illuminate\Support\Facades\Validator;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
+
 class AuthController extends Controller
 {
     public function __construct()
@@ -63,5 +67,33 @@ class AuthController extends Controller
     public function refresh()
     {
         return $this->respondWithToken(Auth::refresh());
+    }
+
+
+    public function registerLawyer(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:30',
+            'last_name' => 'required|max:50',
+            'type_document_id' => 'required|max:10',
+            'document_number' => 'required|max:10',
+            'email' => 'required|max:255|unique:lawyers',
+            'password' => 'required|string|min:8',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $lawyer = new Lawyer(); 
+        $lawyer->name = $request->name;
+        $lawyer->last_name = $request->last_name;
+        $lawyer->type_document_id = $request->type_document_id;
+        $lawyer->document_number = $request->document_number;
+        $lawyer->email = $request->email;
+        $lawyer->password = bcrypt($request->password);
+        $lawyer->save();
+
+        return response()->json($lawyer, 201);
     }
 }
