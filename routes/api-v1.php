@@ -116,21 +116,21 @@ Route::get('/getprofile', [UserProfileController::class, 'getProfile'])->middlew
 
 Route::get('countries', [DropdownController::class, 'indexCountry'])->name('api.v1.countries.index');
 Route::post('countries', [DropdownController::class, 'storeCountry'])->name('api.v1.countries.store');
-Route::get('countries/{country}', [DropdownController::class, 'showCountry'])->name('api.v1.countries.show');
-Route::put('countries/{country}', [DropdownController::class, 'updateCountry'])->name('api.v1.countries.update');
-Route::delete('countries/{country}', [DropdownController::class, 'destroyCountry'])->name('api.v1.countries.delete');
+// Route::get('countries/{country}', [DropdownController::class, 'showCountry'])->name('api.v1.countries.show');
+// Route::put('countries/{country}', [DropdownController::class, 'updateCountry'])->name('api.v1.countries.update');
+// Route::delete('countries/{country}', [DropdownController::class, 'destroyCountry'])->name('api.v1.countries.delete');
 
 Route::get('states', [DropdownController::class, 'indexState'])->name('api.v1.states.index');
 Route::post('states', [DropdownController::class, 'storeState'])->name('api.v1.states.store');
-Route::get('states/{state}', [DropdownController::class, 'showState'])->name('api.v1.states.show');
-Route::put('states/{state}', [DropdownController::class, 'updateState'])->name('api.v1.states.update');
-Route::delete('states/{state}', [DropdownController::class, 'destroyState'])->name('api.v1.states.delete');
+// Route::get('states/{state}', [DropdownController::class, 'showState'])->name('api.v1.states.show');
+// Route::put('states/{state}', [DropdownController::class, 'updateState'])->name('api.v1.states.update');
+// Route::delete('states/{state}', [DropdownController::class, 'destroyState'])->name('api.v1.states.delete');
 
 Route::get('cities', [DropdownController::class, 'indexCity'])->name('api.v1.cities.index');
 Route::post('cities', [DropdownController::class, 'storeCity'])->name('api.v1.cities.store');
-Route::get('cities/{city}', [DropdownController::class, 'showCity'])->name('api.v1.cities.show');
-Route::put('cities/{city}', [DropdownController::class, 'updateCity'])->name('api.v1.cities.update');
-Route::delete('cities/{city}', [DropdownController::class, 'destroyCity'])->name('api.v1.cities.delete');
+// Route::get('cities/{city}', [DropdownController::class, 'showCity'])->name('api.v1.cities.show');
+// Route::put('cities/{city}', [DropdownController::class, 'updateCity'])->name('api.v1.cities.update');
+// Route::delete('cities/{city}', [DropdownController::class, 'destroyCity'])->name('api.v1.cities.delete');
 
 
 Route::get('/states/{countryId}', [DropdownController::class, 'indexStateByCountry']);
