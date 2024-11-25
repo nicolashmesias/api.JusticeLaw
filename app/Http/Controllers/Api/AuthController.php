@@ -101,8 +101,18 @@ class AuthController extends Controller
 
     public function me()
     {
-        return response()->json(auth()->user());
+        // Lista de guards que quieres admitir
+        $guards = ['api', 'lawyer', 'administrator'];
+    
+        foreach ($guards as $guard) {
+            if (auth($guard)->check()) {
+                return response()->json(auth($guard)->user());
+            }
+        }
+    
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
+    
     public function logout()
     {
         auth()->logout();

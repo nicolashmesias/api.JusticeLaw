@@ -53,7 +53,7 @@ Route::get('/', function () {
 
 Route::group([
 
-    'middleware' => 'api',
+    'middleware' => ['auth:api,lawyer,administrator'],
     'prefix' => 'auth'
 
 ], function ($router) {
@@ -62,8 +62,6 @@ Route::group([
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
     Route::post('/me', [AuthController::class, 'me'])->name('me');
-
-Route::post('/register-lawyer', [AuthController::class, 'registerLawyer'])->name('register-lawyer')->middleware('guest');
 
 });
 
