@@ -62,10 +62,10 @@ Route::group([
     Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
     Route::post('/me', [AuthController::class, 'me'])->name('me');
 
+Route::post('/register-lawyer', [AuthController::class, 'registerLawyer'])->name('register-lawyer')->middleware('guest');
 
 });
 
-Route::post('/register-lawyer', [AuthController::class, 'registerLawyer'])->name('register-lawyer')->middleware('guest');
 
 
 
