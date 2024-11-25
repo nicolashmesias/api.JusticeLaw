@@ -58,38 +58,34 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
-        $authenticatedUser = null; // Usuario autenticado
-        $role = null; // Rol del usuario
-
-        // Verificar en cada tabla y autenticar
-        if ($user = User::where('email', $credentials['email'])->first()) {
-            if (JWTAuth::attempt($credentials)) {
-                $authenticatedUser = $user;
-                $role = 'user';
-            }
-        } elseif ($lawyer = Lawyer::where('email', $credentials['email'])->first()) {
-            if (JWTAuth::attempt($credentials)) {
-                $authenticatedUser = $lawyer;
-                $role = 'lawyer';
-            }
-        } elseif ($administrator = Administrator::where('email', $credentials['email'])->first()) {
-            if (JWTAuth::attempt($credentials)) {
-                $authenticatedUser = $administrator;
-                $role = 'admin';
-            }
+        $authenticatedUser = null;
+        $role = null;
+    
+        // Intentar autenticación con el guard 'user'
+        if (Auth::guard('api')->attempt($credentials)) {
+            $authenticatedUser = Auth::guard('api')->user();
+            $role = 'user';
         }
-
-        // Si no se encuentra en ninguna tabla o las credenciales son incorrectas
+        // Intentar autenticación con el guard 'lawyer'
+        elseif (Auth::guard('lawyer')->attempt($credentials)) {
+            $authenticatedUser = Auth::guard('lawyer')->user();
+            $role = 'lawyer';
+        }
+        // Intentar autenticación con el guard 'administrator'
+        elseif (Auth::guard('administrator')->attempt($credentials)) {
+            $authenticatedUser = Auth::guard('administrator')->user();
+            $role = 'admin';
+        }
+    
+        // Si no se autenticó en ningún guard
         if (!$authenticatedUser) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Credenciales incorrectas'], 401);
         }
-
-        // Generar el token para el usuario autenticado
+    
+        // Generar token con claims personalizados
         $customClaims = ['role' => $role];
-
         $token = JWTAuth::claims($customClaims)->fromUser($authenticatedUser);
-
+    
         return response()->json([
             'access_token' => $token,
             'role' => $role,
