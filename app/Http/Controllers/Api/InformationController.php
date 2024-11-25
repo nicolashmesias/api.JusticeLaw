@@ -14,33 +14,35 @@ class InformationController extends Controller
     {
         // Obtiene todos los registros de la base de datos
         $informations = Information::query();
-    
+
         // Si hay una búsqueda en el request, aplica un filtro
         if ($request->has('search')) {
             $search = $request->input('search');
             $informations->where('title', 'like', '%' . $search . '%')
                          ->orWhere('content', 'like', '%' . $search . '%');
         }
-    
+
         // Recupera los datos
         $informations = $informations->get();
-    
+
         // Si no hay datos, retorna un mensaje vacío
         if ($informations->isEmpty()) {
             return view('information.index', ['informations' => [], 'message' => 'No se encontraron resultados.']);
         }
-    
-        // Retorna la vista con los datos
-        return view('information.index', compact('informations'));
-    }
-    
 
-    
+        // Retorna la vista con los datos
+
+        return response()->json($informations);
+        // return view('information.index', compact('informations'));
+    }
+
+
+
 
 public function view(Request $request)
 {
     // Obtén el parámetro de búsqueda
-    $query = $request->input('query'); 
+    $query = $request->input('query');
 
     if ($query) {
         // Realiza la búsqueda
@@ -69,7 +71,7 @@ public function view(Request $request)
 public function search(Request $request)
 {
     $query = $request->get('query');
-    
+
     // Buscar las informaciones que coincidan con la búsqueda
     $informations = Information::where('title', 'like', '%' . $query . '%')->get();
 
@@ -86,7 +88,7 @@ public function search(Request $request)
     {
         //
     }
- 
+
     /**
      * Store a newly created resource in storage.
      */
