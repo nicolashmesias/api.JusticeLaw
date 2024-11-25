@@ -28,12 +28,11 @@ class PasswordResetController extends Controller
     $user->save();
 
     // Send the email
-    Mail::send([], [], function ($message) use ($user, $resetCode) {
+    Mail::send('emails.reset_code', ['resetCode' => $resetCode], function ($message) use ($user) {
         $message->to($user->email)
-            ->subject('Password Reset Code')
-            ->setBody("Your password reset code is: $resetCode");
+            ->subject('Código de Restablecimiento de Contraseña');
     });
-
+    
     return response()->json(['message' => 'Reset code sent'], 200);
 }
 
