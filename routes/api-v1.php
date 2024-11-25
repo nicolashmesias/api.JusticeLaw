@@ -186,6 +186,9 @@ Route::get('verificationLawyers/{verificationLawyer}',[VerificationLawyerControl
 Route::put('verificationLawyers/{verificationLawyer}',[VerificationLawyerController::class,'update'])->name('api.v1.verificationLawyers.update');
 Route::delete('verificationLawyers/{verificationLawyer}',[VerificationLawyerController::class,'destroy'])->name('api.v1.verificationLawyers  .delete');
 
+Route::get('/get-level-options', [VerificationLawyerController::class, 'getLevelOptions']);
+
+
 Route::get('overhaulreviews',[OverhaulReviewController::class,'index'])->name('api.v1.overhaulreviews.index');
 Route::post('overhaulreviews',[OverhaulReviewController::class,'store'])->name('api.v1.overhaulreviews.store');
 Route::get('overhaulreviews/{overhaulreview}',[OverhaulReviewController::class,'show'])->name('api.v1.overhaulreviews.show');

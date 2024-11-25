@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Models\VerificationLawyer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class VerificationLawyerController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      */
     public function index()
@@ -23,6 +24,23 @@ class VerificationLawyerController extends Controller
     public function create()
     {
         //
+    }
+
+
+    public function getLevelOptions()
+    {
+        // Consulta para obtener los valores de la columna 'level' de la tabla 'verification_lawyers'
+        $enumValues = DB::select(DB::raw('SHOW COLUMNS FROM verification_lawyers WHERE Field = "level"'));
+
+        // Extraer los valores del tipo enum
+        preg_match("/^enum\((.*)\)$/", $enumValues[0]->Type, $matches);
+        $enumValues = explode(",", $matches[1]);
+
+        $enumValues = array_map(function ($value) {
+            return trim($value, "'");
+        }, $enumValues);
+
+        return response()->json($enumValues);
     }
 
     /**
