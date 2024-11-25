@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Lawyer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class LawyerController extends Controller
 {
@@ -29,20 +30,31 @@ class LawyerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function registerLawyer(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|max:30',
-            'last_name' => 'required|max:50',
+            'last_names' => 'required|max:50',
             'type_document_id' => 'required|max:10',
             'document_number' => 'required|max:10',
             'email' => 'required|max:255|unique:lawyers',
-            'password' => 'required|string|min:8'
+            'password' => 'required|string|min:8',
         ]);
 
-        $lawyer = Lawyer::create($request->all());
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
 
-        return response()->json($lawyer);
+        $lawyer = new Lawyer();
+        $lawyer->name = $request->name;
+        $lawyer->last_names = $request->last_names;
+        $lawyer->type_document_id = $request->type_document_id;
+        $lawyer->document_number = $request->document_number;
+        $lawyer->email = $request->email;
+        $lawyer->password = bcrypt($request->password);
+        $lawyer->save();
+
+        return response()->json($lawyer, 201);
     }
 
     /**

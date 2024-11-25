@@ -87,7 +87,7 @@ class AuthController extends Controller
 
         $lawyer = new Lawyer();
         $lawyer->name = $request->name;
-        $lawyer->last_name = $request->last_name;
+        $lawyer->last_names = $request->last_names;
         $lawyer->type_document_id = $request->type_document_id;
         $lawyer->document_number = $request->document_number;
         $lawyer->email = $request->email;

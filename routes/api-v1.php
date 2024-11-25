@@ -229,7 +229,7 @@ Route::put('reviews/{rivew}', [ReviewController::class, 'update'])->name('api.v1
 Route::delete('reviews/{review}', [ReviewController::class, 'destroy'])->name('api.v1.rivews.delete');
 
 Route::get('lawyers', [LawyerController::class, 'index'])->name('api.v1.lawyers.index');
-Route::post('lawyers', [LawyerController::class, 'store'])->name('api.v1.lawyers.store');
+Route::post('/registrarLawyer', [LawyerController::class, 'store'])->name('api.v1.lawyers.store');
 Route::get('lawyers/{lawyer}', [LawyerController::class, 'show'])->name('api.v1.lawyers.show');
 Route::put('lawyers/{lawyer}', [LawyerController::class, 'update'])->name('api.v1.lawyers.update');
 Route::delete('lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('api.v1.lawyers.delete');
