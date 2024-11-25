@@ -24,7 +24,7 @@ use App\Http\Controllers\Api\VerificationLawyerController;
 use App\Http\Controllers\Api\LawyerController;
 use App\Http\Controllers\Api\OverhaulReviewController;
 use App\Http\Controllers\Api\LawyerProfileController;
-use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\Api\PasswordResetController;
 
 /*
 |--------------------------------------------------------------------------
