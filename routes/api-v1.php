@@ -61,7 +61,14 @@ Route::group([
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
     Route::post('/me', [AuthController::class, 'me'])->name('me');
+
+Route::post('/register-lawyer', [AuthController::class, 'registerLawyer'])->name('register-lawyer')->middleware('guest');
+
 });
+
+Route::post('/registerLawyer', [AuthController::class, 'registerLawyer'])->name('registerPRUEBA')->middleware('guest');
+
+
 
 Route::get('answers', [AnswerController::class, 'index'])->name('api.v1.answers.index');
 Route::post('answers', [AnswerController::class, 'store'])->name('api.v1.answers.store');
@@ -110,27 +117,37 @@ Route::delete('usersProfile/{userProfile}', [UserProfileController::class, 'dest
 
 Route::post('/profile', [UserProfileController::class, 'updateUserProfile'])->middleware('auth');
 
+Route::get('/getprofile', [UserProfileController::class, 'getProfile'])->middleware('auth');
+
+
 
 Route::get('countries', [DropdownController::class, 'indexCountry'])->name('api.v1.countries.index');
 Route::post('countries', [DropdownController::class, 'storeCountry'])->name('api.v1.countries.store');
-Route::get('countries/{country}', [DropdownController::class, 'showCountry'])->name('api.v1.countries.show');
-Route::put('countries/{country}', [DropdownController::class, 'updateCountry'])->name('api.v1.countries.update');
-Route::delete('countries/{country}', [DropdownController::class, 'destroyCountry'])->name('api.v1.countries.delete');
+// Route::get('countries/{country}', [DropdownController::class, 'showCountry'])->name('api.v1.countries.show');
+// Route::put('countries/{country}', [DropdownController::class, 'updateCountry'])->name('api.v1.countries.update');
+// Route::delete('countries/{country}', [DropdownController::class, 'destroyCountry'])->name('api.v1.countries.delete');
 
 Route::get('states', [DropdownController::class, 'indexState'])->name('api.v1.states.index');
 Route::post('states', [DropdownController::class, 'storeState'])->name('api.v1.states.store');
-Route::get('states/{state}', [DropdownController::class, 'showState'])->name('api.v1.states.show');
-Route::put('states/{state}', [DropdownController::class, 'updateState'])->name('api.v1.states.update');
-Route::delete('states/{state}', [DropdownController::class, 'destroyState'])->name('api.v1.states.delete');
+// Route::get('states/{state}', [DropdownController::class, 'showState'])->name('api.v1.states.show');
+// Route::put('states/{state}', [DropdownController::class, 'updateState'])->name('api.v1.states.update');
+// Route::delete('states/{state}', [DropdownController::class, 'destroyState'])->name('api.v1.states.delete');
 
 Route::get('cities', [DropdownController::class, 'indexCity'])->name('api.v1.cities.index');
 Route::post('cities', [DropdownController::class, 'storeCity'])->name('api.v1.cities.store');
-Route::get('cities/{city}', [DropdownController::class, 'showCity'])->name('api.v1.cities.show');
-Route::put('cities/{city}', [DropdownController::class, 'updateCity'])->name('api.v1.cities.update');
-Route::delete('cities/{city}', [DropdownController::class, 'destroyCity'])->name('api.v1.cities.delete');
+// Route::get('cities/{city}', [DropdownController::class, 'showCity'])->name('api.v1.cities.show');
+// Route::put('cities/{city}', [DropdownController::class, 'updateCity'])->name('api.v1.cities.update');
+// Route::delete('cities/{city}', [DropdownController::class, 'destroyCity'])->name('api.v1.cities.delete');
+
+
+Route::get('/states/{countryId}', [DropdownController::class, 'indexStateByCountry']);
+Route::get('/cities/{stateId}', [DropdownController::class, 'indexCityByState']);
+
 
 Route::get('informations', [InformationController::class, 'index'])->name('api.v1.informations.index');
-Route::get('informations/view', [InformationController::class, 'view'])->name('api.v1.informations.view'); // Para la vista
+Route::get('informations/view', [InformationController::class, 'view'])->name('api.v1.informations.view');
+Route::get('/informations/search', [InformationController::class, 'search']);
+
 //Route::post('informations', [InformationController::class, 'store'])->name('api.v1.informations.store');
 //Route::get('informations/{information}', [InformationController::class, 'show'])->name('api.v1.informations.show');
 //Route::put('informations/{information}', [InformationController::class, 'update'])->name('api.v1.informations.update');
@@ -164,7 +181,7 @@ Route::put('reviews/{rivew}',[ReviewController::class,'update'])->name('api.v1.r
 Route::delete('reviews/{review}',[ReviewController::class,'destroy'])->name('api.v1.rivews.delete');
 
 Route::get('verificationLawyers',[VerificationLawyerController::class,'index'])->name('api.v1.verificationLawyers.index');
-Route::post('verificationLawyers',[VerificationLawyerController::class,'store'])->name('api.v1.verificationLawyers.store');
+Route::post('/verificationLawyer',[VerificationLawyerController::class,'store'])->name('api.v1.verificationLawyers.store');
 Route::get('verificationLawyers/{verificationLawyer}',[VerificationLawyerController::class,'show'])->name('api.v1.verificationLawyers.show');
 Route::put('verificationLawyers/{verificationLawyer}',[VerificationLawyerController::class,'update'])->name('api.v1.verificationLawyers.update');
 Route::delete('verificationLawyers/{verificationLawyer}',[VerificationLawyerController::class,'destroy'])->name('api.v1.verificationLawyers  .delete');
@@ -212,7 +229,7 @@ Route::put('reviews/{rivew}', [ReviewController::class, 'update'])->name('api.v1
 Route::delete('reviews/{review}', [ReviewController::class, 'destroy'])->name('api.v1.rivews.delete');
 
 Route::get('lawyers', [LawyerController::class, 'index'])->name('api.v1.lawyers.index');
-Route::post('lawyers', [LawyerController::class, 'store'])->name('api.v1.lawyers.store');
+Route::post('/registrarLawyer', [LawyerController::class, 'registerLawyer'])->name('api.v1.lawyers.store');
 Route::get('lawyers/{lawyer}', [LawyerController::class, 'show'])->name('api.v1.lawyers.show');
 Route::put('lawyers/{lawyer}', [LawyerController::class, 'update'])->name('api.v1.lawyers.update');
 Route::delete('lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('api.v1.lawyers.delete');
@@ -231,17 +248,14 @@ Route::middleware('auth:api')->post('/refresh-token', function () {
 
 //grupo de rutas de notificaciones
 Route::group([
-
-    'middleware' => 'api',
+    'middleware' => ['auth:api'],
     'prefix' => 'auth'
-
-],function ($router) {
-    Route::get('/notifications', [NotificationController::class, 'index']); // Listar notificaciones no leídas
-    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']); // Marcar como leída
-    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']); // Eliminar notificación
-    Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']); // Archivar notificación
-    Route::delete('/notifications', [NotificationController::class, 'destroyAll']); // Eliminar todas
-    Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']); // Archivar todas
+], function ($router) {
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
+    Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']);
+    Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
+    Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
     Route::post('/notifications/{id}/like', [NotificationController::class, 'likeNotification']);
 });
-

@@ -6,6 +6,8 @@ use App\Models\UserProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+
 class UserProfileController extends Controller
 {
     /**
@@ -92,25 +94,64 @@ class UserProfileController extends Controller
     }
 
     public function updateUserProfile(Request $request)
-{
-    $user = auth()->user(); // Obtener el usuario autenticado
+    {
+        $user = auth()->user();
 
-    $validatedData = $request->validate([
-        'cell_phone' => 'nullable|string|max:15',
-        'country_id' => 'nullable|exists:countries,id',
-        'state_id' => 'nullable|exists:states,id',
-        'city_id' => 'nullable|exists:cities,id',
-        'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-    ]);
-    // Subir la foto si se proporciona
-    if ($request->hasFile('photo')) {
-        $path = $request->file('photo')->store('profile_photos', 'public');
-        $validatedData['photo_path'] = $path;
+        $validatedData = $request->validate([
+            'cell_phone' => 'nullable|string|max:15',
+            'country_id' => 'nullable|exists:countries,id',
+            'state_id' => 'nullable|exists:states,id',
+            'city_id' => 'nullable|exists:cities,id',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        if ($request->hasFile('profile_photo')) {
+            if ($user->profile && $user->profile->profile_photo) {
+                Storage::disk('public')->delete($user->profile->profile_photo);
+            }
+
+            $path = $request->file('profile_photo')->store('profile_photos', 'public');
+
+            $validatedData['profile_photo'] = $path;
+        }
+
+        $user->profile()->updateOrCreate(['user_id' => $user->id], $validatedData);
+
+        return response()->json([
+            'message' => 'Perfil actualizado con éxito',
+            'photo' => isset($path) ? asset('storage/' . $path) : ($user->profile->profile_photo ? asset('storage/' . $user->profile->profile_photo) : null),
+        ], 200);
     }
 
-    $user->profile()->updateOrCreate(['user_id' => $user->id], $validatedData);
+    public function getProfile(Request $request)
+    {
+        $user = $request->user();
 
-    return response()->json(['message' => 'Perfil actualizado con éxito'], 200);
-}
+        $profile = $user->profile;
+
+        if ($profile) {
+            $countryName = $profile->country ? $profile->country->name : null;
+            $countryId = $profile->country ? $profile->country->id : null;
+            $stateName = $profile->state ? $profile->state->name : null;
+            $stateId = $profile->state ? $profile->state->id : null;
+            $cityName = $profile->city ? $profile->city->name : null;
+            $cityId = $profile->city ? $profile->city->id : null;
+
+            return response()->json([
+                'cell_phone' => $profile->cell_phone ?? '',
+                'country' => $countryName ?? '',
+                'country_id' => $countryId ?? '',
+                'state' => $stateName ?? '',
+                'state_id' => $stateId ?? '',
+                'city' => $cityName ?? '',
+                'city_id' => $cityId ?? '',
+                'photo' => $profile->profile_photo ? url('storage/' . $profile->profile_photo) : null,
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Perfil no encontrado',
+            ], 404);
+        }
+    }
 
 }

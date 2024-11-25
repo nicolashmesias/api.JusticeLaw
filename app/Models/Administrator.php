@@ -5,7 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-class Administrator extends Model
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+
+class Administrator extends Authenticatable implements JWTSubject
 {
     use HasFactory;
 
@@ -24,6 +27,16 @@ class Administrator extends Model
 
     protected $allowIncluded = ['overhaulReview.review','typeDocument'];
 
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+    
     public function scopeIncluded(Builder $query)
     {
 
@@ -51,4 +64,3 @@ class Administrator extends Model
     }
 
 }
-

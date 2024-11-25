@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\Lawyer as Authenticatable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
-class Lawyer extends Model
+class Lawyer extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -25,6 +26,7 @@ class Lawyer extends Model
         'document_number',
         'email',
         'password',
+        'verification',
     ];
 
 
@@ -58,6 +60,15 @@ class Lawyer extends Model
 
     protected $allowFilter = ['id', 'name', 'last_names','type_document_id', 'document_number', 'email', 'password'];
 
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     public function typeDocument(){
         return $this->belongsTo(TypeDocument::class);

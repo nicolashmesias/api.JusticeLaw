@@ -8,27 +8,40 @@ use Illuminate\Database\Eloquent\Model;
 class VerificationLawyer extends Model
 {
     use HasFactory;
-    public $fillable =[
+    public $fillable = [
         'cell_phone',
         'country_id',
         'state_id',
         'city_id',
+        'level',
+        'training_place',
+        'resume',
         'lawyer_id'
     ];
-    public function country(){
+
+    const LEVELS = [
+        'Universidad',
+        'Maestría',
+        'Doctorado',
+    ];
+
+    public function country()
+    {
         return $this->belongsTo(Country::class);
     }
 
-    public function lawyer(){
+    public function lawyer()
+    {
         return $this->belongsTo(Lawyer::class);
     }
 
-    public function state(){
+    public function state()
+    {
         return $this->belongsTo(State::class);
     }
 
-    public function city(){
+    public function city()
+    {
         return $this->belongsTo(City::class);
     }
-
 }

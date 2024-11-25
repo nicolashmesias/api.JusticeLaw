@@ -13,10 +13,8 @@ class DropdownController extends Controller
 {
     public function indexCountry()
     {
-        $countries=Country::all();
+        $countries = Country::all();
         return response()->json($countries);
-
-
     }
     /**
      * Display a listing of the resource.
@@ -25,17 +23,42 @@ class DropdownController extends Controller
     {
         $cities = City::all();
         return response()->json($cities);
+    }
 
+
+
+
+    public function indexStateByCountry($countryId)
+    {
+        $country = Country::find($countryId);
+
+        if (!$country) {
+            return response()->json(['error' => 'Country not found'], 404);
+        }
+
+        $states = $country->states;
+
+        return response()->json($states); 
+    }
+
+    public function indexCityByState($stateId)
+    {
+        $state = State::find($stateId);
+
+        if (!$state) {
+            return response()->json(['error' => 'State not found'], 404);
+        }
+
+        $cities = $state->cities;
+
+        return response()->json($cities);
     }
 
     /**
      * Show the form for creating a new resource.
      */
 
-    public function createCountry(){
-
-
-    }
+    public function createCountry() {}
     public function createCity()
 
     {
@@ -50,7 +73,7 @@ class DropdownController extends Controller
     {
 
         $request->validate([
-            'code'=>'required|max:2',
+            'code' => 'required|max:2',
             'name' => 'required|max:255',
             'phonecode' => 'required|max:4'
         ]);
@@ -58,7 +81,6 @@ class DropdownController extends Controller
         $country = Country::create($request->all());
 
         return response()->json($country);
-
     }
 
     public function storeCity(Request $request)
@@ -71,7 +93,6 @@ class DropdownController extends Controller
         $city = City::create($request->all());
 
         return response()->json($city);
-
     }
 
     /**
@@ -88,7 +109,6 @@ class DropdownController extends Controller
     {
         $city = City::findOrFail($id);
         return response()->json($city);
-
     }
 
     /**
@@ -100,11 +120,7 @@ class DropdownController extends Controller
 
     }
 
-    public function editCity(city $city)
-    {
-
-
-    }
+    public function editCity(city $city) {}
 
     /**
      * Update the specified resource in storage.
@@ -113,7 +129,7 @@ class DropdownController extends Controller
     public function updateCountry(Request $request, Country $country)
     {
         $request->validate([
-            'code'=>'required|max:2',
+            'code' => 'required|max:2',
             'name' => 'required|max:255',
             'phonecode' => 'required|max:4'
         ]);
@@ -121,7 +137,6 @@ class DropdownController extends Controller
         $country->update($request->all());
 
         return response()->json($country);
-
     }
 
     public function updateCity(Request $request, City $city)
@@ -134,7 +149,6 @@ class DropdownController extends Controller
         $city->update($request->all());
 
         return response()->json($city);
-
     }
 
     /**
@@ -145,7 +159,6 @@ class DropdownController extends Controller
     {
         $country->delete();
         return response()->json($country);
-
     }
 
     public function destroyCity(City $city)
@@ -154,7 +167,7 @@ class DropdownController extends Controller
         return response()->json($city);
     }
 
-     /**
+    /**
      * Display a listing of the resource.
      */
     public function indexState()
@@ -198,10 +211,7 @@ class DropdownController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function editState(city $city)
-    {
-
-    }
+    public function editState(city $city) {}
 
     /**
      * Update the specified resource in storage.
@@ -225,7 +235,5 @@ class DropdownController extends Controller
     {
         $state->delete();
         return response()->json($state);
-
     }
-
 }

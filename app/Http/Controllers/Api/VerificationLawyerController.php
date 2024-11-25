@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Models\VerificationLawyer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class VerificationLawyerController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      */
     public function index()
@@ -25,24 +26,43 @@ class VerificationLawyerController extends Controller
         //
     }
 
+
+
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'cell_phone' => 'required|min:10',
-            'country_id' => 'required',
-            'state_id' => 'required',
-            'city_id' => 'required',
-            'lawyer_id' => 'required'
+        $validated = $request->validate([
+            'cell_phone' => 'required|string|max:10',
+            'country_id' => 'required|exists:countries,id',
+            'state_id' => 'required|exists:states,id',
+            'city_id' => 'required|exists:cities,id',
+            'level' => 'required|string',
+            'training_place' => 'required|string|max:255',
+            'resume' => 'required|file|mimes:pdf,doc,docx|max:2048',
+            'lawyer_id' => 'required|exists:lawyers,id',
         ]);
 
-        $verificationLawyer = VerificationLawyer::create($request->all());
+        $resumePath = $request->file('resume')->store('resumes', 'public');
 
-        return response()->json($verificationLawyer);
+        $verificationLawyer = VerificationLawyer::create([
+            'cell_phone' => $validated['cell_phone'],
+            'country_id' => $validated['country_id'],
+            'state_id' => $validated['state_id'],
+            'city_id' => $validated['city_id'],
+            'level' => $validated['level'],
+            'training_place' => $validated['training_place'],
+            'resume' => $resumePath,
+            'lawyer_id' => $validated['lawyer_id'],
+        ]);
+
+        return response()->json([
+            'message' => 'Registro creado exitosamente.',
+            'data' => $verificationLawyer,
+        ], 201);
     }
-
     /**
      * Display the specified resource.
      */
@@ -70,6 +90,9 @@ class VerificationLawyerController extends Controller
             'country_id' => 'required',
             'state_id' => 'required',
             'city_id' => 'required',
+            'level' => 'required',
+            'training_place' => 'required',
+            'resume' => 'required',
             'lawyer_id' => 'required'
         ]);
         $verificationLawyer->update($request->all());
