@@ -27,10 +27,17 @@ class VerificationLawyerController extends Controller
     }
 
 
+
+
     public function getLevelOptions()
     {
         // Consulta para obtener los valores de la columna 'level' de la tabla 'verification_lawyers'
         $enumValues = DB::select(DB::raw('SHOW COLUMNS FROM verification_lawyers WHERE Field = "level"'));
+
+        // Verifica que se obtuvieron resultados
+        if (empty($enumValues)) {
+            return response()->json(['error' => 'No se encontraron valores para la columna level'], 404);
+        }
 
         // Extraer los valores del tipo enum
         preg_match("/^enum\((.*)\)$/", $enumValues[0]->Type, $matches);
@@ -42,6 +49,7 @@ class VerificationLawyerController extends Controller
 
         return response()->json($enumValues);
     }
+
 
     /**
      * Store a newly created resource in storage.
