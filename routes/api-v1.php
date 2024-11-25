@@ -66,6 +66,7 @@ Route::post('/register-lawyer', [AuthController::class, 'registerLawyer'])->name
 
 });
 
+Route::post('/registerLawyer', [AuthController::class, 'registerLawyer'])->name('registerPRUEBA')->middleware('guest');
 
 
 
