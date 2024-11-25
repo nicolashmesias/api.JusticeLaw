@@ -25,11 +25,8 @@ return new class extends Migration
             $table->foreign('city_id')->references('id')->on('cities');
 
 
-            $table->enum('level', [
-                'Universidad',
-                'Maestría',
-                'Doctorado'
-            ])->default('Universidad');
+            $table->string('level');
+
 
             $table->string('training_place');
 
