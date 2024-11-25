@@ -66,6 +66,8 @@ Route::group([
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::post('/logoutPrueba', [LawyerController::class, 'logout'])->name('logout');
+
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 

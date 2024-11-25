@@ -29,6 +29,13 @@ class LawyerController extends Controller
 
     }
 
+
+    public function logout()
+    {
+        auth()->logout();
+        return response()->json(['message' => 'Successfully logged out']);
+    }
+    
     /**
      * Store a newly created resource in storage.
      */
