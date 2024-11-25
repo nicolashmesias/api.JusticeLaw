@@ -62,6 +62,9 @@ Route::group([
     Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
     Route::post('/me', [AuthController::class, 'me'])->name('me');
 
+    Route::post('/meLawyer', [LawyerController::class, 'me'])->name('meLawyer');
+
+
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

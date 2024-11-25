@@ -101,7 +101,6 @@ class AuthController extends Controller
 
     public function me()
     {
-        // Lista de guards que quieres admitir
         $guards = ['api', 'lawyer', 'administrator'];
     
         foreach ($guards as $guard) {

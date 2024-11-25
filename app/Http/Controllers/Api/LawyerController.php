@@ -29,13 +29,27 @@ class LawyerController extends Controller
 
     }
 
+    public function me()
+    {
+        $guards = ['api', 'lawyer', 'administrator'];
+    
+        foreach ($guards as $guard) {
+            if (auth($guard)->check()) {
+                return response()->json(auth($guard)->user());
+            }
+        }
+    
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+    
+    
 
     public function logout()
     {
         auth()->logout();
         return response()->json(['message' => 'Successfully logged out']);
     }
-    
+
     /**
      * Store a newly created resource in storage.
      */
