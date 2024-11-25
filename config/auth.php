@@ -86,7 +86,7 @@ return [
             'model' => App\Models\Lawyer::class,
         ],
 
-        'administrator' => [
+        'administrators' => [
             'driver' => 'eloquent',
             'model' => App\Models\Administrator::class,
         ],
