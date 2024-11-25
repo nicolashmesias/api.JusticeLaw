@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Models\Lawyer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Administrator;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 class LawyerController extends Controller
@@ -37,13 +39,18 @@ class LawyerController extends Controller
             'last_names' => 'required|max:50',
             'type_document_id' => 'required|max:10',
             'document_number' => 'required|max:10',
-            'email' => 'required|max:255|unique:lawyers',
+            'email' => 'required|email|max:255',
             'password' => 'required|string|min:8',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
+
+        if ($this->emailExistsInAnyTable($request->email)) {
+            return response()->json(['error' => 'El correo ya está registrado en el sistema.'], 400);
+        }
+
 
         $lawyer = new Lawyer();
         $lawyer->name = $request->name;
@@ -104,4 +111,13 @@ class LawyerController extends Controller
         $lawyer->delete();
         return response()->json($lawyer);
     }
+
+    private function emailExistsInAnyTable($email)
+    {
+        return User::where('email', $email)->exists() ||
+               Lawyer::where('email', $email)->exists() ||
+               Administrator::where('email', $email)->exists();
+    }
+
+
 }
