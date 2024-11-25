@@ -26,6 +26,7 @@ class Lawyer extends Authenticatable implements JWTSubject
         'document_number',
         'email',
         'password',
+        'verification',
     ];
 
 
@@ -68,7 +69,7 @@ class Lawyer extends Authenticatable implements JWTSubject
     {
         return [];
     }
-    
+
     public function typeDocument(){
         return $this->belongsTo(TypeDocument::class);
     }

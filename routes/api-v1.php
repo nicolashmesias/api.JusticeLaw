@@ -181,7 +181,7 @@ Route::put('reviews/{rivew}',[ReviewController::class,'update'])->name('api.v1.r
 Route::delete('reviews/{review}',[ReviewController::class,'destroy'])->name('api.v1.rivews.delete');
 
 Route::get('verificationLawyers',[VerificationLawyerController::class,'index'])->name('api.v1.verificationLawyers.index');
-Route::post('verificationLawyers',[VerificationLawyerController::class,'store'])->name('api.v1.verificationLawyers.store');
+Route::post('/verificationLawyer',[VerificationLawyerController::class,'store'])->name('api.v1.verificationLawyers.store');
 Route::get('verificationLawyers/{verificationLawyer}',[VerificationLawyerController::class,'show'])->name('api.v1.verificationLawyers.show');
 Route::put('verificationLawyers/{verificationLawyer}',[VerificationLawyerController::class,'update'])->name('api.v1.verificationLawyers.update');
 Route::delete('verificationLawyers/{verificationLawyer}',[VerificationLawyerController::class,'destroy'])->name('api.v1.verificationLawyers  .delete');

@@ -52,6 +52,7 @@ class LawyerController extends Controller
         $lawyer->document_number = $request->document_number;
         $lawyer->email = $request->email;
         $lawyer->password = bcrypt($request->password);
+        $lawyer->verification = false;
         $lawyer->save();
 
         return response()->json($lawyer, 201);

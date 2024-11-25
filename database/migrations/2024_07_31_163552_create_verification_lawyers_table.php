@@ -24,6 +24,17 @@ return new class extends Migration
             $table->unsignedBigInteger('city_id');
             $table->foreign('city_id')->references('id')->on('cities');
 
+
+            $table->enum('level', [
+                'Universidad',
+                'Maestría',
+                'Doctorado'
+            ])->default('Universidad');
+
+            $table->string('training_place');
+
+            $table->string('resume');
+
             $table->unsignedBigInteger('lawyer_id');
             $table->foreign('lawyer_id')->references('id')->on('lawyers');
 
