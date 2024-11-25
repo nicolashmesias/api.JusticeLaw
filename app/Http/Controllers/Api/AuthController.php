@@ -74,7 +74,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:30',
-            'last_name' => 'required|max:50',
+            'last_names' => 'required|max:50',
             'type_document_id' => 'required|max:10',
             'document_number' => 'required|max:10',
             'email' => 'required|max:255|unique:lawyers',
@@ -85,7 +85,7 @@ class AuthController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        $lawyer = new Lawyer(); 
+        $lawyer = new Lawyer();
         $lawyer->name = $request->name;
         $lawyer->last_name = $request->last_name;
         $lawyer->type_document_id = $request->type_document_id;
