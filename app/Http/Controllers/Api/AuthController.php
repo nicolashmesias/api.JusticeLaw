@@ -34,7 +34,7 @@ class AuthController extends Controller
         if ($this->emailExistsInAnyTable($request->email)) {
             return response()->json(['error' => 'El correo ya está registrado en el sistema.'], 400);
         }
-        
+
         $user = new User;
         $user->name = $request->name;
         $user->last_name = $request->last_name;
@@ -45,14 +45,64 @@ class AuthController extends Controller
         $user->save();
         return response()->json($user, 201);
     }
-    public function login()
+    // public function login()
+    // {
+    //     $credentials = request(['email', 'password']);
+    //     if (! $token = auth()->attempt($credentials)) {
+    //         return response()->json(['error' => 'Unauthorized'], 401);
+    //     }
+    //     return $this->respondWithToken($token);
+    // }
+
+
+    public function login(Request $request)
     {
-        $credentials = request(['email', 'password']);
-        if (! $token = auth()->attempt($credentials)) {
+        $credentials = $request->only('email', 'password');
+
+        $authenticatedUser = null; // Usuario autenticado
+        $role = null; // Rol del usuario
+
+        // Verificar en cada tabla y autenticar
+        if ($user = User::where('email', $credentials['email'])->first()) {
+            if (JWTAuth::attempt($credentials)) {
+                $authenticatedUser = $user;
+                $role = 'user';
+            }
+        } elseif ($lawyer = Lawyer::where('email', $credentials['email'])->first()) {
+            if (JWTAuth::attempt($credentials)) {
+                $authenticatedUser = $lawyer;
+                $role = 'lawyer';
+            }
+        } elseif ($administrator = Administrator::where('email', $credentials['email'])->first()) {
+            if (JWTAuth::attempt($credentials)) {
+                $authenticatedUser = $administrator;
+                $role = 'admin';
+            }
+        }
+
+        // Si no se encuentra en ninguna tabla o las credenciales son incorrectas
+        if (!$authenticatedUser) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        return $this->respondWithToken($token);
+
+        // Generar el token para el usuario autenticado
+        $customClaims = ['role' => $role];
+
+        $token = JWTAuth::claims($customClaims)->fromUser($authenticatedUser);
+
+        return response()->json([
+            'access_token' => $token,
+            'role' => $role,
+            'expires_in' => Auth::factory()->getTTL() * 60,
+            'user' => [
+                'id' => $authenticatedUser->id,
+                'email' => $authenticatedUser->email,
+                'name' => $authenticatedUser->name,
+            ],
+        ]);
     }
+
+
     public function me()
     {
         return response()->json(auth()->user());
@@ -104,11 +154,9 @@ class AuthController extends Controller
     }
 
     private function emailExistsInAnyTable($email)
-{
-    return User::where('email', $email)->exists() ||
-           Lawyer::where('email', $email)->exists() ||
-           Administrator::where('email', $email)->exists();
-}
-
-
+    {
+        return User::where('email', $email)->exists() ||
+            Lawyer::where('email', $email)->exists() ||
+            Administrator::where('email', $email)->exists();
+    }
 }
