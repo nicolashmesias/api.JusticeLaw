@@ -15,13 +15,14 @@ return [
     |
     */
 
-    'paths' => ['v1/*', 'api/*'],
+    'paths' => ['v1/*', 'auth/*'],
 
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
     'http://localhost:8000',
-    'http://127.0.0.1:8000'
+    'http://127.0.0.1:8000',
+    'https://apijusticelaw-production.up.railway.app'
     ],
 
     'allowed_origins_patterns' => [],
