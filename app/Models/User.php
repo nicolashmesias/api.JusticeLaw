@@ -28,6 +28,7 @@ class User extends Authenticatable implements JWTSubject
         'document_number',
         'email',
         'password',
+        'reset_code',
     ];
 
     protected $allowIncluded = ['typeDocument','userProfile','userProfile.country','userProfile.state','userProfile.city','questions.lawyer','reviews','notifications','searches','searches.information'];
