@@ -65,7 +65,7 @@ Route::group([
 
 });
 
-Route::post('/register-lawyer', [AuthController::class, 'registerLawyer'])->name('register-lawyer');
+Route::post('/register-lawyer', [AuthController::class, 'registerLawyer'])->name('register-lawyer')->middleware('guest');
 
 
 
