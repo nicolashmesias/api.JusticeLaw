@@ -113,22 +113,22 @@ class AuthController extends Controller
         return response()->json(['error' => 'Unauthorized'], 401);
     }
     
-    // public function logout()
-    // {
-    //     auth()->logout();
-    //     return response()->json(['message' => 'Successfully logged out']);
-    // }
-
-    public function logout(Request $request)
+    public function logout()
     {
-        $token = $request->bearerToken();
-        try {
-            JWTAuth::invalidate($token);
-            return response()->json(['message' => 'Successfully logged out'], 200);
-        } catch (\PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException $e) {
-            return response()->json(['error' => 'Failed to logout, please try again'], 500);
-        }
+        auth()->logout();
+        return response()->json(['message' => 'Successfully logged out']);
     }
+
+    // public function logout(Request $request)
+    // {
+    //     $token = $request->bearerToken();
+    //     try {
+    //         JWTAuth::invalidate($token);
+    //         return response()->json(['message' => 'Successfully logged out'], 200);
+    //     } catch (\PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException $e) {
+    //         return response()->json(['error' => 'Failed to logout, please try again'], 500);
+    //     }
+    // }
     
 
 
