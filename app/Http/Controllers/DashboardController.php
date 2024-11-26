@@ -112,7 +112,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function getUsersByRole()
+    public function usersByRole()
     {
         try {
             // Verificar qué guard está autenticado
