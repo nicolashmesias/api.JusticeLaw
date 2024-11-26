@@ -19,7 +19,7 @@ return new class extends Migration
             ->references('id')
             ->on('lawyers')->onDelete('cascade');
 
-            $table->string('biography');
+            $table->text('biography');
             $table->string('profile_photo');
 
             $table->timestamps();

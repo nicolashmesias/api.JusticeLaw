@@ -119,26 +119,53 @@ class LawyerProfileController extends Controller
     public function updateOrCreateProfile(Request $request)
     {
         $lawyer = Auth::guard('lawyer')->user();
-
+    
         if (!$lawyer) {
             return response()->json([
                 'message' => 'Usuario no autenticado.',
             ], 401);
         }
-
+    
         $validatedData = $request->validate([
-            'biography' => 'required|string',
-            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'biography' => 'required|string|min:1000', // Mínimo de 1000 caracteres
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validación de imagen
         ]);
-
+    
+        if (strlen($validatedData['biography']) < 1000) {
+            return response()->json([
+                'message' => 'La biografía debe tener al menos 1000 caracteres.',
+            ], 400);
+        }
+    
         if ($request->hasFile('profile_photo')) {
+            // Validación de foto
+            $file = $request->file('profile_photo');
+            $mimeType = $file->getClientMimeType();
+            $validMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    
+            if (!in_array($mimeType, $validMimeTypes)) {
+                return response()->json([
+                    'message' => 'La foto debe ser en formato JPEG, PNG o JPG.',
+                ], 400);
+            }
+    
+            if ($file->getSize() > 2048 * 1024) { // El tamaño máximo es 2MB
+                return response()->json([
+                    'message' => 'La foto no puede ser mayor de 2MB.',
+                ], 400);
+            }
+    
+            // Borrar la foto previa si existe
             if ($lawyer->profile && $lawyer->profile->profile_photo) {
                 Storage::disk('public')->delete($lawyer->profile->profile_photo);
             }
-            $pathProfilePhoto = $request->file('profile_photo')->store('profile_photos', 'public');
+    
+            // Subir la nueva foto
+            $pathProfilePhoto = $file->store('profile_photos', 'public');
             $validatedData['profile_photo'] = $pathProfilePhoto;
         }
-
+    
+        // Crear o actualizar el perfil
         $lawyer->profile()->updateOrCreate(
             ['lawyer_id' => $lawyer->id],
             [
@@ -146,17 +173,18 @@ class LawyerProfileController extends Controller
                 'profile_photo' => $validatedData['profile_photo'] ?? $lawyer->profile->profile_photo,
             ]
         );
-
+    
         return response()->json([
             'message' => 'Perfil actualizado con éxito',
-                'biography' => $lawyer->profile->biography,
-                'photo' => isset($pathProfilePhoto)
-                    ? asset('storage/' . $pathProfilePhoto)
-                    : ($lawyer->profile->profile_photo
-                        ? asset('storage/' . $lawyer->profile->profile_photo)
-                        : ''),
+            'biography' => $lawyer->profile->biography,
+            'photo' => isset($pathProfilePhoto)
+                ? asset('storage/' . $pathProfilePhoto)
+                : ($lawyer->profile->profile_photo
+                    ? asset('storage/' . $lawyer->profile->profile_photo)
+                    : ''),
         ], 200);
     }
+    
 
     public function getVerification(Request $request)
     {
