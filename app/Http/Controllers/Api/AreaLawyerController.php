@@ -21,12 +21,23 @@ class AreaLawyerController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
+    public function getAreasLawyer(Request $request)
+{
+    $lawyer = Auth::guard('lawyer')->user();
 
-        request();
-
+    if (!$lawyer) {
+        return response()->json([
+            'message' => 'Usuario no autenticado.',
+        ], 401);
     }
+
+    // Obtener las áreas asociadas al abogado
+    $areas = $lawyer->areas()->pluck('name'); // Obtener solo el campo 'name'
+
+    return response()->json([
+        'areas' => $areas,
+    ], 200);
+}
 
     /**
      * Store a newly created resource in storage.

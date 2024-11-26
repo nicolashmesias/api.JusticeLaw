@@ -137,6 +137,7 @@ Route::post('/profileLawyer', [LawyerProfileController::class, 'updateOrCreatePr
 
 Route::get('/getProfileLawyer', [LawyerProfileController::class, 'getProfile']);
 
+Route::get('/getAreasLawyer', [AreaLawyerController::class, 'getAreasLawyer']);
 
 
 Route::post('/verificationLawyerPerfil', [LawyerProfileController::class, 'updateOrCreateVerification']);
