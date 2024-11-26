@@ -64,6 +64,14 @@ class UserController extends Controller
         return response()->json($user, 201);
     }
 
+
+    private function emailExistsInAnyTable($email)
+    {
+        return User::where('email', $email)->exists() ||
+            Lawyer::where('email', $email)->exists() ||
+            Administrator::where('email', $email)->exists();
+    }
+    
     /**
      * Display the specified resource.
      */
