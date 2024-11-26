@@ -30,15 +30,22 @@ class AreaLawyerController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'area_id' => 'required',
-            'lawyer_id' => 'required',
+        $validated = $request->validate([
+            'lawyer_id' => 'required|exists:lawyers,id',
+            'areas' => 'required|array',
+            'areas.*' => 'exists:areas,id'
         ]);
 
-        $areasLawyer=AreaLawyer::create($request->all());
-        return response()->json($areasLawyer);
-    }
+        // Guardar las relaciones entre el abogado y las áreas seleccionadas
+        foreach ($validated['areas'] as $areaId) {
+            AreaLawyer::create([
+                'lawyer_id' => $validated['lawyer_id'],
+                'area_id' => $areaId
+            ]);
+        }
 
+        return response()->json(['message' => 'Áreas guardadas correctamente']);
+    }
     /**
      * Display the specified resource.
      */
