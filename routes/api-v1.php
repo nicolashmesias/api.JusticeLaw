@@ -237,7 +237,7 @@ Route::put('areas/{area}', [AreaController::class, 'update'])->name('api.v1.area
 Route::delete('areas/{area}', [AreaController::class, 'destroy'])->name('api.v1.areas.delete');
 
 Route::get('areasLawyer', [AreaLawyerController::class, 'index'])->name('api.v1.areasLawyer.index');
-Route::post('/saveAreas', [AreaLawyerController::class, 'store'])->name('api.v1.areasLawyer.store');
+Route::post('/saveAreas', [AreaLawyerController::class, 'saveSelectedAreas'])->name('api.v1.areasLawyer.store');
 Route::get('areasLawyer/{areaLawyer}', [AreaLawyerController::class, 'show'])->name('api.v1.areasLawyer.show');
 Route::put('areasLawyer/{areaLawyer}', [AreaLawyerController::class, 'update'])->name('api.v1.areasLawyer.update');
 Route::delete('areasLawyer/{areaLawyer}', [AreaLawyerController::class, 'destroy'])->name('api.v1.areasLawyer.delete');

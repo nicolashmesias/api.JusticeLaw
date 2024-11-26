@@ -5,6 +5,7 @@ use App\Models\AreaLawyer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Lawyer;
 
 class AreaLawyerController extends Controller
 {
@@ -30,33 +31,29 @@ class AreaLawyerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+
+    public function saveSelectedAreas(Request $request)
     {
         $lawyer = Auth::guard('lawyer')->user();
-
+    
         if (!$lawyer) {
             return response()->json([
                 'message' => 'Usuario no autenticado.',
             ], 401);
         }
-
-        $validated = $request->validate([
-            'lawyer_id' => 'required|exists:lawyers,id',
+    
+        $validatedData = $request->validate([
             'areas' => 'required|array',
-            'areas.*' => 'exists:areas,id'
+            'areas.*' => 'exists:areas,id',
         ]);
-
-        // Guardar las relaciones entre el abogado y las áreas seleccionadas
-        foreach ($validated['areas'] as $areaId) {
-            AreaLawyer::create([
-                'lawyer_id' => $validated['lawyer_id'],
-                'area_id' => $areaId
-            ]);
-        }
-
-        return response()->json(['message' => 'Áreas guardadas correctamente']);
+    
+        $lawyer->areas()->sync($validatedData['areas']); // Sincronizar áreas
+    
+        return response()->json([
+            'message' => 'Áreas guardadas con éxito',
+        ], 200);
     }
-
+    
     /**
      * Display the specified resource.
      */
