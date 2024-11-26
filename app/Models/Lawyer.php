@@ -75,7 +75,7 @@ class Lawyer extends Authenticatable implements JWTSubject
         return $this->belongsTo(TypeDocument::class);
     }
 
-    public function lawyerProfile(){
+    public function profile(){
         return $this->hasOne(LawyerProfile::class);
     }
 

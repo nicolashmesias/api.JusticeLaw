@@ -96,54 +96,107 @@ class LawyerProfileController extends Controller
         $lawyer = auth()->user();
 
         $validatedData = $request->validate([
-            'cell_phone' => 'nullable|string|max:15',
-            'country_id' => 'nullable|exists:countries,id',
-            'state_id' => 'nullable|exists:states,id',
-            'city_id' => 'nullable|exists:cities,id',
-            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'biography' => 'required|string',
+            'profile_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'cell_phone' => 'required|string',
+            'country_id' => 'required|integer|exists:countries,id',
+            'state_id' => 'required|integer|exists:states,id',
+            'city_id' => 'required|integer|exists:cities,id',
+            'level' => 'required|string',
+            'training_place' => 'required|string',
+            'resume' => 'required|file|mimes:pdf,doc,docx|max:2048',
         ]);
+
 
         if ($request->hasFile('profile_photo')) {
             if ($lawyer->profile && $lawyer->profile->profile_photo) {
                 Storage::disk('public')->delete($lawyer->profile->profile_photo);
             }
-
-            $path = $request->file('profile_photo')->store('profile_photos', 'public');
-
-            $validatedData['profile_photo'] = $path;
+            $pathProfilePhoto = $request->file('profile_photo')->store('profile_photos', 'public');
+            $validatedData['profile_photo'] = $pathProfilePhoto;
         }
 
-        $lawyer->profile()->updateOrCreate(['lawyer_id' => $lawyer->id], $validatedData);
+
+        if ($request->hasFile('resume')) {
+            if ($lawyer->verificationLawyer && $lawyer->verificationLawyer->resume) {
+                Storage::disk('public')->delete($lawyer->verificationLawyer->resume);
+            }
+            $pathResume = $request->file('resume')->store('resumes', 'public');
+            $validatedData['resume'] = $pathResume;
+        }
+
+
+        $lawyer->profile()->updateOrCreate(
+            ['lawyer_id' => $lawyer->id],
+            [
+                'biography' => $validatedData['biography'],
+                'profile_photo' => $validatedData['profile_photo'] ?? $lawyer->profile->profile_photo,
+            ]
+        );
+
+        $lawyer->verificationLawyer()->updateOrCreate(
+            ['lawyer_id' => $lawyer->id],
+            [
+                'cell_phone' => $validatedData['cell_phone'],
+                'country_id' => $validatedData['country_id'],
+                'state_id' => $validatedData['state_id'],
+                'city_id' => $validatedData['city_id'],
+                'level' => $validatedData['level'],
+                'training_place' => $validatedData['training_place'],
+                'resume' => $validatedData['resume'] ?? $lawyer->verificationLawyer->resume,
+            ]
+        );
+
 
         return response()->json([
-            'message' => 'Perfil actualizado con éxito',
-            'photo' => isset($path) ? asset('storage/' . $path) : ($lawyer->profile->profile_photo ? asset('storage/' . $lawyer->profile->profile_photo) : null),
+            'message' => 'Perfil y verificación actualizados con éxito',
+            'profile' => [
+                'biography' => $lawyer->profile->biography,
+                'photo' => isset($pathProfilePhoto)
+                    ? asset('storage/' . $pathProfilePhoto)
+                    : ($lawyer->profile->profile_photo
+                        ? asset('storage/' . $lawyer->profile->profile_photo)
+                        : ''),
+            ],
+            'verification' => [
+                'cell_phone' => $lawyer->verificationLawyer->cell_phone,
+                'country' => $lawyer->verificationLawyer->country_id,
+                'state' => $lawyer->verificationLawyer->state_id,
+                'city' => $lawyer->verificationLawyer->city_id,
+                'level' => $lawyer->verificationLawyer->level,
+                'training_place' => $lawyer->verificationLawyer->training_place,
+                'resume' => isset($pathResume)
+                    ? asset('storage/' . $pathResume)
+                    : ($lawyer->verificationLawyer->resume
+                        ? asset('storage/' . $lawyer->verificationLawyer->resume)
+                        : ''),
+            ],
         ], 200);
     }
+
 
     public function getProfile(Request $request)
     {
         $lawyer = $request->user();
 
         $profile = $lawyer->profile;
+        $verification = $lawyer->verificationLawyer;
 
         if ($profile) {
-            $countryName = $profile->country ? $profile->country->name : null;
-            $countryId = $profile->country ? $profile->country->id : null;
-            $stateName = $profile->state ? $profile->state->name : null;
-            $stateId = $profile->state ? $profile->state->id : null;
-            $cityName = $profile->city ? $profile->city->name : null;
-            $cityId = $profile->city ? $profile->city->id : null;
-
             return response()->json([
-                'cell_phone' => $profile->cell_phone ?? '',
-                'country' => $countryName ?? '',
-                'country_id' => $countryId ?? '',
-                'state' => $stateName ?? '',
-                'state_id' => $stateId ?? '',
-                'city' => $cityName ?? '',
-                'city_id' => $cityId ?? '',
-                'photo' => $profile->profile_photo ? url('storage/' . $profile->profile_photo) : null,
+                'profile' => [
+                    'biography' => $profile->biography,
+                    'photo' => $profile->profile_photo ? url('storage/' . $profile->profile_photo) : '',
+                ],
+                'verification' => $verification ? [
+                    'cell_phone' => $verification->cell_phone,
+                    'country' => $verification->country_id,
+                    'state' => $verification->state_id,
+                    'city' => $verification->city_id,
+                    'level' => $verification->level,
+                    'training_place' => $verification->training_place,
+                    'resume' => url('storage/' . $verification->resume),
+                ] : null,
             ]);
         } else {
             return response()->json([

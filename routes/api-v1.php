@@ -128,6 +128,10 @@ Route::post('/profile', [UserProfileController::class, 'updateUserProfile'])->mi
 Route::get('/getprofile', [UserProfileController::class, 'getProfile'])->middleware('auth');
 
 
+Route::post('/profileLawyer', [LawyerProfileController::class, 'updateLawyerProfile']);
+
+Route::get('/getProfileLawyer', [LawyerProfileController::class, 'getProfile']);
+
 
 Route::get('countries', [DropdownController::class, 'indexCountry'])->name('api.v1.countries.index');
 Route::post('countries', [DropdownController::class, 'storeCountry'])->name('api.v1.countries.store');
