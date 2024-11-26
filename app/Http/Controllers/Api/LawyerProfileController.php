@@ -94,7 +94,13 @@ class LawyerProfileController extends Controller
 
     public function getProfile(Request $request)
     {
-        $lawyer = $request->user();
+        $lawyer = Auth::guard('lawyer')->user();
+
+        if (!$lawyer) {
+            return response()->json([
+                'message' => 'Usuario no autenticado.',
+            ], 401);
+        }
 
         $profile = $lawyer->profile;
 
@@ -114,7 +120,13 @@ class LawyerProfileController extends Controller
 
     public function updateOrCreateProfile(Request $request)
     {
-        $lawyer = auth()->user();
+        $lawyer = Auth::guard('lawyer')->user();
+
+        if (!$lawyer) {
+            return response()->json([
+                'message' => 'Usuario no autenticado.',
+            ], 401);
+        }
 
         $validatedData = $request->validate([
             'biography' => 'required|string',
@@ -189,7 +201,13 @@ class LawyerProfileController extends Controller
 
     public function updateOrCreateVerification(Request $request)
     {
-        $lawyer = auth()->user();
+        $lawyer = Auth::guard('lawyer')->user();
+
+        if (!$lawyer) {
+            return response()->json([
+                'message' => 'Usuario no autenticado.',
+            ], 401);
+        }
 
         $validatedData = $request->validate([
             'cell_phone' => 'required|string',
