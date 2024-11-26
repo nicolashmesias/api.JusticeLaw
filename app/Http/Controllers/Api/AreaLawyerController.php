@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 use App\Models\AreaLawyer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
 class AreaLawyerController extends Controller
 {
     /**
@@ -30,6 +32,14 @@ class AreaLawyerController extends Controller
      */
     public function store(Request $request)
     {
+        $lawyer = Auth::guard('lawyer')->user();
+
+        if (!$lawyer) {
+            return response()->json([
+                'message' => 'Usuario no autenticado.',
+            ], 401);
+        }
+
         $validated = $request->validate([
             'lawyer_id' => 'required|exists:lawyers,id',
             'areas' => 'required|array',
@@ -46,6 +56,7 @@ class AreaLawyerController extends Controller
 
         return response()->json(['message' => 'Áreas guardadas correctamente']);
     }
+
     /**
      * Display the specified resource.
      */
