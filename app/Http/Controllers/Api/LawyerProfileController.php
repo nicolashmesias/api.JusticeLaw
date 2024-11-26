@@ -106,10 +106,8 @@ class LawyerProfileController extends Controller
 
         if ($profile) {
             return response()->json([
-                'profile' => [
                     'biography' => $profile->biography,
                     'photo' => $profile->profile_photo ? url('storage/' . $profile->profile_photo) : '',
-                ],
             ], 200);
         } else {
             return response()->json([
