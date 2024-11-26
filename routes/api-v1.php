@@ -286,3 +286,5 @@ Route::get('/chart-data/clients', [DashboardController::class, 'clients']);
 Route::get('/chart-data/reviews', [DashboardController::class, 'reviews']);
 Route::get('/chart-data/information', [DashboardController::class, 'information']);
 Route::get('/chart-data/sessions', [DashboardController::class, 'sessions']);
+Route::get('/chart-data/visitors', [DashboardController::class, 'visitors']);
+Route::get('/chart-data/users-by-role', [DashboardController::class, 'usersByRole']);

@@ -90,4 +90,40 @@ class DashboardController extends Controller
             'data' => $data,
         ]);
     }
+
+    public function visitors()
+    {
+        // Obtener datos de visitantes agrupados por mes (puedes modificar la consulta dependiendo de tu modelo)
+        $visitors = User::selectRaw('MONTH(created_at) as month, COUNT(*) as total')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        $labels = $visitors->pluck('month')->map(function ($month) {
+            return date('F', mktime(0, 0, 0, $month, 1)); // Convertir el número del mes a nombre
+        });
+
+        $data = $visitors->pluck('total');
+
+        return response()->json([
+            'labels' => $labels,
+            'data' => $data,
+        ]);
+    }
+
+    public function usersByRole()
+    {
+        // Obtener cantidad de usuarios por rol (asumiendo que tienes un campo `role`)
+        $roles = User::selectRaw('role, COUNT(*) as total')
+            ->groupBy('role')
+            ->get();
+
+        $labels = $roles->pluck('role');
+        $data = $roles->pluck('total');
+
+        return response()->json([
+            'labels' => $labels,
+            'data' => $data,
+        ]);
+    }
 }
