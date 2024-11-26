@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\LawyerController;
 use App\Http\Controllers\Api\OverhaulReviewController;
 use App\Http\Controllers\Api\LawyerProfileController;
 use App\Http\Controllers\Api\PasswordResetController;
+use App\Http\Controllers\MeetingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -291,3 +292,5 @@ Route::get('/chart-data/information', [DashboardController::class, 'information'
 Route::get('/chart-data/sessions', [DashboardController::class, 'sessions']);
 Route::get('/chart-data/visitors', [DashboardController::class, 'visitors']);
 Route::get('/chart-data/users-by-role', [DashboardController::class, 'usersByRole']);
+
+Route::post('/create-meeting', [MeetingController::class, 'createMeeting']);
