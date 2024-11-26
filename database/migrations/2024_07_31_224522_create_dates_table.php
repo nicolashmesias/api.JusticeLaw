@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('state');
             $table->time('startTime');
             $table->time('endTime');
+
+            $table->unsignedBigInteger('lawyer_id');
+            $table->foreign('lawyer_id')->references('id')
+            ->on('lawyers')->onDelete('cascade');
+            
             $table->timestamps();
         });
     }

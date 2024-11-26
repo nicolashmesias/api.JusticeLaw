@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->time('time');
-            $table->double('price');
 
             $table->unsignedBigInteger('answer_id');
             $table->foreign('answer_id')->references('id')

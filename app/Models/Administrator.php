@@ -13,7 +13,7 @@ class Administrator extends Authenticatable implements JWTSubject
     use HasFactory;
 
     protected $fillable = [
-        'type_document_id', 'document_number', 'email', 'password'
+        'type_document_id', 'document_number', 'email', 'password','reset_code',
     ];
 
     public function typeDocument(){

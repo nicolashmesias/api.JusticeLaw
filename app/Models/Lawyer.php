@@ -27,6 +27,7 @@ class Lawyer extends Authenticatable implements JWTSubject
         'email',
         'password',
         'verification',
+        'reset_code',
     ];
 
 

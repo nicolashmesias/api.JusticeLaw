@@ -24,6 +24,7 @@ use App\Http\Controllers\Api\VerificationLawyerController;
 use App\Http\Controllers\Api\LawyerController;
 use App\Http\Controllers\Api\OverhaulReviewController;
 use App\Http\Controllers\Api\LawyerProfileController;
+use App\Http\Controllers\Api\PasswordResetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,19 +53,26 @@ Route::get('/', function () {
 
 Route::group([
 
-    'middleware' => 'api',
+    'middleware' => ['auth:api,lawyer,administrator'],
     'prefix' => 'auth'
 
 ], function ($router) {
     Route::post('/register', [AuthController::class, 'register'])->name('register');
-    Route::post('/login', [AuthController::class, 'login'])->name('login');
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    // Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
     Route::post('/me', [AuthController::class, 'me'])->name('me');
 
-Route::post('/register-lawyer', [AuthController::class, 'registerLawyer'])->name('register-lawyer')->middleware('guest');
+    Route::post('/meLawyer', [LawyerController::class, 'me'])->name('meLawyer');
+
 
 });
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::post('/logoutPrueba', [LawyerController::class, 'logout'])->name('logout');
+
+
+Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::post('/registerLawyer', [AuthController::class, 'registerLawyer'])->name('registerPRUEBA')->middleware('guest');
 
@@ -234,9 +242,11 @@ Route::get('lawyers/{lawyer}', [LawyerController::class, 'show'])->name('api.v1.
 Route::put('lawyers/{lawyer}', [LawyerController::class, 'update'])->name('api.v1.lawyers.update');
 Route::delete('lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('api.v1.lawyers.delete');
 
+// Route::post('v1/validate-code', [ForgetPasswordController::class, 'validateCode'])->name('api.v1.validate-code');
+// Route::post('/password', [ForgetPasswordController::class, 'store'])->name('api.v1.password.store');
 
-Route::post('/password', [ForgetPasswordController::class, 'store'])->name('api.v1.password.store');
-
+Route::post('/password/email', [PasswordResetController::class, 'sendResetCode']);
+Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']);
 
 //Endpoints para notificaciones
 
