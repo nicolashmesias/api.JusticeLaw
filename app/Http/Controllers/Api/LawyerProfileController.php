@@ -91,22 +91,34 @@ class LawyerProfileController extends Controller
         return response()->json($lawyerProfile);
     }
 
-    public function updateLawyerProfile(Request $request)
+    public function getProfile(Request $request)
+    {
+        $lawyer = $request->user();
+
+        $profile = $lawyer->profile;
+
+        if ($profile) {
+            return response()->json([
+                'profile' => [
+                    'biography' => $profile->biography,
+                    'photo' => $profile->profile_photo ? url('storage/' . $profile->profile_photo) : '',
+                ],
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Perfil no encontrado',
+            ], 404);
+        }
+    }
+
+    public function updateOrCreateProfile(Request $request)
     {
         $lawyer = auth()->user();
 
         $validatedData = $request->validate([
             'biography' => 'required|string',
-            'profile_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'cell_phone' => 'required|string',
-            'country_id' => 'required|integer|exists:countries,id',
-            'state_id' => 'required|integer|exists:states,id',
-            'city_id' => 'required|integer|exists:cities,id',
-            'level' => 'required|string',
-            'training_place' => 'required|string',
-            'resume' => 'required|file|mimes:pdf,doc,docx|max:2048',
+            'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
-
 
         if ($request->hasFile('profile_photo')) {
             if ($lawyer->profile && $lawyer->profile->profile_photo) {
@@ -116,6 +128,74 @@ class LawyerProfileController extends Controller
             $validatedData['profile_photo'] = $pathProfilePhoto;
         }
 
+        $lawyer->profile()->updateOrCreate(
+            ['lawyer_id' => $lawyer->id],
+            [
+                'biography' => $validatedData['biography'],
+                'profile_photo' => $validatedData['profile_photo'] ?? $lawyer->profile->profile_photo,
+            ]
+        );
+
+        return response()->json([
+            'message' => 'Perfil actualizado con éxito',
+                'biography' => $lawyer->profile->biography,
+                'photo' => isset($pathProfilePhoto)
+                    ? asset('storage/' . $pathProfilePhoto)
+                    : ($lawyer->profile->profile_photo
+                        ? asset('storage/' . $lawyer->profile->profile_photo)
+                        : ''),
+        ], 200);
+    }
+
+    public function getVerification(Request $request)
+    {
+        $lawyer = $request->user();
+
+        $verification = $lawyer->verificationLawyer;
+
+        if ($verification) {
+
+
+            $countryName = $verification->country ? $verification->country->name : null;
+            $countryId = $verification->country ? $verification->country->id : null;
+            $stateName = $verification->state ? $verification->state->name : null;
+            $stateId = $verification->state ? $verification->state->id : null;
+            $cityName = $verification->city ? $verification->city->name : null;
+            $cityId = $verification->city ? $verification->city->id : null;
+
+
+            return response()->json([
+                    'cell_phone' => $profile->cell_phone ?? '',
+                    'country' => $countryName ?? '',
+                    'country_id' => $countryId ?? '',
+                    'state' => $stateName ?? '',
+                    'state_id' => $stateId ?? '',
+                    'city' => $cityName ?? '',
+                    'city_id' => $cityId ?? '',
+                    'level' => $verification->level,
+                    'training_place' => $verification->training_place,
+                    'resume' => url('storage/' . $verification->resume),
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Verificación no encontrada',
+            ], 404);
+        }
+    }
+
+    public function updateOrCreateVerification(Request $request)
+    {
+        $lawyer = auth()->user();
+
+        $validatedData = $request->validate([
+            'cell_phone' => 'required|string',
+            'country_id' => 'required|integer|exists:countries,id',
+            'state_id' => 'required|integer|exists:states,id',
+            'city_id' => 'required|integer|exists:cities,id',
+            'level' => 'required|string',
+            'training_place' => 'required|string',
+            'resume' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+        ]);
 
         if ($request->hasFile('resume')) {
             if ($lawyer->verificationLawyer && $lawyer->verificationLawyer->resume) {
@@ -124,15 +204,6 @@ class LawyerProfileController extends Controller
             $pathResume = $request->file('resume')->store('resumes', 'public');
             $validatedData['resume'] = $pathResume;
         }
-
-
-        $lawyer->profile()->updateOrCreate(
-            ['lawyer_id' => $lawyer->id],
-            [
-                'biography' => $validatedData['biography'],
-                'profile_photo' => $validatedData['profile_photo'] ?? $lawyer->profile->profile_photo,
-            ]
-        );
 
         $lawyer->verificationLawyer()->updateOrCreate(
             ['lawyer_id' => $lawyer->id],
@@ -147,17 +218,8 @@ class LawyerProfileController extends Controller
             ]
         );
 
-
         return response()->json([
-            'message' => 'Perfil y verificación actualizados con éxito',
-            'profile' => [
-                'biography' => $lawyer->profile->biography,
-                'photo' => isset($pathProfilePhoto)
-                    ? asset('storage/' . $pathProfilePhoto)
-                    : ($lawyer->profile->profile_photo
-                        ? asset('storage/' . $lawyer->profile->profile_photo)
-                        : ''),
-            ],
+            'message' => 'Verificación actualizada con éxito',
             'verification' => [
                 'cell_phone' => $lawyer->verificationLawyer->cell_phone,
                 'country' => $lawyer->verificationLawyer->country_id,
@@ -172,36 +234,5 @@ class LawyerProfileController extends Controller
                         : ''),
             ],
         ], 200);
-    }
-
-
-    public function getProfile(Request $request)
-    {
-        $lawyer = $request->user();
-
-        $profile = $lawyer->profile;
-        $verification = $lawyer->verificationLawyer;
-
-        if ($profile) {
-            return response()->json([
-                'profile' => [
-                    'biography' => $profile->biography,
-                    'photo' => $profile->profile_photo ? url('storage/' . $profile->profile_photo) : '',
-                ],
-                'verification' => $verification ? [
-                    'cell_phone' => $verification->cell_phone,
-                    'country' => $verification->country_id,
-                    'state' => $verification->state_id,
-                    'city' => $verification->city_id,
-                    'level' => $verification->level,
-                    'training_place' => $verification->training_place,
-                    'resume' => url('storage/' . $verification->resume),
-                ] : null,
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Perfil no encontrado',
-            ], 404);
-        }
     }
 }
