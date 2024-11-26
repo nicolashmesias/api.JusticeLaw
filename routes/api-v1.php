@@ -163,7 +163,7 @@ Route::get('/states/{countryId}', [DropdownController::class, 'indexStateByCount
 Route::get('/cities/{stateId}', [DropdownController::class, 'indexCityByState']);
 
 
-Route::get('informations', [InformationController::class, 'index'])->name('api.v1.informations.index');
+Route::get('/informations', [InformationController::class, 'index'])->name('api.v1.informations.index');
 Route::get('informations/view', [InformationController::class, 'view'])->name('api.v1.informations.view');
 Route::get('/informations/search', [InformationController::class, 'search']);
 
