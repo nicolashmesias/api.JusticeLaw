@@ -58,7 +58,7 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
-    Route::post('/register', [AuthController::class, 'register'])->name('register');
+    // Route::post('/register', [AuthController::class, 'register'])->name('register');
     // Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
     Route::post('/me', [AuthController::class, 'me'])->name('me');
@@ -68,9 +68,12 @@ Route::group([
 
 });
 
+
+Route::post('/register', [UserController::class, 'register'])->name('register');
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::post('/logoutPrueba', [LawyerController::class, 'logout'])->name('logout');
+Route::post('/logoutPrueba', [LawyerController::class, 'logout'])->name('logoutPrueba');
 
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -113,7 +116,7 @@ Route::put('typeDocuments/{typeDocument}', [TypeDocumentController::class, 'upda
 Route::delete('typeDocuments/{typeDocument}', [TypeDocumentController::class, 'destroy'])->name('api.v1.typeDocuments.delete');
 
 Route::get('users', [UserController::class, 'index'])->name('api.v1.users.index');
-Route::post('users', [UserController::class, 'store'])->name('api.v1.users.store');
+// Route::post('users', [UserController::class, 'store'])->name('api.v1.users.store');
 Route::get('users/{user}', [UserController::class, 'show'])->name('api.v1.users.show');
 Route::put('users/{user}', [UserController::class, 'update'])->name('api.v1.users.update');
 Route::delete('users/{user}', [UserController::class, 'destroy'])->name('api.v1.users.delete');
