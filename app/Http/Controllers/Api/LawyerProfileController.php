@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\LawyerProfile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class LawyerProfileController extends Controller
@@ -149,13 +150,17 @@ class LawyerProfileController extends Controller
 
     public function getVerification(Request $request)
     {
-        $lawyer = $request->user();
+        $lawyer = Auth::guard('lawyer')->user();
+
+        if (!$lawyer) {
+            return response()->json([
+                'message' => 'Usuario no autenticado.',
+            ], 401);
+        }
 
         $verification = $lawyer->verificationLawyer;
 
         if ($verification) {
-
-
             $countryName = $verification->country ? $verification->country->name : null;
             $countryId = $verification->country ? $verification->country->id : null;
             $stateName = $verification->state ? $verification->state->name : null;
@@ -163,18 +168,17 @@ class LawyerProfileController extends Controller
             $cityName = $verification->city ? $verification->city->name : null;
             $cityId = $verification->city ? $verification->city->id : null;
 
-
             return response()->json([
-                    'cell_phone' => $profile->cell_phone ?? '',
-                    'country' => $countryName ?? '',
-                    'country_id' => $countryId ?? '',
-                    'state' => $stateName ?? '',
-                    'state_id' => $stateId ?? '',
-                    'city' => $cityName ?? '',
-                    'city_id' => $cityId ?? '',
-                    'level' => $verification->level,
-                    'training_place' => $verification->training_place,
-                    'resume' => url('storage/' . $verification->resume),
+                'cell_phone' => $verification->cell_phone ?? '',
+                'country' => $countryName ?? '',
+                'country_id' => $countryId ?? '',
+                'state' => $stateName ?? '',
+                'state_id' => $stateId ?? '',
+                'city' => $cityName ?? '',
+                'city_id' => $cityId ?? '',
+                'level' => $verification->level,
+                'training_place' => $verification->training_place,
+                'resume' => url('storage/' . $verification->resume),
             ], 200);
         } else {
             return response()->json([
