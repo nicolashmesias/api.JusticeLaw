@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Consulting;
 use App\Http\Controllers\Controller;
+use App\Services\GoogleCalendarService;
 use Illuminate\Http\Request;
 
 class ConsultingController extends Controller
@@ -57,4 +58,23 @@ class ConsultingController extends Controller
         $consulting->delete();
         return response()->json($consulting);
     }
+    public function acceptAdvisory(Request $request, $id)
+{
+    $advisory = Consulting::findOrFail($id);
+    $advisory->status = 'accepted';
+    $advisory->save();
+
+    $calendarService = new GoogleCalendarService();
+    $event = $calendarService->createMeetEvent(
+        'Asesoría con ' . $advisory->lawyer->name,
+        $advisory->start_time,
+        $advisory->end_time,
+        [$advisory->user->email, $advisory->lawyer->email]
+    );
+
+    return response()->json([
+        'message' => 'Asesoría aceptada y reunión creada',
+        'meet_link' => $event->getHangoutLink(),
+    ]);
+}
 }
