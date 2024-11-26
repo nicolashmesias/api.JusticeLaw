@@ -282,7 +282,7 @@ Route::group([
     Route::post('/notifications/{id}/like', [NotificationController::class, 'likeNotification']);
 });
 
-Route::get('/v1/chart-data/clients', [DashboardController::class, 'clients']);
-Route::get('/v1/chart-data/reviews', [DashboardController::class, 'reviews']);
-Route::get('/v1/chart-data/information', [DashboardController::class, 'information']);
-Route::get('/v1/chart-data/sessions', [DashboardController::class, 'sessions']);
+Route::get('/chart-data/clients', [DashboardController::class, 'clients']);
+Route::get('/chart-data/reviews', [DashboardController::class, 'reviews']);
+Route::get('/chart-data/information', [DashboardController::class, 'information']);
+Route::get('/chart-data/sessions', [DashboardController::class, 'sessions']);
