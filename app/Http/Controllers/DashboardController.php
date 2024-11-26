@@ -8,6 +8,7 @@ use App\Models\Question;
 use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -111,19 +112,37 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function usersByRole()
+    public function getUsersByRole()
     {
-        // Obtener cantidad de usuarios por rol (asumiendo que tienes un campo `role`)
-        $roles = User::selectRaw('role, COUNT(*) as total')
-            ->groupBy('role')
-            ->get();
+        try {
+            // Verificar qué guard está autenticado
+            $user = auth()->user();
+            
+            if (!$user) {
+                return response()->json(['error' => 'No se ha encontrado un usuario autenticado'], 401);
+            }
 
-        $labels = $roles->pluck('role');
-        $data = $roles->pluck('total');
+            // Usar el guard para determinar el tipo de usuario
+            $role = 'user'; // Por defecto 'user', pero puede cambiar según el guard
 
-        return response()->json([
-            'labels' => $labels,
-            'data' => $data,
-        ]);
+            if (auth('lawyer')->check()) {
+                $role = 'lawyer';
+            } elseif (auth('administrator')->check()) {
+                $role = 'admin';
+            }
+
+            // Ahora que sabemos el rol, podemos realizar la consulta
+            $data = DB::table('users')
+                ->select(DB::raw('role, COUNT(*) as user_count'))
+                ->groupBy('role')
+                ->get();
+
+            // Retornar los datos de la gráfica
+            return response()->json($data);
+
+        } catch (\Exception $e) {
+            // Si ocurre un error, devolvemos una respuesta con un código 500
+            return response()->json(['error' => 'Error al obtener los datos para la gráfica'], 500);
+        }
     }
 }
