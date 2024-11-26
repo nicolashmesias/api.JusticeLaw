@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AnswerController;
@@ -280,3 +281,8 @@ Route::group([
     Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
     Route::post('/notifications/{id}/like', [NotificationController::class, 'likeNotification']);
 });
+
+Route::get('/v1/chart-data/clients', [DashboardController::class, 'clients']);
+Route::get('/v1/chart-data/reviews', [DashboardController::class, 'reviews']);
+Route::get('/v1/chart-data/information', [DashboardController::class, 'information']);
+Route::get('/v1/chart-data/sessions', [DashboardController::class, 'sessions']);
