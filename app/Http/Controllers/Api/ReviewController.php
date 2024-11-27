@@ -5,84 +5,48 @@ namespace App\Http\Controllers\Api;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Consulting;
+
 class ReviewController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $reviews=Review::all();
-
-        return response()->json($reviews); 
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        
-        $request->validate([
-            'content' => 'required',  
-            'date' => 'required',  
-            'user_id' => 'required',  
-            'lawyer_id' => 'required', 
+        // Obtiene el usuario autenticado
+        $user = auth()->user();
+
+        // Valida los datos de entrada
+        $validatedData = $request->validate([
+            'content' => 'required|string',
+            'stars' => 'required|integer|min:1|max:5',
+            'lawyer_id' => 'required|exists:lawyers,id',
         ]);
 
-        $reviews=Review::create($request->all());
-        return response()->json($reviews);
-    }
+        // Verifica si el usuario ha tenido interacción con el abogado
+        $hasInteracted = Consulting::whereHas('question', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->whereHas('answer', function ($query) use ($validatedData) {
+            $query->where('lawyer_id', $validatedData['lawyer_id']);
+        })->exists();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Review $id)
-    {
-        $review=Review::included()->findOrFail($id);
+        // Si no hay interacción, regresa un mensaje de error
+        if (!$hasInteracted) {
+            return response()->json([
+                'message' => 'Tienes que haber interactuado con el abogado para calificarlo.',
+            ], 403);
+        }
 
-        return response()->json($review);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Review $review)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Review $review)
-    {
-        $request->validate([
-            'content' => 'required',  
-            'date' => 'required', 
-            'user_id'=>'required',
-            'lawyer_id'=>'required'
+        // Crea la reseña si la validación es correcta
+        $review = Review::create([
+            'content' => $validatedData['content'],
+            'stars' => $validatedData['stars'],
+            'user_id' => $user->id,
+            'lawyer_id' => $validatedData['lawyer_id'],
+            'date' => now(), // Fecha actual
         ]);
 
-        $review->update($request->all());
-
-        return response()->json($review);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Review $review)
-    {
-        $review->delete();
-        return response()->json($review);
+        return response()->json([
+            'message' => 'Reseña creada con éxito.',
+            'review' => $review,
+        ], 201); 
     }
 }
