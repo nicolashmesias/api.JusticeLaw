@@ -278,10 +278,8 @@ Route::middleware('auth:api')->post('/refresh-token', function () {
     return response()->json(['token' => $token]);
 });
 
-//grupo de rutas de notificaciones
 Route::group([
-    'middleware' => ['auth:api'],
-    'prefix' => 'auth'
+    'prefix' => 'v1'
 ], function ($router) {
     Route::get('/notifications', [NotificationController::class, 'index']);
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
@@ -289,8 +287,8 @@ Route::group([
     Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']);
     Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
     Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
-    Route::post('/notifications/{id}/like', [NotificationController::class, 'likeNotification']);
 });
+
 
 Route::get('/chart-data/clients', [DashboardController::class, 'clients']);
 Route::get('/chart-data/reviews', [DashboardController::class, 'reviews']);
