@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Area extends Model
 {
@@ -13,8 +14,9 @@ class Area extends Model
         'name',
     ];
 
-    public function lawyers(){
-        return $this->belongsToMany(Lawyer::class);
+    public function lawyers():BelongsToMany
+    {
+        return $this->belongsToMany(Lawyer::class, 'area_lawyers', 'area_id', 'lawyer_id');
     }
 
 }

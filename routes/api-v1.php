@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\LawyerController;
 use App\Http\Controllers\Api\OverhaulReviewController;
 use App\Http\Controllers\Api\LawyerProfileController;
 use App\Http\Controllers\Api\PasswordResetController;
+use App\Http\Controllers\MeetingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,7 +59,7 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
-    Route::post('/register', [AuthController::class, 'register'])->name('register');
+    // Route::post('/register', [AuthController::class, 'register'])->name('register');
     // Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/refresh', [AuthController::class, 'refresh'])->name('refresh');
     Route::post('/me', [AuthController::class, 'me'])->name('me');
@@ -68,9 +69,12 @@ Route::group([
 
 });
 
+
+Route::post('/register', [UserController::class, 'register'])->name('register');
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::post('/logoutPrueba', [LawyerController::class, 'logout'])->name('logout');
+Route::post('/logoutPrueba', [LawyerController::class, 'logout'])->name('logoutPrueba');
 
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -113,7 +117,7 @@ Route::put('typeDocuments/{typeDocument}', [TypeDocumentController::class, 'upda
 Route::delete('typeDocuments/{typeDocument}', [TypeDocumentController::class, 'destroy'])->name('api.v1.typeDocuments.delete');
 
 Route::get('users', [UserController::class, 'index'])->name('api.v1.users.index');
-Route::post('users', [UserController::class, 'store'])->name('api.v1.users.store');
+// Route::post('users', [UserController::class, 'store'])->name('api.v1.users.store');
 Route::get('users/{user}', [UserController::class, 'show'])->name('api.v1.users.show');
 Route::put('users/{user}', [UserController::class, 'update'])->name('api.v1.users.update');
 Route::delete('users/{user}', [UserController::class, 'destroy'])->name('api.v1.users.delete');
@@ -133,6 +137,7 @@ Route::post('/profileLawyer', [LawyerProfileController::class, 'updateOrCreatePr
 
 Route::get('/getProfileLawyer', [LawyerProfileController::class, 'getProfile']);
 
+Route::get('/getAreasLawyer', [AreaLawyerController::class, 'getAreasLawyer']);
 
 
 Route::post('/verificationLawyerPerfil', [LawyerProfileController::class, 'updateOrCreateVerification']);
@@ -237,7 +242,7 @@ Route::put('areas/{area}', [AreaController::class, 'update'])->name('api.v1.area
 Route::delete('areas/{area}', [AreaController::class, 'destroy'])->name('api.v1.areas.delete');
 
 Route::get('areasLawyer', [AreaLawyerController::class, 'index'])->name('api.v1.areasLawyer.index');
-Route::post('/saveAreas', [AreaLawyerController::class, 'store'])->name('api.v1.areasLawyer.store');
+Route::post('/saveAreas', [AreaLawyerController::class, 'saveSelectedAreas'])->name('api.v1.areasLawyer.store');
 Route::get('areasLawyer/{areaLawyer}', [AreaLawyerController::class, 'show'])->name('api.v1.areasLawyer.show');
 Route::put('areasLawyer/{areaLawyer}', [AreaLawyerController::class, 'update'])->name('api.v1.areasLawyer.update');
 Route::delete('areasLawyer/{areaLawyer}', [AreaLawyerController::class, 'destroy'])->name('api.v1.areasLawyer.delete');
@@ -288,3 +293,5 @@ Route::get('/chart-data/information', [DashboardController::class, 'information'
 Route::get('/chart-data/sessions', [DashboardController::class, 'sessions']);
 Route::get('/chart-data/visitors', [DashboardController::class, 'visitors']);
 Route::get('/chart-data/users-by-role', [DashboardController::class, 'usersByRole']);
+
+Route::post('/create-meeting', [MeetingController::class, 'createMeeting']);
