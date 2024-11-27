@@ -32,7 +32,7 @@ class AreasSeeder extends Seeder
 
         Information::insert([
             [
-                'name' => 'Los derechos del consumido',
+                'name' => 'Los derechos del consumidor',
                 'body' => 'Conoce tus derechos como consumidor y aprende cómo protegerte contra el fraude y las prácticas comerciales injustas', // Contenido para la columna body
                 'cover_photo' => '../../img/Derechosdelconsumidor.png', // Ruta o URL de la foto de portada
                 'category' => Information::PENAL, // Usando la constante definida
