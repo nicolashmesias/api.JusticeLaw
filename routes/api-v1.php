@@ -300,3 +300,8 @@ Route::get('/chart-data/visitors', [DashboardController::class, 'visitors']);
 Route::get('/chart-data/users-by-role', [DashboardController::class, 'usersByRole']);
 
 Route::post('/create-meeting', [MeetingController::class, 'createMeeting']);
+
+
+
+Route::post('/questions/{id}/like', [QuestionController::class, 'like']);
+Route::post('/questions/{id}/dislike', [QuestionController::class, 'dislike']);

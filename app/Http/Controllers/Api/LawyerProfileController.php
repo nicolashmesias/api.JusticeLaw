@@ -286,55 +286,54 @@ class LawyerProfileController extends Controller
     }
 
     public function getLawyerDetails(Request $request, $lawyerId)
-{
-    // Obtener el abogado usando el ID recibido
-    $lawyer = Lawyer::find($lawyerId);
+    {
+        $lawyer = Lawyer::find($lawyerId);
 
-    // Verificar si el abogado existe
-    if (!$lawyer) {
+        if (!$lawyer) {
+            return response()->json([
+                'message' => 'Abogado no encontrado.',
+            ], 404);
+        }
+
+        $profile = $lawyer->profile;
+
+        $verification = $lawyer->verificationLawyer;
+
+        $areas = $lawyer->areas()->pluck('name');
+
         return response()->json([
-            'message' => 'Abogado no encontrado.',
-        ], 404);
+            'lawyer' => [
+                'id' => $lawyer->id,
+                'name' => $lawyer->name,
+                'last_names' => $lawyer->last_names,
+                'type_document_id' => $lawyer->type_document_id,
+                'document_number' => $lawyer->document_number,
+                'email' => $lawyer->email,
+                'email_verified_at' => $lawyer->email_verified_at,
+                'verification' => $lawyer->verification,
+                'reset_code' => $lawyer->reset_code,
+                'created_at' => $lawyer->created_at,
+                'updated_at' => $lawyer->updated_at,
+            ],
+            'profile' => $profile ? [
+                'biography' => $profile->biography,
+                'photo' => $profile->profile_photo ? url('storage/' . $profile->profile_photo) : '',
+            ] : null,
+            'verification' => $verification ? [
+                'cell_phone' => $verification->cell_phone ?? '',
+                'country' => $verification->country ? $verification->country->name : '',
+                'country_id' => $verification->country ? $verification->country->id : '',
+                'state' => $verification->state ? $verification->state->name : '',
+                'state_id' => $verification->state ? $verification->state->id : '',
+                'city' => $verification->city ? $verification->city->name : '',
+                'city_id' => $verification->city ? $verification->city->id : '',
+                'level' => $verification->level,
+                'training_place' => $verification->training_place,
+                'resume' => $verification->resume ? url('storage/' . $verification->resume) : '',
+            ] : null,
+            'areas' => $areas,
+        ], 200);
     }
 
-    // Obtener el perfil del abogado
-    $profile = $lawyer->profile;
-
-    // Obtener la verificación del abogado
-    $verification = $lawyer->verificationLawyer;
-
-    // Si el perfil y la verificación existen, devolver toda la información
-    return response()->json([
-        'lawyer' => [
-            'id' => $lawyer->id,
-            'name' => $lawyer->name,
-            'last_names' => $lawyer->last_names,
-            'type_document_id' => $lawyer->type_document_id,
-            'document_number' => $lawyer->document_number,
-            'email' => $lawyer->email,
-            'email_verified_at' => $lawyer->email_verified_at,
-            'verification' => $lawyer->verification,
-            'reset_code' => $lawyer->reset_code,
-            'created_at' => $lawyer->created_at,
-            'updated_at' => $lawyer->updated_at,
-        ],
-        'profile' => $profile ? [
-            'biography' => $profile->biography,
-            'photo' => $profile->profile_photo ? url('storage/' . $profile->profile_photo) : '',
-        ] : null,
-        'verification' => $verification ? [
-            'cell_phone' => $verification->cell_phone ?? '',
-            'country' => $verification->country ? $verification->country->name : '',
-            'country_id' => $verification->country ? $verification->country->id : '',
-            'state' => $verification->state ? $verification->state->name : '',
-            'state_id' => $verification->state ? $verification->state->id : '',
-            'city' => $verification->city ? $verification->city->name : '',
-            'city_id' => $verification->city ? $verification->city->id : '',
-            'level' => $verification->level,
-            'training_place' => $verification->training_place,
-            'resume' => $verification->resume ? url('storage/' . $verification->resume) : '',
-        ] : null,
-    ], 200);
-}
 
 }

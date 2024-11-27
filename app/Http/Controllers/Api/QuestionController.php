@@ -22,6 +22,54 @@ class QuestionController extends Controller
         return response()->json($questions);
     }
 
+    public function like($id)
+{
+    // Buscar la pregunta por ID
+    $question = Question::find($id);
+
+    if (!$question) {
+        return response()->json(['error' => 'Pregunta no encontrada'], 404);
+    }
+
+    // Incrementar el contador de likes
+    $question->likes += 1;
+    $question->save();
+
+    // Devolver la respuesta con el nuevo conteo
+    return response()->json([
+        'message' => 'Like registrado con éxito',
+        'likes' => $question->likes,
+        'dislikes' => $question->dislikes,
+    ]);
+}
+
+
+public function dislike($id)
+{
+    // Buscar la pregunta por ID
+    $question = Question::find($id);
+
+    if (!$question) {
+        return response()->json(['error' => 'Pregunta no encontrada'], 404);
+    }
+
+    // Incrementar el contador de dislikes
+    $question->dislikes += 1;
+    $question->save();
+
+    // Devolver la respuesta con el nuevo conteo
+    return response()->json([
+        'message' => 'Dislike registrado con éxito',
+        'likes' => $question->likes,
+        'dislikes' => $question->dislikes,
+    ]);
+}
+
+
+
+
+
+
     /**
      * Show the form for creating a new resource.
      */
