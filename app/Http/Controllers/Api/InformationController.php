@@ -110,11 +110,12 @@ public function search(Request $request)
     /**
      * Display the specified resource.
      */
+ 
     public function show($id)
 {
     try {
-        // Buscar la información por ID
-        $information = Information::with('area') // Asume que existe una relación con la tabla `areas`
+        // Buscar la información por ID, incluyendo la relación con `forumcategory`
+        $information = Information::with('forumcategory') // Asume que existe una relación con la tabla `forumcategories`
             ->findOrFail($id);
 
         // Retornar la información como JSON
@@ -125,6 +126,8 @@ public function search(Request $request)
             'message' => 'No se pudo encontrar la información solicitada.'
         ], 404);
     }
+}
+
 }
 
     
