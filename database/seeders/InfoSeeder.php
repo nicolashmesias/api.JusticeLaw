@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class AreasSeeder extends Seeder
+class InfoSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -27,7 +27,7 @@ class AreasSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ]
         ]);
-        
+
 
 
         Information::insert([
@@ -40,7 +40,7 @@ class AreasSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ]
         ]);
-        
+
         Information::insert([
             [
                 'name' => 'spectos legales para iniciar un negocio',
@@ -52,6 +52,6 @@ class AreasSeeder extends Seeder
             ]
         ]);
 
-        
+
     }
 }
