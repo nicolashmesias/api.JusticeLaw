@@ -23,4 +23,10 @@ class Information extends Model
     {
         return $this->hasMany(Search::class);
     }
+
+    public function forumcategory()
+{
+    return $this->belongsTo(ForumCategory::class, 'forumcategory_id'); // Asegúrate de usar el nombre correcto del campo FK
+}
+
 }
