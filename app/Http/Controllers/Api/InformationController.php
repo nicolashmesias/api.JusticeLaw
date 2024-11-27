@@ -110,22 +110,37 @@ public function search(Request $request)
     /**
      * Display the specified resource.
      */
-    public function show($id)
-    {
-        try {
-            // Buscar la información por ID, incluyendo la relación con `forumcategory`
-            $information = Information::with('forumcategory') // Asume que existe una relación con la tabla `forumcategories`
-                ->findOrFail($id);
-    
-            // Retornar la información como JSON
-            return response()->json($information, 200);
-        } catch (\Exception $e) {
-            // Si ocurre un error (como no encontrar el registro), devolver un error
-            return response()->json([
-                'message' => 'No se pudo encontrar la información solicitada.'
-            ], 404);
-        }
+    public function getInformationDetails(Request $request, $informationId)
+{
+    // Buscar la información por ID
+    $information = Information::with('forumcategory') // Asegúrate de que la relación con forumcategory esté definida
+        ->find($informationId);
+
+    if (!$information) {
+        return response()->json([
+            'message' => 'Información no encontrada.',
+        ], 404);
     }
+
+    // Si necesitas, puedes obtener más relaciones aquí (por ejemplo, foros o cualquier otra cosa relacionada con la información)
+    // $additionalData = $information->someRelation;
+
+    return response()->json([
+        'information' => [
+            'id' => $information->id,
+            'name' => $information->name,
+            'body' => $information->body,
+            'cover_photo' => $information->cover_photo ? url('storage/' . $information->cover_photo) : null,
+            'created_at' => $information->created_at,
+            'updated_at' => $information->updated_at,
+        ],
+        'category' => $information->forumcategory ? [
+            'name' => $information->forumcategory->name,
+            'id' => $information->forumcategory->id,
+        ] : null,
+    ], 200);
+}
+
     
 
     /**

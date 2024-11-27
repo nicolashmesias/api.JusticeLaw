@@ -175,7 +175,7 @@ Route::get('/informations', [InformationController::class, 'index'])->name('api.
 Route::get('informations/view', [InformationController::class, 'view'])->name('api.v1.informations.view');
 Route::get('/informations/search', [InformationController::class, 'search']);
 // routes/web.php
-Route::get('/informations/{id}', [InformationController::class, 'show'])->name('api.v1.informations.show');
+Route::get('/informations/{id}', [InformationController::class, 'getInformationDetails'])->name('api.v1.informations.getInformationDetails');
 
 
 //Route::post('informations', [InformationController::class, 'store'])->name('api.v1.informations.store');
