@@ -144,6 +144,8 @@ Route::post('/verificationLawyerPerfil', [LawyerProfileController::class, 'updat
 
 Route::get('/getVerificationLawyer', [LawyerProfileController::class, 'getVerification']);
 
+Route::get('/verPerfilAbogado/{lawyerId}', [LawyerProfileController::class, 'getLawyerDetails']);
+
 
 
 Route::get('countries', [DropdownController::class, 'indexCountry'])->name('api.v1.countries.index');

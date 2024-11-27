@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\LawyerProfile;
+use App\Models\Lawyer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -119,52 +120,52 @@ class LawyerProfileController extends Controller
     public function updateOrCreateProfile(Request $request)
     {
         $lawyer = Auth::guard('lawyer')->user();
-    
+
         if (!$lawyer) {
             return response()->json([
                 'message' => 'Usuario no autenticado.',
             ], 401);
         }
-    
+
         $validatedData = $request->validate([
             'biography' => 'required|string|min:1000', // Mínimo de 1000 caracteres
             'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Validación de imagen
         ]);
-    
+
         if (strlen($validatedData['biography']) < 1000) {
             return response()->json([
                 'message' => 'La biografía debe tener al menos 1000 caracteres.',
             ], 400);
         }
-    
+
         if ($request->hasFile('profile_photo')) {
             // Validación de foto
             $file = $request->file('profile_photo');
             $mimeType = $file->getClientMimeType();
             $validMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-    
+
             if (!in_array($mimeType, $validMimeTypes)) {
                 return response()->json([
                     'message' => 'La foto debe ser en formato JPEG, PNG o JPG.',
                 ], 400);
             }
-    
+
             if ($file->getSize() > 2048 * 1024) { // El tamaño máximo es 2MB
                 return response()->json([
                     'message' => 'La foto no puede ser mayor de 2MB.',
                 ], 400);
             }
-    
+
             // Borrar la foto previa si existe
             if ($lawyer->profile && $lawyer->profile->profile_photo) {
                 Storage::disk('public')->delete($lawyer->profile->profile_photo);
             }
-    
+
             // Subir la nueva foto
             $pathProfilePhoto = $file->store('profile_photos', 'public');
             $validatedData['profile_photo'] = $pathProfilePhoto;
         }
-    
+
         // Crear o actualizar el perfil
         $lawyer->profile()->updateOrCreate(
             ['lawyer_id' => $lawyer->id],
@@ -173,7 +174,7 @@ class LawyerProfileController extends Controller
                 'profile_photo' => $validatedData['profile_photo'] ?? $lawyer->profile->profile_photo,
             ]
         );
-    
+
         return response()->json([
             'message' => 'Perfil actualizado con éxito',
             'biography' => $lawyer->profile->biography,
@@ -184,7 +185,7 @@ class LawyerProfileController extends Controller
                     : ''),
         ], 200);
     }
-    
+
 
     public function getVerification(Request $request)
     {
@@ -283,4 +284,57 @@ class LawyerProfileController extends Controller
             ],
         ], 200);
     }
+
+    public function getLawyerDetails(Request $request, $lawyerId)
+{
+    // Obtener el abogado usando el ID recibido
+    $lawyer = Lawyer::find($lawyerId);
+
+    // Verificar si el abogado existe
+    if (!$lawyer) {
+        return response()->json([
+            'message' => 'Abogado no encontrado.',
+        ], 404);
+    }
+
+    // Obtener el perfil del abogado
+    $profile = $lawyer->profile;
+
+    // Obtener la verificación del abogado
+    $verification = $lawyer->verificationLawyer;
+
+    // Si el perfil y la verificación existen, devolver toda la información
+    return response()->json([
+        'lawyer' => [
+            'id' => $lawyer->id,
+            'name' => $lawyer->name,
+            'last_names' => $lawyer->last_names,
+            'type_document_id' => $lawyer->type_document_id,
+            'document_number' => $lawyer->document_number,
+            'email' => $lawyer->email,
+            'email_verified_at' => $lawyer->email_verified_at,
+            'verification' => $lawyer->verification,
+            'reset_code' => $lawyer->reset_code,
+            'created_at' => $lawyer->created_at,
+            'updated_at' => $lawyer->updated_at,
+        ],
+        'profile' => $profile ? [
+            'biography' => $profile->biography,
+            'photo' => $profile->profile_photo ? url('storage/' . $profile->profile_photo) : '',
+        ] : null,
+        'verification' => $verification ? [
+            'cell_phone' => $verification->cell_phone ?? '',
+            'country' => $verification->country ? $verification->country->name : '',
+            'country_id' => $verification->country ? $verification->country->id : '',
+            'state' => $verification->state ? $verification->state->name : '',
+            'state_id' => $verification->state ? $verification->state->id : '',
+            'city' => $verification->city ? $verification->city->name : '',
+            'city_id' => $verification->city ? $verification->city->id : '',
+            'level' => $verification->level,
+            'training_place' => $verification->training_place,
+            'resume' => $verification->resume ? url('storage/' . $verification->resume) : '',
+        ] : null,
+    ], 200);
+}
+
 }
