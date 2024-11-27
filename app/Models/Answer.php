@@ -8,6 +8,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use App\Notifications\NewNotification;
 class Answer extends Model
 {
     use HasFactory;
@@ -63,6 +64,27 @@ class Answer extends Model
 
 
     }
+
+    protected static function booted()
+    {
+        static::created(function ($respuesta) {
+            // Obtener la pregunta relacionada
+            $pregunta = $respuesta->question; // Usa la relación definida correctamente
+    
+            // Validar si la pregunta tiene un autor relacionado
+            $autor = $pregunta->user; // Asegúrate de tener la relación 'user' en el modelo Question
+    
+            if ($autor) {
+                $message = [
+                    'pregunta_id' => $pregunta->id,
+                    'titulo_pregunta' => $pregunta->title, // Cambia 'title' si tu columna se llama diferente
+                    'mensaje' => "Nueva respuesta a tu pregunta: {$pregunta->title}",
+                ];
+                $autor->notify(new NewNotification($message)); // Notifica al autor
+            }
+        });
+    }
+    
 
 }
 

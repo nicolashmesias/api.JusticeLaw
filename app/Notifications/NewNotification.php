@@ -45,9 +45,10 @@ class NewNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->subject('Nueva respuesta a tu pregunta')
+            ->line('Alguien ha respondido a tu pregunta.')
+            ->action('Ver respuesta', url("/questions/{$this->message['pregunta_id']}"))
+            ->line('Gracias por usar nuestra plataforma.');
     }
 
     /**
