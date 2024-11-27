@@ -178,7 +178,7 @@ Route::get('/informations/search', [InformationController::class, 'search']);
 Route::get('/informations/{id}', [InformationController::class, 'getInformationDetails'])->name('api.v1.informations.getInformationDetails');
 
 
-//Route::post('informations', [InformationController::class, 'store'])->name('api.v1.informations.store');
+Route::post('informations', [InformationController::class, 'store'])->name('api.v1.informations.store');
 //Route::get('informations/{information}', [InformationController::class, 'show'])->name('api.v1.informations.show');
 //Route::put('informations/{information}', [InformationController::class, 'update'])->name('api.v1.informations.update');
 //Route::delete('informations/{information}', [InformationController::class, 'destroy'])->name('api.v1.informations.delete');
