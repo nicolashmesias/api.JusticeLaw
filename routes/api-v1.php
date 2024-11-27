@@ -179,7 +179,7 @@ Route::get('/informations/{id}', [InformationController::class, 'getInformationD
 
 
 Route::post('informations', [InformationController::class, 'store'])->name('api.v1.informations.store');
-//Route::get('informations/{information}', [InformationController::class, 'show'])->name('api.v1.informations.show');
+Route::get('informations/{information}', [InformationController::class, 'show'])->name('api.v1.informations.show');
 //Route::put('informations/{information}', [InformationController::class, 'update'])->name('api.v1.informations.update');
 //Route::delete('informations/{information}', [InformationController::class, 'destroy'])->name('api.v1.informations.delete');
 
