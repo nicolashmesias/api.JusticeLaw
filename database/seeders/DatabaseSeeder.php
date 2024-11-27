@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             StateSeeder::class,
             CitySeeder::class,
             AreasSeeder::class,
-            InfoSeeder::class,
+            ForumCategorySeeder::class,
         ]);
     }
 }
