@@ -110,11 +110,27 @@ public function search(Request $request)
     /**
      * Display the specified resource.
      */
-    public function show($id)
-    {
-        $information = Information::findOrFail($id);
-        return response()->json($information);
-    }
+ 
+   
+
+     public function show($id)
+     {
+         try {
+             // Buscar la información por ID, incluyendo la relación con `forumcategory`
+             $information = Information::with('forumcategory') // Asume que existe una relación con la tabla `forumcategories`
+                 ->findOrFail($id);
+     
+             // Retornar la información como JSON
+             return response()->json($information, 200);
+         } catch (\Exception $e) {
+             // Si ocurre un error (como no encontrar el registro), devolver un error
+             return response()->json([
+                 'message' => 'No se pudo encontrar la información solicitada.'
+             ], 404);
+         }
+     }
+
+    
 
     /**
      * Show the form for editing the specified resource.

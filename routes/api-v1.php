@@ -174,6 +174,9 @@ Route::get('/cities/{stateId}', [DropdownController::class, 'indexCityByState'])
 Route::get('/informations', [InformationController::class, 'index'])->name('api.v1.informations.index');
 Route::get('informations/view', [InformationController::class, 'view'])->name('api.v1.informations.view');
 Route::get('/informations/search', [InformationController::class, 'search']);
+// routes/web.php
+Route::get('/informations/{id}', [InformationController::class, 'show'])->name('api.v1.informations.show');
+
 
 //Route::post('informations', [InformationController::class, 'store'])->name('api.v1.informations.store');
 //Route::get('informations/{information}', [InformationController::class, 'show'])->name('api.v1.informations.show');
