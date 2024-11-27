@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('content');
             $table->date('date_publication');
             $table->string('archive')->nullable();
+            $table->unsignedInteger('likes')->default(0); // Campo para likes
+            $table->unsignedInteger('dislikes')->default(0); // Campo para dislikes
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unsignedBigInteger('forum_category_id');

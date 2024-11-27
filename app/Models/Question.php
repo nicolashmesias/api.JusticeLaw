@@ -10,7 +10,8 @@ class Question extends Model
     use HasFactory;
 
     
-    public $fillable = ['affair', 'content', 'forum_category_id', 'user_id', 'date_publication'];
+    public $fillable = ['affair', 'content', 'forum_category_id', 'user_id', 'date_publication', 'likes', // Habilitar likes
+    'dislikes'];
 
 
     public function forumCategory(){

@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
-            $table->string('affair');
             $table->text('content');
             $table->date('date_publication');
             $table->string('archive')->nullable();
