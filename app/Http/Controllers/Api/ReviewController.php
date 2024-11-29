@@ -6,6 +6,7 @@ use App\Models\Review;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Consulting;
+use App\Models\Lawyer;
 
 class ReviewController extends Controller
 {
@@ -49,4 +50,27 @@ class ReviewController extends Controller
             'review' => $review,
         ], 201); 
     }
+    public function index(Request $request, $lawyer_id)
+{
+    // Validar que el abogado existe
+    $lawyerExists = Lawyer::find($lawyer_id);
+
+    if (!$lawyerExists) {
+        return response()->json([
+            'message' => 'El abogado no existe.',
+        ], 404);
+    }
+
+    // Obtener todas las reseñas asociadas al abogado
+    $reviews = Review::where('lawyer_id', $lawyer_id)
+        ->orderBy('date', 'desc') // Opcional: ordenar por fecha, de la más reciente a la más antigua
+        ->get();
+
+    // Retornar las reseñas en formato JSON
+    return response()->json([
+        'message' => 'Reseñas obtenidas con éxito.',
+        'reviews' => $reviews,
+    ], 200);
+}
+
 }
