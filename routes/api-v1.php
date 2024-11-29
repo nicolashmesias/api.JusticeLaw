@@ -254,7 +254,7 @@ Route::delete('areasLawyer/{areaLawyer}', [AreaLawyerController::class, 'destroy
 
 // Route::get('reviews', [ReviewController::class, 'index'])->name('api.v1.reviews.index');
 Route::post('/enviarReviews', [ReviewController::class, 'store'])->name('api.v1.reviews.store');
-Route::get('reviews/{lawyer_id}', [ReviewController::class, 'index']);
+Route::get('/reviews/{lawyer_id}', [ReviewController::class, 'index']);
 // Route::get('reviews/{review}', [ReviewController::class, 'show'])->name('api.v1.riv ews.show');
 // Route::put('reviews/{rivew}', [ReviewController::class, 'update'])->name('api.v1.rivews.update');
 // Route::delete('reviews/{review}', [ReviewController::class, 'destroy'])->name('api.v1.rivews.delete');
