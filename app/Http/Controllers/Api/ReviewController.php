@@ -58,8 +58,8 @@ class ReviewController extends Controller
         }
     
         $reviews = Review::where('lawyer_id', $lawyer_id)
-            ->orderBy('date', 'desc') 
-            ->with('user:id,name,last_name') 
+            ->orderBy('date', 'desc')
+            ->with(['user:id,name,last_name', 'user.profile:profile_photo,user_id']) 
             ->get();
     
         return response()->json([
@@ -67,5 +67,6 @@ class ReviewController extends Controller
             'reviews' => $reviews,
         ], 200);
     }
+    
     
 }
