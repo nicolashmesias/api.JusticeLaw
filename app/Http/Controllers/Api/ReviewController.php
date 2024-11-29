@@ -16,7 +16,6 @@ class ReviewController extends Controller
 
         $validatedData = $request->validate([
             'content' => 'required|string',
-            'stars' => 'required|integer|min:1|max:5',
             'lawyer_id' => 'required|exists:lawyers,id',
         ]);
 
@@ -34,7 +33,6 @@ class ReviewController extends Controller
 
         $review = Review::create([
             'content' => $validatedData['content'],
-            'stars' => $validatedData['stars'],
             'user_id' => $user->id,
             'lawyer_id' => $validatedData['lawyer_id'],
             'date' => now(),
