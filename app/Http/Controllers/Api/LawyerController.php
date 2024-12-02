@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Administrator;
 use App\Models\User;
+use App\Models\Question;
+use App\Notifications\NewNotification;
 use Illuminate\Support\Facades\Validator;
 
 class LawyerController extends Controller
@@ -140,5 +142,27 @@ class LawyerController extends Controller
                Administrator::where('email', $email)->exists();
     }
 
+    public function respondToQuestion(Request $request, $questionId , $id)
+    {
+        // 1. Encuentra la pregunta que está siendo respondida
+        $question = Question::findOrFail($questionId);
+        
+        // 2. Encuentra al usuario que hizo la pregunta
+        $user = User::findOrFail($question->user_id);
+
+        $lawyer = Lawyer::findOrFail($id);
+        // 3. Información para la notificación
+        $message = [
+            'message' => 'Tu pregunta ha recibido una respuesta.',
+            'pregunta_id' => $question->id,
+            'answerer_name' => $lawyer->name, // Puede ser el nombre del abogado que responde
+        ];
+
+        // 4. Enviar la notificación al usuario
+        $user->notify(new NewNotification($message));
+
+        // 5. Retorna una respuesta indicando éxito
+        return response()->json(['message' => 'Respuesta enviada y notificación enviada.']);
+    }
 
 }

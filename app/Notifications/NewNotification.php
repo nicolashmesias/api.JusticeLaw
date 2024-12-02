@@ -28,14 +28,18 @@ class NewNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        
-        return ['database','mail'];
+        return ['database', 'mail'];
     }
 
-    public function toDatabase ($notifiable)
+    /**
+     * Prepare the data to store in the database.
+     */
+    public function toDatabase($notifiable)
     {
         return [
-            'message' => $this->message,
+            'message' => $this->message['message'], // Mensaje de la notificación
+            'question_id' => $this->message['pregunta_id'], // ID de la pregunta
+            'answerer_name' => $this->message['answerer_name'], // Nombre del abogado que respondió
         ];
     }
 
@@ -46,7 +50,7 @@ class NewNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Nueva respuesta a tu pregunta')
-            ->line('Alguien ha respondido a tu pregunta.')
+            ->line("{$this->message['lawyer_id']} ha respondido a tu pregunta.")
             ->action('Ver respuesta', url("/questions/{$this->message['pregunta_id']}"))
             ->line('Gracias por usar nuestra plataforma.');
     }
@@ -59,7 +63,9 @@ class NewNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'message' => $this->message, // informacion de la notificacion 
+            'message' => $this->message['message'], // Mensaje de la notificación
+            'question_id' => $this->message['pregunta_id'], // ID de la pregunta
+            'lawyer_id' => $this->message['answerer_name'], // Nombre del abogado
         ];
     }
 }
