@@ -229,12 +229,6 @@ Route::get('lawyerProfiles/{lawyerProfile}',[LawyerProfileController::class,'sho
 Route::put('lawyerProfiles/{lawyerProfile}',[LawyerProfileController::class,'update'])->name('api.v1.lawyerProfiles.update');
 Route::delete('lawyerProfiles/{lawyerProfile}',[LawyerProfileController::class,'destroy'])->name('api.v1.lawyerProfiles.delete');
 
-Route::get('notifications', [NotificationController::class, 'index'])->name('api.v1.notifications.index');
-Route::post('notifications', [NotificationController::class, 'store'])->name('api.v1.notifications.store');
-Route::get('notifications/{notification}', [NotificationController::class, 'show'])->name('api.v1.notifications.show');
-Route::put('notifications/{notification}', [NotificationController::class, 'update'])->name('api.v1.notifications.update');
-Route::delete('notifications/{notification}', [NotificationController::class, 'destroy'])->name('api.v1.notifications.delete');
-
 Route::get('searchs', [SearchController::class, 'index'])->name('api.v1.searchs.index');
 Route::post('searchs', [SearchController::class, 'store'])->name('api.v1.searchs.store');
 Route::get('searchs/{search}', [SearchController::class, 'show'])->name('api.v1.searchs.show');
@@ -280,16 +274,13 @@ Route::middleware('auth:api')->post('/refresh-token', function () {
     return response()->json(['token' => $token]);
 });
 
-Route::group([
-    'prefix' => 'v1'
-], function ($router) {
-    Route::get('/notifications', [NotificationController::class, 'index']);
-    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
-    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
-    Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']);
-    Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
-    Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
-});
+   
+Route::get('/notifications', [NotificationController::class, 'index']);
+Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
+Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
+Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']);
+Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
+Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
 
 
 Route::get('/chart-data/clients', [DashboardController::class, 'clients']);
