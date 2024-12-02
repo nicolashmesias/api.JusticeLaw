@@ -26,11 +26,11 @@ class DateController extends Controller
         {
             // Validar los datos enviados desde el cliente
             $validatedData =  $request->validate([
-                'date'=>'required|date',
-                'state'=>'required|string|max:255',
+                'date'=>'required',
+                'state'=>'required',
                 'startTime'=>'required',
                 'endTime'=>'required',
-                'lawyer_id' => 'required|integer',
+                'lawyer_id' => 'required',
 
             ]);
     
