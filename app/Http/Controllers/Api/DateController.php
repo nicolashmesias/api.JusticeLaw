@@ -21,16 +21,34 @@ class DateController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'date'=>'required|max:255',
-            'state'=>'required|string|max:255',
-            'startTime'=>'required|max:255',
-            'endTime'=>'required|max:255',
-        ]);
+       
 
-        $date=Date::create($request->all());
+        {
+            // Validar los datos enviados desde el cliente
+            $validatedData =  $request->validate([
+                'date'=>'required|date',
+                'state'=>'required|string|max:255',
+                'startTime'=>'required',
+                'endTime'=>'required',
+                'lawyer_id' => 'required|integer',
 
-        return response()->json($date);
+            ]);
+    
+            // Crear una nueva pregunta en la base de datos
+            $date = Date::create([
+                'date' => $validatedData['date'],
+                'state' => $validatedData['state'],
+                'startTime' => $validatedData['startTime'],
+                'endTime' => $validatedData['endTime'],
+                'lawyer_id' => $validatedData['lawyer_id'],
+            ]);
+    
+            // Responder con un mensaje de éxito y los datos creados
+            return response()->json([
+                'message' => 'Pregunta creada con éxito.',
+                'data' => $date
+            ], 201);
+        }
     }
 
     /**

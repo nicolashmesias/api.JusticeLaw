@@ -34,7 +34,6 @@ class AnswerController extends Controller
         $request->validate([
             'lawyer_id' => 'required',
             'question_id' => 'required|max:210',
-            'affair' => 'required|max:255',
             'content' => 'required|string|min:5',
             'date_publication' => 'required|string|min:8'
         ]);
