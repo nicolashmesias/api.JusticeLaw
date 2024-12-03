@@ -4,56 +4,95 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Notifications\Notification;
 use App\Http\Controllers\Controller;
 use App\Notifications\NewNotification;
 use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationController extends Controller
 {
-     /**
-     * Obtener notificaciones no leídas del usuario autenticado.
+    /**
+     * Enviar una nueva notificación.
      */
-    public function index()
+    public function sendNotification(Request $request)
+    {
+        $user = User::find(1); // Asegúrate de que el usuario exista
+    
+        // Validar los datos de la solicitud
+        $request->validate([
+            'message' => 'required|string',
+            'pregunta_id' => 'required|integer',
+            'answerer_name' => 'required|string',
+        ]);
+    
+        // Preparar el mensaje
+        $message = [
+            'message' => $request->message,
+            'pregunta_id' => $request->pregunta_id,
+            'answerer_name' => $request->answerer_name,
+        ];
+    
+        // Enviar la notificación
+        $user->notify(new NewNotification($message));
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Notificación enviada correctamente',
+        ]);
+    }
+
+    public function getNotifications($userId)
 {
     try {
-        // Obtener usuario autenticado
-        $user = auth()->user();
-
-        if (!$user) {
-            return response()->json(['success' => false, 'message' => 'Usuario no autenticado.'], 401);
-        }
-
-        // Obtener notificaciones no leídas
-        $notifications = cache()->remember("user_{$user->id}_unread_notifications", 60, function () use ($user) {
-            return $user->unreadNotifications->take(10)->get(); // Tomar las primeras 10 notificaciones
-        });
+        $user = User::findOrFail($userId);  // Buscar al usuario por ID
+        $notifications = $user->notifications;  // Obtener todas las notificaciones del usuario
 
         return response()->json([
             'success' => true,
-            'notifications' => $notifications,
+            'notifications' => $notifications
         ]);
-
     } catch (\Exception $e) {
-        // Manejo de excepciones
         return response()->json([
             'success' => false,
+            'message' => 'Error al obtener las notificaciones.',
             'error' => $e->getMessage(),
         ], 500);
     }
 }
 
     /**
-     * Marcar una notificación como leída.
-     *
-     * @param string $id
+     * Obtener notificaciones no leídas.
+     */
+    public function index()
+    {
+        try {
+            $user = auth()->user();
+            $notifications = cache()->remember("user_{$user->id}notifications", 60, function () use ($user) {
+                return $user->notifications;
+            });
+
+            return response()->json([
+                'success' => true,
+                'notifications' => $notifications,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Marcar como leída una notificación.
      */
     public function markAsRead($id)
     {
-        $user = auth()->user();
-        $notificacion = $user->notifications->find($id);
+        $notification = auth()->user()->notifications->find($id);
 
-        if ($notificacion) {
-            $notificacion->markAsRead(); // Marcar como leída
+        if ($notification) {
+            $notification->markAsRead();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Notificación marcada como leída',
@@ -68,16 +107,14 @@ class NotificationController extends Controller
 
     /**
      * Eliminar una notificación.
-     *
-     * @param string $id
      */
     public function destroy($id)
     {
-        $user = auth()->user();
-        $notificacion = $user->notifications->find($id);
+        $notification = auth()->user()->notifications->find($id);
 
-        if ($notificacion) {
-            $notificacion->delete(); // Eliminar notificación
+        if ($notification) {
+            $notification->delete();
+
             return response()->json([
                 'success' => true,
                 'message' => 'Notificación eliminada correctamente',
@@ -92,18 +129,15 @@ class NotificationController extends Controller
 
     /**
      * Archivar una notificación.
-     *
-     * @param string $id
      */
     public function archive($id)
     {
-        $user = auth()->user();
-        $notificacion = $user->notifications->find($id);
+        $notification = auth()->user()->notifications->find($id);
 
-        if ($notificacion) {
-            $data = $notificacion->data;
-            $data['archived'] = true; // Agrega un campo "archived"
-            $notificacion->update(['data' => $data]);
+        if ($notification) {
+            $data = $notification->data;
+            $data['archived'] = true;
+            $notification->update(['data' => $data]);
 
             return response()->json([
                 'success' => true,
@@ -118,12 +152,11 @@ class NotificationController extends Controller
     }
 
     /**
-     * Eliminar todas las notificaciones del usuario autenticado.
+     * Eliminar todas las notificaciones.
      */
     public function destroyAll()
     {
-        $user = auth()->user();
-        $user->notifications->delete(); // Eliminar todas las notificaciones
+        auth()->user()->notifications->delete();
 
         return response()->json([
             'success' => true,
@@ -132,15 +165,14 @@ class NotificationController extends Controller
     }
 
     /**
-     * Archivar todas las notificaciones del usuario autenticado.
+     * Archivar todas las notificaciones.
      */
     public function archiveAll()
     {
-        $user = auth()->user();
-        $user->notifications->each(function ($notificacion) {
-            $data = $notificacion->data;
-            $data['archived'] = true; // Agrega un campo "archived"
-            $notificacion->update(['data' => $data]);
+        auth()->user()->notifications->each(function ($notification) {
+            $data = $notification->data;
+            $data['archived'] = true;
+            $notification->update(['data' => $data]);
         });
 
         return response()->json([
@@ -149,35 +181,33 @@ class NotificationController extends Controller
         ]);
     }
 
-    // manejo de likes en notificaciones 
+    /**
+     * Manejo de "me gusta" en una notificación.
+     */
     public function likeNotification($id)
     {
-    $notification = DatabaseNotification::findOrFail($id);
-    $userId = auth()->id();
+        $notification = DatabaseNotification::findOrFail($id);
+        $userId = auth()->id();
 
-    // Extraer datos actuales
-    $data = $notification->data;
+        $data = collect($notification->data);
 
-    // Manejar "me gusta"
-    if (!isset($data['likes'])) {
-        $data['likes'] = [];
-    }
+        $likes = collect($data->get('likes', []));
 
-    if (in_array($userId, $data['likes'])) {
-        // Si el usuario ya dio "me gusta", eliminarlo
-        $data['likes'] = array_diff($data['likes'], [$userId]);
-        $message = 'Me gusta eliminado';
-    } else {
-        // Si no, añadirlo
-        $data['likes'][] = $userId;
-        $message = 'Me gusta añadido';
-    }
+        if ($likes->contains($userId)) {
+            $likes = $likes->reject(fn($id) => $id === $userId);
+            $message = 'Me gusta eliminado';
+        } else {
+            $likes->push($userId);
+            $message = 'Me gusta añadido';
+        }
 
-    // Guardar cambios
-    $notification->data = $data;
-    $notification->save();
+        $data['likes'] = $likes->values()->all();
+        $notification->update(['data' => $data->toArray()]);
 
-    return response()->json(['message' => $message, 'likes_count' => count($data['likes'])]);
+        return response()->json([
+            'message' => $message,
+            'likes_count' => $likes->count(),
+        ]);
     }
 
 }

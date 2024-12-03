@@ -80,6 +80,7 @@ Route::post('/logoutPrueba', [LawyerController::class, 'logout'])->name('logoutP
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::post('/registerLawyer', [AuthController::class, 'registerLawyer'])->name('registerPRUEBA')->middleware('guest');
+Route::post('/registerLawyerMovil', [LawyerController::class, 'registerLawyer'])->name('registromovil');
 
 
 
@@ -178,8 +179,9 @@ Route::get('/informations/search', [InformationController::class, 'search']);
 Route::get('/informations/{id}', [InformationController::class, 'getInformationDetails'])->name('api.v1.informations.getInformationDetails');
 
 
-Route::post('informations', [InformationController::class, 'store'])->name('api.v1.informations.store');
-Route::get('informations/{information}', [InformationController::class, 'show'])->name('api.v1.informations.show');
+Route::post('/informations', [InformationController::class, 'store'])->name('api.v1.informations.store');
+Route::get('/informations/{information}', [InformationController::class, 'show'])->name('api.v1.informations.show');
+Route::get('/informations/{information}', [InformationController::class, 'search'])->name('api.v1.informations.search');
 //Route::put('informations/{information}', [InformationController::class, 'update'])->name('api.v1.informations.update');
 //Route::delete('informations/{information}', [InformationController::class, 'destroy'])->name('api.v1.informations.delete');
 
@@ -228,12 +230,6 @@ Route::get('lawyerProfiles/{lawyerProfile}',[LawyerProfileController::class,'sho
 Route::put('lawyerProfiles/{lawyerProfile}',[LawyerProfileController::class,'update'])->name('api.v1.lawyerProfiles.update');
 Route::delete('lawyerProfiles/{lawyerProfile}',[LawyerProfileController::class,'destroy'])->name('api.v1.lawyerProfiles.delete');
 
-Route::get('notifications', [NotificationController::class, 'index'])->name('api.v1.notifications.index');
-Route::post('notifications', [NotificationController::class, 'store'])->name('api.v1.notifications.store');
-Route::get('notifications/{notification}', [NotificationController::class, 'show'])->name('api.v1.notifications.show');
-Route::put('notifications/{notification}', [NotificationController::class, 'update'])->name('api.v1.notifications.update');
-Route::delete('notifications/{notification}', [NotificationController::class, 'destroy'])->name('api.v1.notifications.delete');
-
 Route::get('searchs', [SearchController::class, 'index'])->name('api.v1.searchs.index');
 Route::post('searchs', [SearchController::class, 'store'])->name('api.v1.searchs.store');
 Route::get('searchs/{search}', [SearchController::class, 'show'])->name('api.v1.searchs.show');
@@ -279,16 +275,14 @@ Route::middleware('auth:api')->post('/refresh-token', function () {
     return response()->json(['token' => $token]);
 });
 
-Route::group([
-    'prefix' => 'v1'
-], function ($router) {
-    Route::get('/notifications', [NotificationController::class, 'index']);
-    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
-    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
-    Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']);
-    Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
-    Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
-});
+Route::post('/notifications/send', [NotificationController::class, 'sendNotification']);  
+Route::get('/notifications/get', [NotificationController::class, 'getNotifications']);
+Route::get('/notifications', [NotificationController::class, 'index']);
+Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
+Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
+Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']);
+Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
+Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
 
 
 Route::get('/chart-data/clients', [DashboardController::class, 'clients']);

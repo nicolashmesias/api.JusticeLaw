@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->string('state');
-            $table->time('startTime');
-            $table->time('endTime');
+            $table->string('startTime');
+            $table->string('endTime');
 
             $table->unsignedBigInteger('lawyer_id');
             $table->foreign('lawyer_id')->references('id')

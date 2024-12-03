@@ -95,6 +95,11 @@ class Lawyer extends Authenticatable implements JWTSubject
     public function reviews(){
         return $this->hasMany(Review::class);
     }
+    
+    public function notifications()
+    {
+        return $this->morphMany(\Illuminate\Notifications\DatabaseNotification::class, 'notifiable');
+    }
 
     public function areas():BelongsToMany
     {

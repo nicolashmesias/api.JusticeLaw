@@ -13,7 +13,8 @@ class Date extends Model
         'date',
         'state',
         'startTime',
-        'endTime'
+        'endTime',
+        'lawyer_id'
     ];
 
 

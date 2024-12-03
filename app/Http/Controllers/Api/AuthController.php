@@ -45,7 +45,7 @@ class AuthController extends Controller
         $user->save();
         return response()->json($user, 201);
     }
-    // public function login()
+    // public function     login()
     // {
     //     $credentials = request(['email', 'password']);
     //     if (! $token = auth()->attempt($credentials)) {

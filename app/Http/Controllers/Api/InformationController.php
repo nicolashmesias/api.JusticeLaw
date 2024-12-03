@@ -86,13 +86,13 @@ public function view(Request $request)
 // En tu controlador
 public function search(Request $request)
 {
-    $query = $request->get('query');
-
-    // Buscar las informaciones que coincidan con la búsqueda
-    $informations = Information::where('title', 'like', '%' . $query . '%')->get();
-
+    $query = $request->input('search');
+    $informations = Information::where('name', 'like', '%' . $query . '%')->get();
     return response()->json($informations);
 }
+
+
+    // Si no hay término de búsqueda, retornar un array vacío
 
 
 

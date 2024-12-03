@@ -14,7 +14,7 @@ class NewNotification extends Notification
     private $message;
 
     /**
-     * Create a new notification instance.
+     * Crear una nueva instancia de la notificación.
      */
     public function __construct($message)
     {
@@ -22,44 +22,50 @@ class NewNotification extends Notification
     }
 
     /**
-     * Get the notification's delivery channels.
+     * Obtener los canales de entrega de la notificación.
      *
      * @return array<int, string>
      */
     public function via(object $notifiable): array
     {
-        
-        return ['database','mail'];
+        return ['database', 'mail'];
     }
 
-    public function toDatabase ($notifiable)
+    /**
+     * Preparar los datos para almacenar en la base de datos.
+     */
+    public function toDatabase($notifiable)
     {
         return [
-            'message' => $this->message,
+            'message' => $this->message['message'], // Mensaje de la notificación
+            'question_id' => $this->message['pregunta_id'], // ID de la pregunta
+            'answerer_name' => $this->message['answerer_name'], // Nombre del abogado que respondió
         ];
     }
 
     /**
-     * Get the mail representation of the notification.
+     * Obtener la representación de la notificación por correo electrónico.
      */
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
             ->subject('Nueva respuesta a tu pregunta')
-            ->line('Alguien ha respondido a tu pregunta.')
+            ->line("{$this->message['answerer_name']} ha respondido a tu pregunta.")
             ->action('Ver respuesta', url("/questions/{$this->message['pregunta_id']}"))
             ->line('Gracias por usar nuestra plataforma.');
     }
 
     /**
-     * Get the array representation of the notification.
+     * Obtener la representación de la notificación en forma de arreglo.
      *
      * @return array<string, mixed>
      */
     public function toArray(object $notifiable): array
     {
         return [
-            'message' => $this->message, // informacion de la notificacion 
+            'message' => $this->message['message'], // Mensaje de la notificación
+            'question_id' => $this->message['pregunta_id'], // ID de la pregunta
+            'answerer_name' => $this->message['answerer_name'], // Nombre del abogado
         ];
     }
 }
