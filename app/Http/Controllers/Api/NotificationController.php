@@ -16,45 +16,49 @@ class NotificationController extends Controller
      */
     public function sendNotification(Request $request)
     {
-        $user = auth()->user(); // Obtener el usuario autenticado
-
-        if (!$user) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Usuario no autenticado.',
-            ], 401);
-        }
-
-        // Validar los datos
+        $user = User::find(1); // Asegúrate de que el usuario exista
+    
+        // Validar los datos de la solicitud
         $request->validate([
             'message' => 'required|string',
             'pregunta_id' => 'required|integer',
             'answerer_name' => 'required|string',
         ]);
-
-        // Construir los datos del mensaje
-        $messageData = [
+    
+        // Preparar el mensaje
+        $message = [
             'message' => $request->message,
             'pregunta_id' => $request->pregunta_id,
             'answerer_name' => $request->answerer_name,
         ];
-
-        // Crear la notificación y enviarla
-        try {
-            $user->notify(new NewNotification($messageData));
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Notificación enviada correctamente.',
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al enviar la notificación.',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
+    
+        // Enviar la notificación
+        $user->notify(new NewNotification($message));
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Notificación enviada correctamente',
+        ]);
     }
+
+    public function getNotifications($userId)
+{
+    try {
+        $user = User::findOrFail($userId);  // Buscar al usuario por ID
+        $notifications = $user->notifications;  // Obtener todas las notificaciones del usuario
+
+        return response()->json([
+            'success' => true,
+            'notifications' => $notifications
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al obtener las notificaciones.',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
 
     /**
      * Obtener notificaciones no leídas.
@@ -63,8 +67,8 @@ class NotificationController extends Controller
     {
         try {
             $user = auth()->user();
-            $notifications = cache()->remember("user_{$user->id}_unread_notifications", 60, function () use ($user) {
-                return $user->unreadNotifications->take(10);
+            $notifications = cache()->remember("user_{$user->id}notifications", 60, function () use ($user) {
+                return $user->notifications;
             });
 
             return response()->json([
