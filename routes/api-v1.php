@@ -80,6 +80,7 @@ Route::post('/logoutPrueba', [LawyerController::class, 'logout'])->name('logoutP
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::post('/registerLawyer', [AuthController::class, 'registerLawyer'])->name('registerPRUEBA')->middleware('guest');
+Route::post('/registerLawyerMovil', [LawyerController::class, 'registerLawyer'])->name('registromovil');
 
 
 
@@ -274,7 +275,7 @@ Route::middleware('auth:api')->post('/refresh-token', function () {
     return response()->json(['token' => $token]);
 });
 
-   
+
 Route::get('/notifications', [NotificationController::class, 'index']);
 Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
 Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
