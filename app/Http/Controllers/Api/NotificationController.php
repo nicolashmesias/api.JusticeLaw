@@ -4,13 +4,59 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Notifications\Notification;
 use App\Http\Controllers\Controller;
 use App\Notifications\NewNotification;
 use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationController extends Controller
 {
-     /**
+    /**
+     * Enviar una nueva notificación.
+     */
+    public function sendNotification(Request $request)
+    {
+        $user = auth()->user(); // Obtener el usuario autenticado
+
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Usuario no autenticado.',
+            ], 401);
+        }
+
+        // Validar los datos
+        $request->validate([
+            'message' => 'required|string',
+            'pregunta_id' => 'required|integer',
+            'answerer_name' => 'required|string',
+        ]);
+
+        // Construir los datos del mensaje
+        $messageData = [
+            'message' => $request->message,
+            'pregunta_id' => $request->pregunta_id,
+            'answerer_name' => $request->answerer_name,
+        ];
+
+        // Crear la notificación y enviarla
+        try {
+            $user->notify(new NewNotification($messageData));
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Notificación enviada correctamente.',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al enviar la notificación.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
      * Obtener notificaciones no leídas.
      */
     public function index()
@@ -18,7 +64,7 @@ class NotificationController extends Controller
         try {
             $user = auth()->user();
             $notifications = cache()->remember("user_{$user->id}_unread_notifications", 60, function () use ($user) {
-                return $user->unreadNotifications->take(10);
+                return $user->unreadNotifications->take(10)->get();
             });
 
             return response()->json([

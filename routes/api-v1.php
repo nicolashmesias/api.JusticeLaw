@@ -274,7 +274,7 @@ Route::middleware('auth:api')->post('/refresh-token', function () {
     return response()->json(['token' => $token]);
 });
 
-   
+Route::middleware('auth:api')->post('/notifications/send', [NotificationController::class, 'sendNotification']);  
 Route::get('/notifications', [NotificationController::class, 'index']);
 Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
 Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
