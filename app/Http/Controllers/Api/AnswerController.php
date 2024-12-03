@@ -36,7 +36,7 @@ class AnswerController extends Controller
             'question_id' => 'required|max:210',
             'affair' => 'nullable|max:255',
             'content' => 'required|string|min:5',
-            'date_publication' => 'required'
+            'date_publication' => 'required|date'
         ]);
 
         // Crear la nueva respuesta
