@@ -77,10 +77,6 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Question::class);
     }
 
-    public function notifications()
-    {
-        return $this->morphMany(\Illuminate\Notifications\DatabaseNotification::class, 'notifiable');
-    }
 
     public function searches(){
         return $this->hasMany(Search::class);
