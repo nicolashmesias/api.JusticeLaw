@@ -41,25 +41,6 @@ class NotificationController extends Controller
         ]);
     }
 
-    public function getNotifications($userId)
-{
-    try {
-        $user = User::findOrFail($userId);  // Buscar al usuario por ID
-        $notifications = $user->notifications;  // Obtener todas las notificaciones del usuario
-
-        return response()->json([
-            'success' => true,
-            'notifications' => $notifications
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Error al obtener las notificaciones.',
-            'error' => $e->getMessage(),
-        ], 500);
-    }
-}
-
     /**
      * Obtener notificaciones no leídas.
      */
