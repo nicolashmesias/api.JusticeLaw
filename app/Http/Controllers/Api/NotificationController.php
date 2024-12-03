@@ -64,7 +64,7 @@ class NotificationController extends Controller
         try {
             $user = auth()->user();
             $notifications = cache()->remember("user_{$user->id}_unread_notifications", 60, function () use ($user) {
-                return $user->unreadNotifications->take(10)->get();
+                return $user->unreadNotifications->take(10);
             });
 
             return response()->json([
