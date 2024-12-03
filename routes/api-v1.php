@@ -80,6 +80,7 @@ Route::post('/logoutPrueba', [LawyerController::class, 'logout'])->name('logoutP
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 Route::post('/registerLawyer', [AuthController::class, 'registerLawyer'])->name('registerPRUEBA')->middleware('guest');
+Route::post('/registerLawyerMovil', [LawyerController::class, 'registerLawyer'])->name('registromovil');
 
 
 
