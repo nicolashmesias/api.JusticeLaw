@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Answer;
 use App\Notifications\NewNotification;
 use App\Models\Question;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class AnswerController extends Controller
@@ -31,29 +32,37 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'lawyer_id' => 'required',
-            'question_id' => 'required|max:210',
-            'content' => 'required|string|min:5',
-            'date_publication' => 'required|string|min:8'
-        ]);
+        {
+            // Validar los datos enviados desde el cliente
+            $validatedData = $request->validate([
+                'content' => 'required|string|max:255',
+                'lawyer_id' => 'required',
+                'question_id' => 'required',
+                'date_publication' => 'required|date',
+            ]);
+    
 
-        // Crear la nueva respuesta
-        $answer = Answer::create($request->all());
-
-        // Obtener la pregunta asociada a la respuesta
-        $question = Question::findOrFail($request->input('question_id'));
-
-        // Enviar la notificación al usuario que hizo la pregunta
-        $question->user->notify(new NewNotification(
-            'Alguien ha respondido a tu pregunta: "' . $question->title . '"'
-        ));
-        
-
-        return response()->json($answer);
-    }
-
+            // Crear una nueva pregunta en la base de datos
+            $answer = Answer::create([
+                'content' => $validatedData['content'],
+                'lawyer_id' => $validatedData['lawyer_id'],
+                'question_id' => $validatedData['question_id'],
+                'date_publication' => $validatedData['date_publication']
+            ]);
+    
+            // Responder con un mensaje de éxito y los datos creados
+            return response()->json([
+                'message' => 'Pregunta creada con éxito.',
+                'data' => $answer
+            ], 201);
+        }
+     }
     /**
+     * Display the specified resource.
+    
+
+
+    
      * Display the specified resource.
      */
     public function show($id)

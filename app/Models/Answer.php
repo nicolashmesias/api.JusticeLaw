@@ -14,7 +14,6 @@ class Answer extends Model
     use HasFactory;
 
     public $fillable=[
-        'affair',
         'content',
         'date_publication',
         'lawyer_id',
