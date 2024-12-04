@@ -190,5 +190,14 @@ class NotificationController extends Controller
             'likes_count' => $likes->count(),
         ]);
     }
+    public function show($id)
+{
+    $notification = auth()->user()->notifications->find($id);
 
+    if (!$notification) {
+        return response()->json(['message' => 'Notificación no encontrada'], 404);
+    }
+
+    return response()->json($notification);
+    }
 }
