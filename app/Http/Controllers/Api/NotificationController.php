@@ -47,19 +47,39 @@ class NotificationController extends Controller
     public function index()
     {
         try {
+            // Obtén el usuario autenticado
             $user = auth()->user();
-            $notifications = cache()->remember("user_{$user->id}notifications", 60, function () use ($user) {
-                return $user->notifications;
-            });
-
+    
+            // Asegúrate de que el usuario esté autenticado
+            if (!$user) {
+                return response()->json(['message' => 'Usuario no autenticado'], 401);
+            }
+    
+            // Obtén todas las notificaciones del usuario desde la base de datos
+            $notifications = DatabaseNotification::where('notifiable_id', $user->id)
+                                                 ->where('notifiable_type', get_class($user))
+                                                 ->get();
+    
+            // Si no hay notificaciones
+            if ($notifications->isEmpty()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'No hay notificaciones disponibles.',
+                    'notifications' => []
+                ]);
+            }
+    
+            // Retorna las notificaciones en formato JSON
             return response()->json([
                 'success' => true,
-                'notifications' => $notifications,
+                'notifications' => $notifications
             ]);
+    
         } catch (\Exception $e) {
+            // Manejo de errores
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $e->getMessage()
             ], 500);
         }
     }
