@@ -282,7 +282,7 @@ Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])
 Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']);
 Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
 Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
-Route::get('/notifications/{id}', [NotificationController::class, 'show'])
+Route::get('/notifications/{id}', [NotificationController::class, 'show']);
 
 
 Route::get('/chart-data/clients', [DashboardController::class, 'clients']);
