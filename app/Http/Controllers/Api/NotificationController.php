@@ -192,12 +192,12 @@ class NotificationController extends Controller
     }
     public function show($id)
 {
-    $notification = auth()->user()->notifications->find($id);
+    $notification = DatabaseNotification::find($id);
 
     if (!$notification) {
         return response()->json(['message' => 'Notificación no encontrada'], 404);
     }
 
     return response()->json($notification);
-    }
+}
 }
