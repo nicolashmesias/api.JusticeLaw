@@ -55,12 +55,13 @@ class NotificationController extends Controller
                 return response()->json(['message' => 'Usuario no autenticado'], 401);
             }
     
-            // Obtén todas las notificaciones del usuario desde la base de datos
+            // Consulta directa a la tabla de notificaciones
             $notifications = DatabaseNotification::where('notifiable_id', $user->id)
                                                  ->where('notifiable_type', get_class($user))
+                                                 ->orderBy('created_at', 'desc') // Ordena por la más reciente
                                                  ->get();
     
-            // Si no hay notificaciones
+            // Verifica si hay notificaciones
             if ($notifications->isEmpty()) {
                 return response()->json([
                     'success' => true,
@@ -69,7 +70,7 @@ class NotificationController extends Controller
                 ]);
             }
     
-            // Retorna las notificaciones en formato JSON
+            // Retorna las notificaciones
             return response()->json([
                 'success' => true,
                 'notifications' => $notifications
