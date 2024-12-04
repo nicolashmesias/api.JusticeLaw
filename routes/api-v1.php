@@ -269,12 +269,6 @@ Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']
 
 //Endpoints para notificaciones
 
-//obtener nuevo token cuando expira
-Route::middleware('auth:api')->post('/refresh-token', function () {
-    $token = auth()->refresh;
-    return response()->json(['token' => $token]);
-});
-
 Route::post('/notifications/send', [NotificationController::class, 'sendNotification']);  
 Route::get('/notifications', [NotificationController::class, 'index']);
 Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
