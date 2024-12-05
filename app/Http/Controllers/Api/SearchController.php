@@ -5,31 +5,36 @@ namespace App\Http\Controllers\Api;
 use App\Models\Search;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 class SearchController extends Controller
 {
     /**
      * Muestra todas las búsquedas (puedes filtrar por usuario si es necesario).
      */
 
+     
 
      public function registrarVista(Request $request)
-{
-    // Validamos que el usuario haya enviado el ID de la información y que esté autenticado
-    $request->validate([
-        'informacion_id' => 'required|integer', // ID de la información que se está viendo
-    ]);
-
-    // Registrar la vista en la tabla 'searches'
-    \App\Models\Search::create([
-        'usuario_id' => auth()->id(), // Asumimos que el usuario está autenticado
-        'informacion_id' => $request->informacion_id,
-        'fecha' => now(), // Fecha y hora actual
-    ]);
-
-    return response()->json(['message' => 'Vista registrada correctamente']);
-}
-
+     {
+         // Validar que se haya enviado un ID válido de la información
+         $validated = $request->validate([
+             'informacion_id' => 'required|integer|exists:informacions,id', // Asegúrate que exista en la tabla de "informacions"
+         ]);
+ 
+         // Registrar la vista en la tabla "searches"
+         try {
+             // Guardar la información en la tabla "searches"
+             Search::create([
+                 'informacion_id' => $validated['informacion_id'],
+                 'user_id' => Auth::id(), // Si tienes autenticación, guarda el ID del usuario autenticado
+             ]);
+ 
+             return response()->json(['message' => 'Vista registrada correctamente.'], 200);
+         } catch (\Exception $e) {
+             return response()->json(['error' => 'Hubo un error al registrar la vista.'], 500);
+         }
+     }
     public function index()
     {
         $searches = Search::with(['information', 'lawyer'])->orderBy('fecha', 'desc')->get();
@@ -80,10 +85,20 @@ class SearchController extends Controller
      * Muestra un registro específico.
      */
     public function show($id)
-    {
-        $search = Search::with(['information', 'lawyer'])->findOrFail($id);
-        return response()->json($search);
-    }
+{
+    $informacion = Search::findOrFail($id);
+    $usuarioId = auth()->id(); // Obtener el ID del usuario autenticado
+
+    // Guardar la visita en la base de datos
+    DB::table('visitas')->insert([
+        'usuario_id' => $usuarioId,
+        'informacion_id' => $id,
+        'fecha_visita' => now()
+    ]);
+
+    return view('informacion.show', compact('informacion'));
+}
+
 
     /**
      * Actualiza un registro específico.
