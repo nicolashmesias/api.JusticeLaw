@@ -9,6 +9,7 @@ use App\Models\Question;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 
@@ -63,13 +64,18 @@ class AnswerController extends Controller
         }
     
         // Obtener el usuario que hizo la pregunta (el autor)
-        $userToNotify = $question->user();
+        $userToNotify = $question->user;
+
+        if (!$userToNotify) {
+            return response()->json(['message' => 'Usuario no encontrado para la pregunta.'], 404);
+        }
     
         // Obtener el nombre del abogado que respondió
         $lawyer = Lawyer::find($validatedData['lawyer_id']);
         $lawyerName = $lawyer ? $lawyer->name : 'Abogado desconocido'; // Si no se encuentra, se usa un nombre por defecto
     
         // Crear y enviar la notificación
+        Log::info("Enviando notificación a usuario con ID: {$userToNotify->id}");
         $userToNotify->notify(new NewNotification(
             "Tu pregunta ha recibido una respuesta de {$lawyerName}",
             $question->id,

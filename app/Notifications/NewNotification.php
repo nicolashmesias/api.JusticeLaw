@@ -22,7 +22,7 @@ class NewNotification extends Notification
 
     public function via($notifiable)
     {
-        return ['database', 'mail']; // Asegúrate de tener 'database' y 'mail' si quieres enviar una notificación por ambos métodos.
+        return ['database']; // Asegúrate de tener 'database' y 'mail' si quieres enviar una notificación por ambos métodos.
     }
 
     public function toDatabase($notifiable)
@@ -37,14 +37,6 @@ class NewNotification extends Notification
     /**
      * Obtener la representación de la notificación por correo electrónico.
      */
-    public function toMail(object $notifiable): MailMessage
-    {
-        return (new MailMessage)
-            ->subject('Nueva respuesta a tu pregunta')
-            ->line("{$this->lawyerName} ha respondido a tu pregunta.")
-            ->action('Ver respuesta', url("/questions/{$this->questionId}"))
-            ->line('Gracias por usar nuestra plataforma.');
-    }
 
     /**
      * Obtener la representación de la notificación en forma de arreglo.
