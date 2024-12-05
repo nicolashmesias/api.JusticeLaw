@@ -285,7 +285,7 @@ Route::post('/notifications/{id}/archive', [NotificationController::class, 'arch
 Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
 Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
 Route::get('/notifications/{id}', [NotificationController::class, 'show']);
-
+Route::post('/notifications/{id}/like', [NotificationController::class, 'likeNotification']);
 
 Route::get('/chart-data/clients', [DashboardController::class, 'clients']);
 Route::get('/chart-data/reviews', [DashboardController::class, 'reviews']);
