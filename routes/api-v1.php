@@ -234,6 +234,8 @@ Route::get('searchs', [SearchController::class, 'index'])->name('api.v1.searchs.
 Route::post('searchs', [SearchController::class, 'store'])->name('api.v1.searchs.store');
 Route::get('searchs/{search}', [SearchController::class, 'show'])->name('api.v1.searchs.show');
 Route::put('searchs/{search}', [SearchController::class, 'update'])->name('api.v1.searchs.update');
+Route::get('/searches/history', [SearchController::class, 'getHistory']);
+Route::post('/registrar-vista', [SearchController::class, 'registrarVista']);
 Route::delete('searchs/{search}', [SearchController::class, 'destroy'])->name('api.v1.searchs.delete');
 
 Route::get('/areas', [AreaController::class, 'index'])->name('api.v1.areas.index');
