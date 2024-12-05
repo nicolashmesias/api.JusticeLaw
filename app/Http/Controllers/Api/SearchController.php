@@ -16,22 +16,26 @@ class SearchController extends Controller
 
      
      public function registrarVista(Request $request)
-{
-    $validated = $request->validate([
-        'informacion_id' => 'required|integer|exists:informations,id',
-    ]);
-
-    try {
-        $search = Search::create([
-            'informacion_id' => $validated['informacion_id'],
-            'user_id' => auth()->id() ?? null,
-        ]);
-
-        return response()->json(['message' => 'Vista registrada exitosamente.', 'data' => $search], 200);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Error al registrar la vista.', 'details' => $e->getMessage()], 500);
-    }
-}
+     {
+         // Validar los datos entrantes
+         $validated = $request->validate([
+             'informacion_id' => 'required|integer|exists:information,id', // Verifica en la tabla `information`
+         ]);
+     
+         try {
+             // Crear el registro en la tabla `searches`
+             $search = Search::create([
+                 'informacion_id' => $validated['informacion_id'], // ID de la información
+                 'user_id' => auth()->id() ?? null, // Si usas autenticación, guarda el ID del usuario
+             ]);
+     
+             return response()->json(['message' => 'Vista registrada exitosamente.', 'data' => $search], 200);
+         } catch (\Exception $e) {
+             return response()->json(['error' => 'Error al registrar la vista.', 'details' => $e->getMessage()], 500);
+         }
+     }
+     
+     
 
 
 
