@@ -31,20 +31,20 @@ class AnswerController extends Controller
         //
     }
 
-      /**
+     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         // Validar los datos enviados desde el cliente
-         $validatedData = $request->validate([
+        $validatedData = $request->validate([
             'content' => 'required|string|max:255',
             'lawyer_id' => 'required|integer',
             'archive' => 'nullable|string|max:255',
             'question_id' => 'required|integer',
             'date_publication' => 'required|date',
         ]);
-
+    
         // Crear una nueva respuesta en la base de datos
         $answer = Answer::create([
             'content' => $validatedData['content'],
@@ -53,24 +53,29 @@ class AnswerController extends Controller
             'date_publication' => $validatedData['date_publication'],
             'archive' => $validatedData['archive'] ?? null,
         ]);
-
+    
         // Obtener la pregunta relacionada con la respuesta
         $question = Question::find($validatedData['question_id']);
+    
+        // Verificar si la pregunta existe
         if (!$question) {
             return response()->json(['message' => 'Pregunta no encontrada'], 404);
         }
-
+    
         // Obtener el usuario que hizo la pregunta (el autor)
-        $userToNotify = $question->user;
-
+        $userToNotify = $question->user();
+    
         // Obtener el nombre del abogado que respondió
         $lawyer = Lawyer::find($validatedData['lawyer_id']);
-        $lawyerName = $lawyer ? $lawyer->name : 'Abogado desconocido';
-
-        // Crear y enviar la notificación utilizando el sistema de notificaciones de Laravel
-        $message = "Tu pregunta ha recibido una respuesta de {$lawyerName}";
-        $userToNotify->notify(new NewNotification($message, $question->id, $lawyerName));
-
+        $lawyerName = $lawyer ? $lawyer->name : 'Abogado desconocido'; // Si no se encuentra, se usa un nombre por defecto
+    
+        // Crear y enviar la notificación
+        $userToNotify->notify(new NewNotification(
+            "Tu pregunta ha recibido una respuesta de {$lawyerName}",
+            $question->id,
+            $lawyerName // Nombre del abogado que respondió
+        ));
+    
         // Responder con un mensaje de éxito y los datos creados
         return response()->json([
             'message' => 'Pregunta respondida y notificación enviada con éxito.',
