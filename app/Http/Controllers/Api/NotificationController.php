@@ -6,60 +6,53 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Notifications\Notification;
 use App\Http\Controllers\Controller;
+use App\Models\Question;
 use App\Notifications\NewNotification;
 use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationController extends Controller
 {
-    /**
-     * Enviar una nueva notificación.
-     */
-    public function sendNotification(Request $request)
-    {
-        $user = User::find(1); // Asegúrate de que el usuario exista
-    
-        // Validar los datos de la solicitud
-        $request->validate([
-            'message' => 'required|string',
-            'pregunta_id' => 'required|integer',
-            'answerer_name' => 'required|string',
-        ]);
-    
-        // Preparar el mensaje
-        $message = [
-            'message' => $request->message,
-            'pregunta_id' => $request->pregunta_id,
-            'answerer_name' => $request->answerer_name,
-        ];
-    
-        // Enviar la notificación
-        $user->notify(new NewNotification($message));
-    
-        return response()->json([
-            'success' => true,
-            'message' => 'Notificación enviada correctamente',
-        ]);
-    }
-
+   
     /**
      * Obtener notificaciones no leídas.
      */
     public function index()
     {
         try {
+            // Obtén el usuario autenticado
             $user = auth()->user();
-            $notifications = cache()->remember("user_{$user->id}notifications", 60, function () use ($user) {
-                return $user->notifications;
-            });
-
+    
+            // Asegúrate de que el usuario esté autenticado
+            if (!$user) {
+                return response()->json(['message' => 'Usuario no autenticado'], 401);
+            }
+    
+            // Consulta directa a la tabla de notificaciones
+            $notifications = DatabaseNotification::where('notifiable_id', $user->id)
+                                                 ->where('notifiable_type', get_class($user))
+                                                 ->orderBy('created_at', 'desc') // Ordena por la más reciente
+                                                 ->get();
+    
+            // Verifica si hay notificaciones
+            if ($notifications->isEmpty()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'No hay notificaciones disponibles.',
+                    'notifications' => []
+                ]);
+            }
+    
+            // Retorna las notificaciones
             return response()->json([
                 'success' => true,
-                'notifications' => $notifications,
+                'notifications' => $notifications
             ]);
+    
         } catch (\Exception $e) {
+            // Manejo de errores
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $e->getMessage()
             ], 500);
         }
     }
@@ -190,5 +183,14 @@ class NotificationController extends Controller
             'likes_count' => $likes->count(),
         ]);
     }
+    public function show($id)
+{
+    $notification = DatabaseNotification::find($id);
 
+    if (!$notification) {
+        return response()->json(['message' => 'Notificación no encontrada'], 404);
+    }
+
+    return response()->json($notification);
+}
 }

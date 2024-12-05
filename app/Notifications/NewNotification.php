@@ -9,37 +9,28 @@ use Illuminate\Notifications\Notification;
 
 class NewNotification extends Notification
 {
-    use Queueable;
+    protected $message;
+    protected $questionId;
+    protected $lawyerName;
 
-    private $message;
-
-    /**
-     * Crear una nueva instancia de la notificación.
-     */
-    public function __construct($message)
+    public function __construct($message, $questionId, $lawyerName)
     {
         $this->message = $message;
+        $this->questionId = $questionId;
+        $this->lawyerName = $lawyerName;
     }
 
-    /**
-     * Obtener los canales de entrega de la notificación.
-     *
-     * @return array<int, string>
-     */
-    public function via(object $notifiable): array
+    public function via($notifiable)
     {
-        return ['database', 'mail'];
+        return ['database', 'mail']; // Asegúrate de tener 'database' y 'mail' si quieres enviar una notificación por ambos métodos.
     }
 
-    /**
-     * Preparar los datos para almacenar en la base de datos.
-     */
     public function toDatabase($notifiable)
     {
         return [
-            'message' => $this->message['message'], // Mensaje de la notificación
-            'question_id' => $this->message['pregunta_id'], // ID de la pregunta
-            'answerer_name' => $this->message['answerer_name'], // Nombre del abogado que respondió
+            'message' => $this->message,
+            'question_id' => $this->questionId,
+            'lawyer_name' => $this->lawyerName,
         ];
     }
 
@@ -50,8 +41,8 @@ class NewNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Nueva respuesta a tu pregunta')
-            ->line("{$this->message['answerer_name']} ha respondido a tu pregunta.")
-            ->action('Ver respuesta', url("/questions/{$this->message['pregunta_id']}"))
+            ->line("{$this->lawyerName} ha respondido a tu pregunta.")
+            ->action('Ver respuesta', url("/questions/{$this->questionId}"))
             ->line('Gracias por usar nuestra plataforma.');
     }
 
@@ -63,9 +54,9 @@ class NewNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'message' => $this->message['message'], // Mensaje de la notificación
-            'question_id' => $this->message['pregunta_id'], // ID de la pregunta
-            'answerer_name' => $this->message['answerer_name'], // Nombre del abogado
+            'message' => $this->message, // Mensaje de la notificación
+            'question_id' => $this->questionId, // ID de la pregunta
+            'answerer_name' => $this->lawyerName, // Nombre del abogado
         ];
     }
 }

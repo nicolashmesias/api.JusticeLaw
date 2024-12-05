@@ -272,12 +272,6 @@ Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']
 
 //Endpoints para notificaciones
 
-//obtener nuevo token cuando expira
-Route::middleware('auth:api')->post('/refresh-token', function () {
-    $token = auth()->refresh;
-    return response()->json(['token' => $token]);
-});
-
 Route::post('/notifications/send', [NotificationController::class, 'sendNotification']);  
 Route::get('/notifications', [NotificationController::class, 'index']);
 Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
@@ -285,6 +279,7 @@ Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])
 Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']);
 Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
 Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
+Route::get('/notifications/{id}', [NotificationController::class, 'show']);
 
 
 Route::get('/chart-data/clients', [DashboardController::class, 'clients']);
