@@ -12,13 +12,17 @@ class NewNotification extends Notification
     use Queueable;
 
     private $message;
+    private $questionId;
+    private $answererName;
 
     /**
      * Crear una nueva instancia de la notificación.
      */
-    public function __construct($message)
+    public function __construct($message, $questionId, $answererName)
     {
         $this->message = $message;
+        $this->questionId = $questionId;
+        $this->answererName = $answererName;
     }
 
     /**
@@ -37,9 +41,9 @@ class NewNotification extends Notification
     public function toDatabase($notifiable)
     {
         return [
-            'message' => $this->message['message'], // Mensaje de la notificación
-            'question_id' => $this->message['pregunta_id'], // ID de la pregunta
-            'answerer_name' => $this->message['answerer_name'], // Nombre del abogado que respondió
+            'message' => $this->message, // Mensaje de la notificación
+            'question_id' => $this->questionId, // ID de la pregunta
+            'answerer_name' => $this->answererName, // Nombre del abogado que respondió
         ];
     }
 
@@ -50,8 +54,8 @@ class NewNotification extends Notification
     {
         return (new MailMessage)
             ->subject('Nueva respuesta a tu pregunta')
-            ->line("{$this->message['answerer_name']} ha respondido a tu pregunta.")
-            ->action('Ver respuesta', url("/questions/{$this->message['pregunta_id']}"))
+            ->line("{$this->answererName} ha respondido a tu pregunta.")
+            ->action('Ver respuesta', url("/questions/{$this->questionId}"))
             ->line('Gracias por usar nuestra plataforma.');
     }
 
@@ -63,9 +67,9 @@ class NewNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'message' => $this->message['message'], // Mensaje de la notificación
-            'question_id' => $this->message['pregunta_id'], // ID de la pregunta
-            'answerer_name' => $this->message['answerer_name'], // Nombre del abogado
+            'message' => $this->message, // Mensaje de la notificación
+            'question_id' => $this->questionId, // ID de la pregunta
+            'answerer_name' => $this->answererName, // Nombre del abogado
         ];
     }
 }
