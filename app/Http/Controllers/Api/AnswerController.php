@@ -37,7 +37,7 @@ class AnswerController extends Controller
     public function store(Request $request)
     {
         // Validar los datos enviados desde el cliente
-        $validatedData = $request->validate([
+         $validatedData = $request->validate([
             'content' => 'required|string|max:255',
             'lawyer_id' => 'required|integer',
             'archive' => 'nullable|string|max:255',
