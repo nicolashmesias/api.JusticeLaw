@@ -56,8 +56,6 @@ class AnswerController extends Controller
 
         // Obtener la pregunta relacionada con la respuesta
         $question = Question::find($validatedData['question_id']);
-
-        // Verificar si la pregunta existe
         if (!$question) {
             return response()->json(['message' => 'Pregunta no encontrada'], 404);
         }
@@ -67,41 +65,17 @@ class AnswerController extends Controller
 
         // Obtener el nombre del abogado que respondió
         $lawyer = Lawyer::find($validatedData['lawyer_id']);
-        $lawyerName = $lawyer ? $lawyer->name : 'Abogado desconocido'; // Si no se encuentra, se usa un nombre por defecto
+        $lawyerName = $lawyer ? $lawyer->name : 'Abogado desconocido';
 
-        // Crear y enviar la notificación
+        // Crear y enviar la notificación utilizando el sistema de notificaciones de Laravel
         $message = "Tu pregunta ha recibido una respuesta de {$lawyerName}";
-        $this->storeNotificationWithModel($userToNotify->id, $message, $question->id, $lawyerName);
+        $userToNotify->notify(new NewNotification($message, $question->id, $lawyerName));
 
         // Responder con un mensaje de éxito y los datos creados
         return response()->json([
             'message' => 'Pregunta respondida y notificación enviada con éxito.',
             'data' => $answer
         ], 201);
-    }
-
-    /**
-     * Almacenar la notificación manualmente en la base de datos
-     */
-    public function storeNotificationWithModel($userId, $message, $questionId, $lawyerName)
-    {
-        $data = [
-            'message' => $message,
-            'question_id' => $questionId,
-            'answerer_name' => $lawyerName
-        ];
-        
-        // Verifica que se esté serializando correctamente
-        $dataJson = json_encode($data);
-        
-        DatabaseNotification::create([
-            'id' => Str::uuid()->toString(),
-            'type' => 'App\\Notifications\\NewNotification',
-            'notifiable_type' => 'App\\Models\\User',
-            'notifiable_id' => $userId,
-            'data' => $dataJson, // Asegúrate de que sea un JSON válido
-            'read_at' => null,
-        ]);
     }
     
     /**
