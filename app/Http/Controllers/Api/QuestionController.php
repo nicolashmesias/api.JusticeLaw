@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
+use App\Models\Like;
 use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class QuestionController extends Controller
 {
@@ -16,55 +19,71 @@ class QuestionController extends Controller
         return response()->json($questions);
     }
 
+    public function indexr()
+    {
+        $likes = Like::all();
+        return response()->json($likes);
+    }
+
     public function indexlogin()
     {
         $questions = Question::all();
         return response()->json($questions);
     }
 
-    public function like($id)
-{
-    // Buscar la pregunta por ID
-    $question = Question::find($id);
 
-    if (!$question) {
-        return response()->json(['error' => 'Pregunta no encontrada'], 404);
+    public function toggleReaction(Request $request, $postId)
+    {
+        $user = Auth::user(); // Obtener el usuario autenticado
+
+        // Validar el cuerpo de la solicitud
+        $request->validate([
+            'is_like' => 'required|boolean',
+        ]);
+
+        // Buscar si ya existe un like/dislike del usuario en este post
+        $like = Like::where('user_id', $user->id)->where('post_id', $postId)->first();
+
+        if ($like) {
+            if ($like->is_like == $request->is_like) {
+                // Si el usuario repite la misma reacción, eliminarla
+                $like->delete();
+            } else {
+                // Si el usuario cambia de reacción, actualizarla
+                $like->update(['is_like' => $request->is_like]);
+            }
+        } else {
+            // Si no existe una reacción previa, crearla
+            Like::create([
+                'user_id' => $user->id,
+                'post_id' => $postId,
+                'is_like' => $request->is_like,
+            ]);
+        }
+
+        // Retornar el conteo actualizado de likes y dislikes
+        $likesCount = Like::where('post_id', $postId)->where('is_like', true)->count();
+        $dislikesCount = Like::where('post_id', $postId)->where('is_like', false)->count();
+
+        return response()->json([
+            'likes' => $likesCount,
+            'dislikes' => $dislikesCount,
+        ]);
     }
 
-    // Incrementar el contador de likes
-    $question->likes += 1;
-    $question->save();
+    /**
+     * Obtener todas las reacciones para un post específico.
+     */
+    public function getReactions($Id)
+    {
+        $likes = Like::where('question_id', $Id)->where('is_like', true)->count();
+        $dislikes = Like::where('question_id', $Id)->where('is_like', false)->count();
 
-    // Devolver la respuesta con el nuevo conteo
-    return response()->json([
-        'message' => 'Like registrado con éxito',
-        'likes' => $question->likes,
-        'dislikes' => $question->dislikes,
-    ]);
-}
-
-
-public function dislike($id)
-{
-    // Buscar la pregunta por ID
-    $question = Question::find($id);
-
-    if (!$question) {
-        return response()->json(['error' => 'Pregunta no encontrada'], 404);
+        return response()->json([
+            'likes' => $likes,
+            'dislikes' => $dislikes,
+        ]);
     }
-
-    // Incrementar el contador de dislikes
-    $question->dislikes += 1;
-    $question->save();
-
-    // Devolver la respuesta con el nuevo conteo
-    return response()->json([
-        'message' => 'Dislike registrado con éxito',
-        'likes' => $question->likes,
-        'dislikes' => $question->dislikes,
-    ]);
-}
-
 
 
 
