@@ -92,6 +92,9 @@ Route::delete('answers/{answer}', [AnswerController::class, 'destroy'])->name('a
 
 
 Route::get('likes', [QuestionController::class, 'indexr'])->name('api.v1.likes.index');
+Route::get('likes/{like}', [QuestionController::class, 'shows'])->name('api.v1.likes.show');
+
+
 
 Route::get('questions', [QuestionController::class, 'index'])->name('api.v1.questions.index');
 Route::post('questions', [QuestionController::class, 'store'])->name('api.v1.questions.store');
@@ -237,6 +240,8 @@ Route::get('searchs', [SearchController::class, 'index'])->name('api.v1.searchs.
 Route::post('searchs', [SearchController::class, 'store'])->name('api.v1.searchs.store');
 Route::get('searchs/{search}', [SearchController::class, 'show'])->name('api.v1.searchs.show');
 Route::put('searchs/{search}', [SearchController::class, 'update'])->name('api.v1.searchs.update');
+Route::get('/searches/history', [SearchController::class, 'getHistory']);
+Route::post('/registrar-vista', [SearchController::class, 'registrarVista']);
 Route::delete('searchs/{search}', [SearchController::class, 'destroy'])->name('api.v1.searchs.delete');
 
 Route::get('/areas', [AreaController::class, 'index'])->name('api.v1.areas.index');
@@ -292,8 +297,7 @@ Route::get('/chart-data/users-by-role', [DashboardController::class, 'usersByRol
 Route::post('/create-meeting', [MeetingController::class, 'createMeeting']);
 
 
-Route::middleware('auth:api')->group(function () {
-    Route::post('/question/{id}/react', [QuestionController::class, 'toggleReaction']);
-    Route::get('/question/{id}/reactions', [QuestionController::class, 'getReactions']);
+    Route::post('/question/{id}/react', [QuestionController::class, 'toggleLike']);
+    Route::get('/question/{id}/reactions', [QuestionController::class, 'getLikes'])->name('api.v1.slikes.show');
 
-});
+

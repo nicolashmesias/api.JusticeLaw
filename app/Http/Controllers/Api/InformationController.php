@@ -3,29 +3,36 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Information;
+use App\Models\Search;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 class InformationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
         try {
-            // Buscar la información por ID, incluyendo la relación con `forumcategory`
-            $information = Information::with('forumcategory') // Asume que existe una relación con la tabla `forumcategories`
-                ->findOrFail($id);
-    
-            // Retornar la información como JSON
+            // Buscar la información por ID
+            $information = Information::with('forumcategory')->findOrFail($id);
+
+            // Registrar la vista en el historial
+            Search::create([
+                'fecha' => now(),
+                'user_id' => $request->user_id ?? null, // ID del usuario si está autenticado
+                'information_id' => $id,
+            ]);
+
+            // Retornar la información encontrada
             return response()->json($information, 200);
         } catch (\Exception $e) {
-            // Si ocurre un error (como no encontrar el registro), devolver un error
-            return response()->json([
-                'message' => 'No se pudo encontrar la información solicitada.'
-            ], 404);
+            return response()->json(['message' => 'Información no encontrada.'], 404);
         }
     }
+
     public function index(Request $request)
     {
         // Obtiene todos los registros de la base de datos
