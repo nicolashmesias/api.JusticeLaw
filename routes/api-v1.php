@@ -90,6 +90,12 @@ Route::get('answers/{answer}', [AnswerController::class, 'show'])->name('api.v1.
 Route::put('answers/{answer}', [AnswerController::class, 'update'])->name('api.v1.answers.update');
 Route::delete('answers/{answer}', [AnswerController::class, 'destroy'])->name('api.v1.answers.delete');
 
+
+Route::get('likes', [QuestionController::class, 'indexr'])->name('api.v1.likes.index');
+Route::get('likes/{like}', [QuestionController::class, 'shows'])->name('api.v1.likes.show');
+
+
+
 Route::get('questions', [QuestionController::class, 'index'])->name('api.v1.questions.index');
 Route::post('questions', [QuestionController::class, 'store'])->name('api.v1.questions.store');
 Route::get('questions/{question}', [QuestionController::class, 'show'])->name('api.v1.questions.show');
@@ -291,6 +297,7 @@ Route::get('/chart-data/users-by-role', [DashboardController::class, 'usersByRol
 Route::post('/create-meeting', [MeetingController::class, 'createMeeting']);
 
 
+    Route::post('/question/{id}/react', [QuestionController::class, 'toggleLike']);
+    Route::get('/question/{id}/reactions', [QuestionController::class, 'getLikes'])->name('api.v1.slikes.show');
 
-Route::post('/questions/{id}/like', [QuestionController::class, 'like']);
-Route::post('/questions/{id}/dislike', [QuestionController::class, 'dislike']);
+

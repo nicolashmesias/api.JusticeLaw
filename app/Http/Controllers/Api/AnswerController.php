@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
+use App\Models\Lawyer;
 use App\Notifications\NewNotification;
 use App\Models\Question;
 use Carbon\Carbon;
@@ -32,33 +33,56 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        {
-            // Validar los datos enviados desde el cliente
-            $validatedData = $request->validate([
-                'content' => 'required|string|max:255',
-                'lawyer_id' => 'required|integer',
-                'archive' => 'nullable|string|max:255',
-                'question_id' => 'required|integer',
-                'date_publication' => 'required|date',
-            ]);
+        // Validar los datos enviados desde el cliente
+        $validatedData = $request->validate([
+            'content' => 'required|string|max:255',
+            'lawyer_id' => 'required|integer',
+            'archive' => 'nullable|string|max:255',
+            'question_id' => 'required|integer',
+            'date_publication' => 'required|date',
+        ]);
     
-
-            // Crear una nueva pregunta en la base de datos
-            $answer = Answer::create([
-                'content' => $validatedData['content'],
-                'lawyer_id' => $validatedData['lawyer_id'],
-                'question_id' => $validatedData['question_id'],
-                'date_publication' => $validatedData['date_publication'],
-                'archive' => $validatedData['archive'] ?? null,
-            ]);
+        // Crear una nueva respuesta en la base de datos
+        $answer = Answer::create([
+            'content' => $validatedData['content'],
+            'lawyer_id' => $validatedData['lawyer_id'],
+            'question_id' => $validatedData['question_id'],
+            'date_publication' => $validatedData['date_publication'],
+            'archive' => $validatedData['archive'] ?? null,
+        ]);
     
-            // Responder con un mensaje de éxito y los datos creados
-            return response()->json([
-                'message' => 'Pregunta creada con éxito.',
-                'data' => $answer
-            ], 201);
+        // Obtener la pregunta relacionada con la respuesta
+        $question = Question::find($validatedData['question_id']);
+    
+        // Verificar si la pregunta existe
+        if (!$question) {
+            return response()->json(['message' => 'Pregunta no encontrada'], 404);
         }
-     }
+    
+        // Obtener el usuario que hizo la pregunta (el autor)
+        $userToNotify = $question->user;
+    
+        // Obtener el nombre del abogado que respondió
+        $lawyer = Lawyer::find($validatedData['lawyer_id']);
+        $lawyerName = $lawyer ? $lawyer->name : 'Abogado desconocido'; // Si no se encuentra, se usa un nombre por defecto
+    
+        // Crear el mensaje de la notificación
+        $message = "Tu pregunta ha recibido una respuesta de {$lawyerName}";
+    
+        // Crear y enviar la notificación
+        $userToNotify->notify(new NewNotification(
+            $message,
+            $question->id,
+            $lawyerName // Nombre del abogado que respondió
+        ));
+    
+        // Responder con un mensaje de éxito y los datos creados
+        return response()->json([
+            'message' => 'Pregunta respondida y notificación enviada con éxito.',
+            'data' => $answer
+        ], 201);
+    }
+    
     /**
      * Display the specified resource.
     

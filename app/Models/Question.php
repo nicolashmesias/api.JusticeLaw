@@ -29,4 +29,10 @@ class Question extends Model
     {
         return $this->hasMany(Consulting::class, 'question_id');
     }
+
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
 }
