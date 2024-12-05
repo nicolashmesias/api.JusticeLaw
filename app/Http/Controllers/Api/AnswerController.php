@@ -8,6 +8,9 @@ use App\Notifications\NewNotification;
 use App\Models\Question;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Str;
+
 
 class AnswerController extends Controller
 {
@@ -95,7 +98,6 @@ class AnswerController extends Controller
             'read_at' => null,
         ]);
     }
-}
     
     /**
      * Display the specified resource.
