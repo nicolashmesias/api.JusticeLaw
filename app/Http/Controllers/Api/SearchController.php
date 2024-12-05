@@ -34,7 +34,7 @@ class SearchController extends Controller
             return response()->json(['error' => 'Error al registrar la vista.'], 500);
         }
      }
-     
+
     public function index()
     {
         $searches = Search::with(['information', 'lawyer'])->orderBy('fecha', 'desc')->get();
@@ -44,24 +44,27 @@ class SearchController extends Controller
     /**
      * Registra una búsqueda o vista en el historial.
      */
+   
     public function store(Request $request)
-    {
+{
+    try {
         $validated = $request->validate([
-            'user_id' => 'nullable|exists:users,id', // Puede ser null para usuarios no autenticados
-            'lawyer_id' => 'nullable|exists:lawyers,id',
-            'information_id' => 'required|exists:information,id', // Es obligatorio
+            'informacion_id' => 'required|exists:informations,id',
+            'action' => 'required|string', // Acción: 'visited'
         ]);
 
-        // Crea el registro en la tabla `searches`
-        $search = Search::create([
-            'fecha' => now(),
-            'user_id' => $validated['user_id'] ?? null,
-            'lawyer_id' => $validated['lawyer_id'] ?? null,
-            'information_id' => $validated['information_id'],
+        Search::create([
+            'informacion_id' => $validated['informacion_id'],
+            'action' => $validated['action'], // Guardar la acción
+            'created_at' => now(),
         ]);
 
-        return response()->json($search, 201);
+        return response()->json(['message' => 'Visita registrada correctamente.'], 201);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 400);
     }
+}
+
 
     /**
      * Muestra el historial de búsquedas para un usuario específico.
