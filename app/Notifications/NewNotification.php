@@ -56,7 +56,7 @@ class NewNotification extends Notification
         return [
             'message' => $this->message, // Mensaje de la notificación
             'question_id' => $this->questionId, // ID de la pregunta
-            'answerer_name' => $this->answererName, // Nombre del abogado
+            'answerer_name' => $this->lawyerName, // Nombre del abogado
         ];
     }
 }
