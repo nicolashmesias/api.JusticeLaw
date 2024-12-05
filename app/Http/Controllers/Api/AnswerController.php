@@ -60,7 +60,7 @@ class AnswerController extends Controller
         }
     
         // Obtener el usuario que hizo la pregunta (el autor)
-        $userToNotify = $question->user;
+        $userToNotify = $question->user();
     
         // Obtener el nombre del abogado que respondió
         $lawyer = Lawyer::find($validatedData['lawyer_id']);
