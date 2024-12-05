@@ -69,6 +69,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(TypeDocument::class);
     }
 
+    public function likes()
+    {
+        return $this->hasMany(Like::class);
+    }
+
     public function profile(){
         return $this->hasOne(UserProfile::class);
     }

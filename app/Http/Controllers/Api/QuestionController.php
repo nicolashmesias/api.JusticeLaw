@@ -32,56 +32,45 @@ class QuestionController extends Controller
     }
 
 
-    public function toggleReaction(Request $request, $postId)
+    public function toggleLike(Request $request)
     {
-        $user = Auth::user(); // Obtener el usuario autenticado
-
-        // Validar el cuerpo de la solicitud
-        $request->validate([
-            'is_like' => 'required|boolean',
+        $validated = $request->validate([
+            'question_id' => 'required|integer',
+            'user_id' => 'required|integer',
+            'is_like' => 'required|boolean', // Asegúrate de enviar solo true o false
         ]);
 
-        // Buscar si ya existe un like/dislike del usuario en este post
-        $like = Like::where('user_id', $user->id)->where('post_id', $postId)->first();
+        // Convertir true/false a 1/0
+        $validated['is_like'] = $validated['is_like'] ? 1 : 0;
+
+        // Buscar si ya existe un registro para este usuario y publicación
+        $like = Like::where('question_id', $validated['question_id'])
+                    ->where('question_id', $validated['question_id'])
+                    ->first();
 
         if ($like) {
-            if ($like->is_like == $request->is_like) {
-                // Si el usuario repite la misma reacción, eliminarla
-                $like->delete();
-            } else {
-                // Si el usuario cambia de reacción, actualizarla
-                $like->update(['is_like' => $request->is_like]);
-            }
+            // Si ya existe, actualiza el valor de `is_like`
+            $like->is_like = $validated['is_like'];
+            $like->save();
         } else {
-            // Si no existe una reacción previa, crearla
-            Like::create([
-                'user_id' => $user->id,
-                'post_id' => $postId,
-                'is_like' => $request->is_like,
-            ]);
+            // Si no existe, crea un nuevo registro
+            Like::create($validated);
         }
 
-        // Retornar el conteo actualizado de likes y dislikes
-        $likesCount = Like::where('post_id', $postId)->where('is_like', true)->count();
-        $dislikesCount = Like::where('post_id', $postId)->where('is_like', false)->count();
-
-        return response()->json([
-            'likes' => $likesCount,
-            'dislikes' => $dislikesCount,
-        ]);
+        return response()->json(['message' => 'Acción realizada con éxito.']);
     }
 
     /**
-     * Obtener todas las reacciones para un post específico.
+     * Obtener el conteo de likes y dislikes para una publicación.
      */
-    public function getReactions($Id)
+    public function getLikes($id)
     {
-        $likes = Like::where('question_id', $Id)->where('is_like', true)->count();
-        $dislikes = Like::where('question_id', $Id)->where('is_like', false)->count();
+        $likesCount = Like::where('question_id', $id)->where('is_like', 1)->count();
+        $dislikesCount = Like::where('question_id', $id)->where('is_like', 0)->count();
 
         return response()->json([
-            'likes' => $likes,
-            'dislikes' => $dislikes,
+            'likes_count' => $likesCount,
+            'dislikes_count' => $dislikesCount,
         ]);
     }
 
@@ -136,6 +125,13 @@ class QuestionController extends Controller
     {
         $question = Question::findOrFail($id);
         return response()->json($question);
+    }
+
+
+    public function shows( $id)
+    {
+        $like = Like::findOrFail($id);
+        return response()->json($like);
     }
 
     /**
