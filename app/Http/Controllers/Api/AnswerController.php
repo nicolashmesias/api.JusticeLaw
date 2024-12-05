@@ -66,12 +66,9 @@ class AnswerController extends Controller
         $lawyer = Lawyer::find($validatedData['lawyer_id']);
         $lawyerName = $lawyer ? $lawyer->name : 'Abogado desconocido'; // Si no se encuentra, se usa un nombre por defecto
     
-        // Crear el mensaje de la notificación
-        $message = "Tu pregunta ha recibido una respuesta de {$lawyerName}";
-    
         // Crear y enviar la notificación
         $userToNotify->notify(new NewNotification(
-            $message,
+            "Tu pregunta ha recibido una respuesta de {$lawyerName}",
             $question->id,
             $lawyerName // Nombre del abogado que respondió
         ));
