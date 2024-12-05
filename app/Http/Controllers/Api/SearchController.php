@@ -6,6 +6,7 @@ use App\Models\Search;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 class SearchController extends Controller
 {
@@ -14,27 +15,26 @@ class SearchController extends Controller
      */
 
      
-
      public function registrarVista(Request $request)
-    {
-        // Validar los datos entrantes
-        $validated = $request->validate([
-            'informacion_id' => 'required|integer|exists:informacions,id', // Asegúrate de que el ID exista
-        ]);
-
-        try {
-            // Crear el registro en la tabla `searches`
-            Search::create([
-                'informacion_id' => $validated['informacion_id'], // ID de la información
-                'user_id' => auth()->id() ?? null, // Si usas autenticación, guarda el ID del usuario
-            ]);
-
-            return response()->json(['message' => 'Vista registrada exitosamente.'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error al registrar la vista.'], 500);
-        }
+     {
+         // Validar los datos entrantes
+         $validated = $request->validate([
+             'informacion_id' => 'required|integer|exists:informations,id',
+         ]);
+ 
+         try {
+             // Crear el registro en la tabla `searches`
+             $search = Search::create([
+                 'informacion_id' => $validated['informacion_id'],
+                 'user_id' => Auth::id() ?? null, // Guarda el usuario autenticado si está disponible
+             ]);
+ 
+             return response()->json(['message' => 'Vista registrada exitosamente.', 'data' => $search], 200);
+         } catch (\Exception $e) {
+             Log::error('Error al registrar vista:', ['error' => $e->getMessage()]);
+             return response()->json(['error' => 'Error al registrar la vista.'], 500);
+         }
      }
-
     public function index()
     {
         $searches = Search::with(['information', 'lawyer'])->orderBy('fecha', 'desc')->get();
@@ -45,25 +45,25 @@ class SearchController extends Controller
      * Registra una búsqueda o vista en el historial.
      */
    
-    public function store(Request $request)
-{
-    try {
-        $validated = $request->validate([
-            'informacion_id' => 'required|exists:informations,id',
-            'action' => 'required|string', // Acción: 'visited'
-        ]);
-
-        Search::create([
-            'informacion_id' => $validated['informacion_id'],
-            'action' => $validated['action'], // Guardar la acción
-            'created_at' => now(),
-        ]);
-
-        return response()->json(['message' => 'Visita registrada correctamente.'], 201);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 400);
-    }
-}
+     public function store(Request $request)
+     {
+         // Validar los datos recibidos
+         $validatedData = $request->validate([
+             'informacion_id' => 'required|integer|exists:informations,id',
+         ]);
+     
+         // Crear un nuevo registro en la tabla search
+         $search = new Search();
+         $search->informacion_id = $validatedData['informacion_id'];
+         $search->user_id = auth()->id(); // Opcional: Guarda el ID del usuario si está autenticado
+         $search->save();
+     
+         return response()->json([
+             'message' => 'Visita registrada correctamente.',
+             'data' => $search,
+         ]);
+     }
+     
 
 
     /**
