@@ -85,16 +85,21 @@ class AnswerController extends Controller
      */
     public function storeNotificationWithModel($userId, $message, $questionId, $lawyerName)
     {
+        $data = [
+            'message' => $message,
+            'question_id' => $questionId,
+            'answerer_name' => $lawyerName
+        ];
+        
+        // Verifica que se esté serializando correctamente
+        $dataJson = json_encode($data);
+        
         DatabaseNotification::create([
-            'id' => Str::uuid()->toString(), // Genera un ID único
+            'id' => Str::uuid()->toString(),
             'type' => 'App\\Notifications\\NewNotification',
             'notifiable_type' => 'App\\Models\\User',
             'notifiable_id' => $userId,
-            'data' => [
-                'message' => $message,
-                'question_id' => $questionId,
-                'answerer_name' => $lawyerName,
-            ],
+            'data' => $dataJson, // Asegúrate de que sea un JSON válido
             'read_at' => null,
         ]);
     }
