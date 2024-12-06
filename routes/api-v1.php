@@ -275,7 +275,7 @@ Route::get('lawyers', [LawyerController::class, 'index'])->name('api.v1.lawyers.
 Route::post('/registrarLawyer', [LawyerController::class, 'registerLawyer'])->name('api.v1.lawyers.store');
 Route::get('lawyers/{lawyer}', [LawyerController::class, 'show'])->name('api.v1.lawyers.show');
 Route::put('lawyers/{lawyer}', [LawyerController::class, 'update'])->name('api.v1.lawyers.update');
-Route::delete('lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('api.v1.lawyers.delete');
+Route::delete('lawyers/{id}', [LawyerController::class, 'destroy'])->name('api.v1.lawyers.delete');
 
 // Route::post('v1/validate-code', [ForgetPasswordController::class, 'validateCode'])->name('api.v1.validate-code');
 // Route::post('/password', [ForgetPasswordController::class, 'store'])->name('api.v1.password.store');
