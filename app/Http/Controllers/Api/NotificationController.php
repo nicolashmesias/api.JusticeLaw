@@ -79,6 +79,31 @@ class NotificationController extends Controller
         ], 404);
     }
 
+    public function markAllAsRead()
+{
+    try {
+        // Obtener el usuario autenticado
+        $user = auth()->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Usuario no autenticado'], 401);
+        }
+
+        // Marcar todas las notificaciones como leídas
+        $user->unreadNotifications->markAsRead();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Todas las notificaciones han sido marcadas como leídas',
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
+
     /**
      * Eliminar una notificación.
      */
@@ -102,31 +127,6 @@ class NotificationController extends Controller
     }
 
     /**
-     * Archivar una notificación.
-     */
-    public function archive($id)
-{
-    $notification = auth()->user()->notifications->find($id);
-
-    if ($notification) {
-        $data = $notification->data;
-        $data['archived'] = true; // Marca como archivada
-        $notification->update(['data' => $data]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Notificación archivada',
-        ]);
-    }
-
-    return response()->json([
-        'success' => false,
-        'message' => 'Notificación no encontrada',
-    ], 404);
-}
-
-
-    /**
      * Eliminar todas las notificaciones.
      */
     public function destroyAll()
@@ -136,23 +136,6 @@ class NotificationController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Todas las notificaciones fueron eliminadas',
-        ]);
-    }
-
-    /**
-     * Archivar todas las notificaciones.
-     */
-    public function archiveAll()
-    {
-        auth()->user()->notifications->each(function ($notification) {
-            $data = $notification->data;
-            $data['archived'] = true;
-            $notification->update(['data' => $data]);
-        });
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Todas las notificaciones fueron archivadas',
         ]);
     }
 
