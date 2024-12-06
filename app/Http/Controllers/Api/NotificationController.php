@@ -69,30 +69,40 @@ class NotificationController extends Controller
         return response()->json(['message' => 'Notificación marcada como leída.'], 200);
     }
 
-    public function delete($id)
-    {
-        $notification = auth()->user()->notifications->find($id);
-
-        if (!$notification) {
-            return response()->json(['error' => 'Notificación no encontrada.'], 404);
-        }
-
-        $notification->delete();
-        return response()->json(['message' => 'Notificación eliminada.'], 200);
-    }
-
     public function markAllAsRead()
     {
         auth()->user()->unreadNotifications->markAsRead();
         return response()->json(['message' => 'Todas las notificaciones marcadas como leídas.'], 200);
     }
 
-    public function deleteAll()
-    {
-        auth()->user()->notifications->delete();
-        return response()->json(['message' => 'Todas las notificaciones eliminadas.'], 200);
+    public function destroy($id)
+{
+    // Obtener la notificación de un usuario autenticado
+    $notification = auth()->user()->notifications->find($id);
+
+    if (!$notification) {
+        return response()->json(['error' => 'Notificación no encontrada.'], 404);
     }
 
+    try {
+        $notification->delete();
+        return response()->json(['message' => 'Notificación eliminada.'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Error al eliminar la notificación.'], 500);
+    }
+}
+
+public function destroyAll()
+{
+    try {
+        // Eliminar todas las notificaciones del usuario autenticado
+        $user = auth()->user();
+        $user->notifications->delete();
+        return response()->json(['message' => 'Todas las notificaciones eliminadas.'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Error al eliminar todas las notificaciones.'], 500);
+    }
+}
     /**
      * Manejo de "me gusta" en una notificación.
      */

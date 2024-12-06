@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Consulting;
 use App\Http\Controllers\Controller;
+use App\Models\Answer;
+use App\Models\Date;
 use App\Services\GoogleCalendarService;
 use Illuminate\Http\Request;
 
@@ -22,20 +24,41 @@ class ConsultingController extends Controller
 
     public function store(Request $request)
     {
+        // Validar los datos recibidos
         $validated = $request->validate([
             'date' => 'required|date',
-            'time' => 'required|date_format:H:i',
+            'time' => 'required',
             'answer_id' => 'required|exists:answers,id',
             'question_id' => 'required|exists:questions,id',
         ]);
 
-        $consulting = Consulting::create($validated);
+        // Obtener el lawyer_id asociado al answer_id
+        $answer = Answer::findOrFail($validated['answer_id']);
+        $lawyerId = $answer->lawyer_id;
+
+        // Obtener la disponibilidad correspondiente
+        $date = Date::where('date', $validated['date'])
+                    ->where('startTime', $validated['time'])
+                    ->where('lawyer_id', $lawyerId)
+                    ->firstOrFail();
+
+        // Guardar la consulta
+        $consulting = Consulting::create([
+            'date' => $validated['date'],
+            'time' => $validated['time'],
+            'answer_id' => $validated['answer_id'],
+            'question_id' => $validated['question_id']
+        ]);
+
+        // Actualizar el estado de la disponibilidad
+        $date->update(['state' => 'Agendada']);
 
         return response()->json([
             'message' => 'Asesoría creada con éxito.',
             'consulting' => $consulting
         ], 201);
     }
+
 
 
 
