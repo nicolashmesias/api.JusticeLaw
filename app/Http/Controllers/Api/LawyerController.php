@@ -116,7 +116,8 @@ class LawyerController extends Controller
             'type_document_id' => 'required|max:10',
             'document_number' => 'required|max:10',
             'email' => 'required|max:255',
-            'password' => 'required|string|min:8'
+            'password' => 'string|min:8',
+            'verification' => 'integer'
         ]);
 
         // $request->merge(['password' => bcrypt($request->password)]);
