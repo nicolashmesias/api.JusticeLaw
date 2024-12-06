@@ -105,25 +105,26 @@ class NotificationController extends Controller
      * Archivar una notificación.
      */
     public function archive($id)
-    {
-        $notification = auth()->user()->notifications->find($id);
+{
+    $notification = auth()->user()->notifications->find($id);
 
-        if ($notification) {
-            $data = $notification->data;
-            $data['archived'] = true;
-            $notification->update(['data' => $data]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Notificación archivada',
-            ]);
-        }
+    if ($notification) {
+        $data = $notification->data;
+        $data['archived'] = true; // Marca como archivada
+        $notification->update(['data' => $data]);
 
         return response()->json([
-            'success' => false,
-            'message' => 'Notificación no encontrada',
-        ], 404);
+            'success' => true,
+            'message' => 'Notificación archivada',
+        ]);
     }
+
+    return response()->json([
+        'success' => false,
+        'message' => 'Notificación no encontrada',
+    ], 404);
+}
+
 
     /**
      * Eliminar todas las notificaciones.
@@ -160,29 +161,35 @@ class NotificationController extends Controller
      */
     public function likeNotification($id)
     {
+        // Encuentra la notificación por ID
         $notification = DatabaseNotification::findOrFail($id);
-        $userId = auth()->id();
-
-        $data = collect($notification->data);
-
-        $likes = collect($data->get('likes', []));
-
-        if ($likes->contains($userId)) {
-            $likes = $likes->reject(fn($id) => $id === $userId);
-            $message = 'Me gusta eliminado';
-        } else {
-            $likes->push($userId);
-            $message = 'Me gusta añadido';
+    
+        // Verifica que el usuario autenticado sea el destinatario de la notificación
+        $user = auth()->user();
+        if ($notification->notifiable_id !== $user->id || $notification->notifiable_type !== get_class($user)) {
+            return response()->json(['message' => 'No autorizado para interactuar con esta notificación'], 403);
         }
-
-        $data['likes'] = $likes->values()->all();
+    
+        // Recupera los datos de la notificación y asegúrate de que 'liked' esté inicializado
+        $data = collect($notification->data);
+        $liked = $data->get('liked', false); // Valor por defecto: no le ha dado "like"
+    
+        // Alterna el estado de "me gusta"
+        $data['liked'] = !$liked;
+        $message = $data['liked'] ? 'Me gusta añadido' : 'Me gusta eliminado';
+    
+        // Actualiza los datos de la notificación
         $notification->update(['data' => $data->toArray()]);
-
+    
         return response()->json([
+            'success' => true,
             'message' => $message,
-            'likes_count' => $likes->count(),
+            'liked' => $data['liked'], // Estado actual del "like"
         ]);
     }
+    
+
+    
     public function show($id)
 {
     $notification = DatabaseNotification::find($id);

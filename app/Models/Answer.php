@@ -65,30 +65,6 @@ class Answer extends Model
 
     }
 
-    protected static function booted()
-{
-    static::created(function ($respuesta) {
-        // Obtener la pregunta relacionada
-        $pregunta = $respuesta->question; // Usa la relación definida correctamente
-
-        // Validar si la pregunta tiene un autor relacionado
-        if ($pregunta && $pregunta->user) {
-            $autor = $pregunta->user; // Asegúrate de tener la relación 'user' en el modelo Question
-
-            $message = [
-                'pregunta_id' => $pregunta->id,
-                'titulo_pregunta' => $pregunta->title, // Cambia 'title' si tu columna se llama diferente
-                'mensaje' => "Nueva respuesta a tu pregunta: {$pregunta->title}",
-            ];
-
-            // Enviar notificación
-            $autor->notify(new NewNotification($message)); // Notifica al autor
-        }
-    });
-}
-
-    
-
 }
 
 

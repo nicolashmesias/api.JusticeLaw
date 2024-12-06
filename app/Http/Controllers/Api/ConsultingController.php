@@ -14,36 +14,83 @@ class ConsultingController extends Controller
      */
     public function index()
     {
-        $consultings=Consulting::all();
+        $consultings = Consulting::all();
 
         return response()->json($consultings);
     }
 
-   
+
     public function store(Request $request)
     {
-        $request->validate([
-            'date'=>'required|max:255',
-            'time'=>'required|max:255',
-            'price'=>'required|max:255',
+        $validated = $request->validate([
+            'date' => 'required|date',
+            'time' => 'required|date_format:H:i',
+            'answer_id' => 'required|exists:answers,id',
+            'question_id' => 'required|exists:questions,id',
         ]);
+
+        $consulting = Consulting::create($validated);
+
+        return response()->json([
+            'message' => 'Asesoría creada con éxito.',
+            'consulting' => $consulting
+        ], 201);
     }
+
+
+
+    public function getUserQuestionsWithAnswers(Request $request)
+    {
+        $user = $request->user(); // Obtén el usuario logueado
+
+        // Obtén las preguntas hechas por el usuario
+        $questions = $user->questions()->with(['answers' => function ($query) use ($request) {
+            // Filtra las respuestas asociadas al lawyer_id específico
+            $query->where('lawyer_id', $request->lawyer_id);
+        }])->get();
+
+        if ($questions->isEmpty()) {
+            return response()->json([
+                'message' => 'No se encontraron preguntas asociadas al usuario logueado.',
+            ], 404);
+        }
+
+        // Formatea la respuesta
+        $formattedQuestions = $questions->map(function ($question) {
+            return [
+                'id' => $question->id,
+                'affair' => $question->affair,
+                'content' => $question->content,
+                'date_publication' => $question->date_publication,
+                'answers' => $question->answers->map(function ($answer) {
+                    return [
+                        'id' => $answer->id,
+                        'content' => $answer->content,
+                        'date_publication' => $answer->date_publication,
+                    ];
+                }),
+            ];
+        });
+
+        return response()->json($formattedQuestions);
+    }
+
 
     /**
      * Display the specified resource.
      */
     public function show($id)
     {
-        $consulting=Consulting::included()->findOrFail($id);
+        $consulting = Consulting::included()->findOrFail($id);
         return response()->json($consulting);
     }
 
     public function update(Request $request, Consulting $consulting)
     {
         $request->validate([
-            'date'=>'required|max:255',
-            'time'=>'required|max:255',
-            'price'=>'required|double|max:255'
+            'date' => 'required|max:255',
+            'time' => 'required|max:255',
+            'price' => 'required|double|max:255'
         ]);
 
         $consulting->update($request->all());
@@ -59,22 +106,22 @@ class ConsultingController extends Controller
         return response()->json($consulting);
     }
     public function acceptAdvisory(Request $request, $id)
-{
-    $advisory = Consulting::findOrFail($id);
-    $advisory->status = 'accepted';
-    $advisory->save();
+    {
+        $advisory = Consulting::findOrFail($id);
+        $advisory->status = 'accepted';
+        $advisory->save();
 
-    $calendarService = new GoogleCalendarService();
-    $event = $calendarService->createMeetEvent(
-        'Asesoría con ' . $advisory->lawyer->name,
-        $advisory->start_time,
-        $advisory->end_time,
-        [$advisory->user->email, $advisory->lawyer->email]
-    );
+        $calendarService = new GoogleCalendarService();
+        $event = $calendarService->createMeetEvent(
+            'Asesoría con ' . $advisory->lawyer->name,
+            $advisory->start_time,
+            $advisory->end_time,
+            [$advisory->user->email, $advisory->lawyer->email]
+        );
 
-    return response()->json([
-        'message' => 'Asesoría aceptada y reunión creada',
-        'meet_link' => $event->getHangoutLink(),
-    ]);
-}
+        return response()->json([
+            'message' => 'Asesoría aceptada y reunión creada',
+            'meet_link' => $event->getHangoutLink(),
+        ]);
+    }
 }

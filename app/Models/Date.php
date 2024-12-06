@@ -21,8 +21,8 @@ class Date extends Model
 
     protected $allowIncluded =['lawyers'];
 
-    public function lawyers(){
-        return $this->belongsToMany(Lawyer::class);
+    public function lawyer(){
+        return $this->belongsTo(Lawyer::class);
     }
 
     public function scopeIncluded(Builder $query)
@@ -44,9 +44,9 @@ class Date extends Model
                 unset($relations[$key]);
             }
         }
-        $query->with($relations); 
+        $query->with($relations);
 
-        
+
 
 
     }

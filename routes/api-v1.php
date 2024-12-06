@@ -192,9 +192,16 @@ Route::get('/informations/{information}', [InformationController::class, 'search
 //Route::put('informations/{information}', [InformationController::class, 'update'])->name('api.v1.informations.update');
 //Route::delete('informations/{information}', [InformationController::class, 'destroy'])->name('api.v1.informations.delete');
 
+Route::get('/user-questions-with-answers', [ConsultingController::class, 'getUserQuestionsWithAnswers']);
+
+
 
 Route::get('dates', [DateController::class, 'index'])->name('api.v1.dates.index');
-Route::post('dates', [DateController::class, 'store'])->name('api.v1.dates.store');
+Route::post('/guardarDisponibilidad', [DateController::class, 'store'])->name('api.v1.dates.store');
+Route::get('/disponibilidadesAbogado', [DateController::class, 'getAvailabilities'])->name('api.v1.disponibilidades');
+
+Route::get('/calendarioAbogado/{lawyerId}', [DateController::class, 'calendarioAbogado'])->name('api.v1.calendarioAbogado');
+
 Route::get('dates/{date}', [DateController::class, 'show'])->name('api.v1.dates.show');
 Route::put('dates/{date}', [DateController::class, 'update'])->name('api.v1.dates.update');
 Route::delete('dates/{date}', [DateController::class, 'destroy'])->name('api.v1.dates.delete');
@@ -207,7 +214,7 @@ Route::delete('searches/{search}',[SearchController::class,'destroy'])->name('ap
 
 
 Route::get('consultings', [ConsultingController::class, 'index'])->name('api.v1.consultings.index');
-Route::post('consultings', [ConsultingController::class, 'store'])->name('api.v1.consultings.store');
+Route::post('/guardarAsesoria', [ConsultingController::class, 'store'])->name('api.v1.consultings.store');
 Route::get('consultings/{consulting}', [ConsultingController::class, 'show'])->name('api.v1.consultings.show');
 Route::put('consultings/{consulting}', [ConsultingController::class, 'update'])->name('api.v1.consultings.update');
 Route::delete('consultings/{consulting}', [ConsultingController::class, 'destroy'])->name('api.v1.consultings.delete');
@@ -278,15 +285,15 @@ Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']
 
 //Endpoints para notificaciones
 
-Route::post('/notifications/send', [NotificationController::class, 'sendNotification']);  
+Route::post('/notifications/send', [NotificationController::class, 'sendNotification']);
 Route::get('/notifications', [NotificationController::class, 'index']);
-Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
+Route::patch('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
 Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
 Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']);
 Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
 Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
 Route::get('/notifications/{id}', [NotificationController::class, 'show']);
-
+Route::post('/notifications/{id}/like', [NotificationController::class, 'likeNotification']);
 
 Route::get('/chart-data/clients', [DashboardController::class, 'clients']);
 Route::get('/chart-data/reviews', [DashboardController::class, 'reviews']);
@@ -304,3 +311,5 @@ Route::post('/create-meeting', [MeetingController::class, 'createMeeting']);
 
     Route::get('/likes/{question_id}', [LikeController::class, 'getLikes']);
     Route::post('/lk', [LikeController::class, 'store']);
+    Route::post('/question/{id}/react', [QuestionController::class, 'toggleLike']);
+    Route::get('/question/{id}/reactions', [QuestionController::class, 'getLikes'])->name('api.v1.slikes.show');
