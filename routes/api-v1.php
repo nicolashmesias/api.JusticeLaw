@@ -286,7 +286,7 @@ Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']
 
 Route::post('/notifications/send', [NotificationController::class, 'sendNotification']);
 Route::get('/notifications', [NotificationController::class, 'index']);
-Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
+Route::patch('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
 Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
 Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']);
 Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
