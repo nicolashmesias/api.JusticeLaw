@@ -25,7 +25,7 @@ class ConsultingController extends Controller
     {
         $validated = $request->validate([
             'date' => 'required|date',
-            'time' => 'required|date_format:H:i',
+            'time' => 'required',
             'answer_id' => 'required|exists:answers,id',
             'question_id' => 'required|exists:questions,id',
         ]);
