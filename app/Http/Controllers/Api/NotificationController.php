@@ -69,29 +69,39 @@ class NotificationController extends Controller
         return response()->json(['message' => 'Notificación marcada como leída.'], 200);
     }
 
-    public function delete($id)
-{
-    $notification = auth()->user()->notifications->find($id);  // Aseguramos que estamos buscando dentro de las notificaciones del usuario autenticado
-
-    if (!$notification) {
-        return response()->json(['error' => 'Notificación no encontrada.'], 404);
-    }
-
-    $notification->delete();
-    return response()->json(['message' => 'Notificación eliminada.'], 200);
-}
-
     public function markAllAsRead()
     {
         auth()->user()->unreadNotifications->markAsRead();
         return response()->json(['message' => 'Todas las notificaciones marcadas como leídas.'], 200);
     }
 
-    public function deleteAll()
+    public function destroy($id)
 {
-    $user = auth()->user();
-    $user->notifications->delete();  // Elimina todas las notificaciones del usuario autenticado
-    return response()->json(['message' => 'Todas las notificaciones eliminadas.'], 200);
+    // Obtener la notificación de un usuario autenticado
+    $notification = auth()->user()->notifications->find($id);
+
+    if (!$notification) {
+        return response()->json(['error' => 'Notificación no encontrada.'], 404);
+    }
+
+    try {
+        $notification->delete();
+        return response()->json(['message' => 'Notificación eliminada.'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Error al eliminar la notificación.'], 500);
+    }
+}
+
+public function destroyAll()
+{
+    try {
+        $user = auth()->user();
+        // Eliminar todas las notificaciones del usuario autenticado
+        $user->notifications->delete();
+        return response()->json(['message' => 'Todas las notificaciones eliminadas.'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Error al eliminar todas las notificaciones.'], 500);
+    }
 }
     /**
      * Manejo de "me gusta" en una notificación.
