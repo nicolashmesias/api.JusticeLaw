@@ -57,86 +57,40 @@ class NotificationController extends Controller
         }
     }
 
-    /**
-     * Marcar como leída una notificación.
-     */
-    public function markAsRead($id)
+    public function markAsRead(Request $request, $id)
     {
         $notification = auth()->user()->notifications->find($id);
 
-        if ($notification) {
-            $notification->markAsRead();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Notificación marcada como leída',
-            ]);
+        if (!$notification) {
+            return response()->json(['error' => 'Notificación no encontrada.'], 404);
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Notificación no encontrada',
-        ], 404);
+        $notification->markAsRead();
+        return response()->json(['message' => 'Notificación marcada como leída.'], 200);
+    }
+
+    public function delete($id)
+    {
+        $notification = auth()->user()->notifications->find($id);
+
+        if (!$notification) {
+            return response()->json(['error' => 'Notificación no encontrada.'], 404);
+        }
+
+        $notification->delete();
+        return response()->json(['message' => 'Notificación eliminada.'], 200);
     }
 
     public function markAllAsRead()
-{
-    try {
-        // Obtener el usuario autenticado
-        $user = auth()->user();
-
-        if (!$user) {
-            return response()->json(['message' => 'Usuario no autenticado'], 401);
-        }
-
-        // Marcar todas las notificaciones como leídas
-        $user->unreadNotifications->markAsRead();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Todas las notificaciones han sido marcadas como leídas',
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'success' => false,
-            'error' => $e->getMessage(),
-        ], 500);
-    }
-}
-
-    /**
-     * Eliminar una notificación.
-     */
-    public function destroy($id)
     {
-        $notification = auth()->user()->notifications->find($id);
-
-        if ($notification) {
-            $notification->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Notificación eliminada correctamente',
-            ]);
-        }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Notificación no encontrada',
-        ], 404);
+        auth()->user()->unreadNotifications->markAsRead();
+        return response()->json(['message' => 'Todas las notificaciones marcadas como leídas.'], 200);
     }
 
-    /**
-     * Eliminar todas las notificaciones.
-     */
-    public function destroyAll()
+    public function deleteAll()
     {
         auth()->user()->notifications->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Todas las notificaciones fueron eliminadas',
-        ]);
+        return response()->json(['message' => 'Todas las notificaciones eliminadas.'], 200);
     }
 
     /**
