@@ -193,7 +193,7 @@ Route::get('/informations/{information}', [InformationController::class, 'search
 
 
 Route::get('dates', [DateController::class, 'index'])->name('api.v1.dates.index');
-Route::post('dates', [DateController::class, 'store'])->name('api.v1.dates.store');
+Route::post('/guardarDisponibilidad', [DateController::class, 'store'])->name('api.v1.dates.store');
 Route::get('dates/{date}', [DateController::class, 'show'])->name('api.v1.dates.show');
 Route::put('dates/{date}', [DateController::class, 'update'])->name('api.v1.dates.update');
 Route::delete('dates/{date}', [DateController::class, 'destroy'])->name('api.v1.dates.delete');
@@ -277,7 +277,7 @@ Route::post('/password/reset', [PasswordResetController::class, 'resetPassword']
 
 //Endpoints para notificaciones
 
-Route::post('/notifications/send', [NotificationController::class, 'sendNotification']);  
+Route::post('/notifications/send', [NotificationController::class, 'sendNotification']);
 Route::get('/notifications', [NotificationController::class, 'index']);
 Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
 Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
@@ -299,5 +299,3 @@ Route::post('/create-meeting', [MeetingController::class, 'createMeeting']);
 
     Route::post('/question/{id}/react', [QuestionController::class, 'toggleLike']);
     Route::get('/question/{id}/reactions', [QuestionController::class, 'getLikes'])->name('api.v1.slikes.show');
-
-

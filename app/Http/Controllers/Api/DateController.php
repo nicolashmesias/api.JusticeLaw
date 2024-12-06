@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Date;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DateController extends Controller
 {
@@ -21,35 +22,39 @@ class DateController extends Controller
 
     public function store(Request $request)
     {
-       
+        // Obtener el abogado autenticado
+        $lawyer = Auth::guard('lawyer')->user();
 
-        {
-            // Validar los datos enviados desde el cliente
-            $validatedData =  $request->validate([
-                'date'=>'required',
-                'state'=>'required',
-                'startTime'=>'required',
-                'endTime'=>'required',
-                'lawyer_id' => 'required',
-
-            ]);
-    
-            // Crear una nueva pregunta en la base de datos
-            $date = Date::create([
-                'date' => $validatedData['date'],
-                'state' => $validatedData['state'],
-                'startTime' => $validatedData['startTime'],
-                'endTime' => $validatedData['endTime'],
-                'lawyer_id' => $validatedData['lawyer_id'],
-            ]);
-    
-            // Responder con un mensaje de éxito y los datos creados
+        if (!$lawyer) {
             return response()->json([
-                'message' => 'Pregunta creada con éxito.',
-                'data' => $date
-            ], 201);
+                'message' => 'Usuario no autenticado.',
+            ], 401);
         }
+
+        // Validar los datos enviados desde el cliente
+        $validatedData = $request->validate([
+            'date' => 'required',
+            'state' => 'required',
+            'startTime' => 'required',
+            'endTime' => 'required',
+        ]);
+
+        // Crear una nueva disponibilidad en la base de datos
+        $date = Date::create([
+            'date' => $validatedData['date'],
+            'state' => $validatedData['state'],
+            'startTime' => $validatedData['startTime'],
+            'endTime' => $validatedData['endTime'],
+            'lawyer_id' => $lawyer->id, // Usar el ID del abogado autenticado
+        ]);
+
+        // Responder con un mensaje de éxito y los datos creados
+        return response()->json([
+            'message' => 'Disponibilidad creada con éxito.',
+            'data' => $date
+        ], 201);
     }
+
 
     /**
      * Display the specified resource.
