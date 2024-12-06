@@ -23,6 +23,7 @@ class ConsultingController extends Controller
 
     public function store(Request $request)
     {
+        // Validar los datos recibidos
         $validated = $request->validate([
             'date' => 'required|date',
             'time' => 'required',
@@ -30,13 +31,23 @@ class ConsultingController extends Controller
             'question_id' => 'required|exists:questions,id',
         ]);
 
+        // Obtener el lawyer_id asociado al answer_id
+        $answer = Answer::findOrFail($validated['answer_id']);
+        $lawyerId = $answer->lawyer_id;
+
         // Obtener la disponibilidad correspondiente
         $date = Date::where('date', $validated['date'])
-                     ->where('startTime', $validated['time'])
-                     ->where('lawyer_id', $request->lawyer_id)
-                     ->firstOrFail();
+                    ->where('startTime', $validated['time'])
+                    ->where('lawyer_id', $lawyerId)
+                    ->firstOrFail();
 
-        $consulting = Consulting::create($validated);
+        // Guardar la consulta
+        $consulting = Consulting::create([
+            'date' => $validated['date'],
+            'time' => $validated['time'],
+            'answer_id' => $validated['answer_id'],
+            'question_id' => $validated['question_id']
+        ]);
 
         // Actualizar el estado de la disponibilidad
         $date->update(['state' => 'Agendada']);
@@ -46,6 +57,7 @@ class ConsultingController extends Controller
             'consulting' => $consulting
         ], 201);
     }
+
 
 
 
