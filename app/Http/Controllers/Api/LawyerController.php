@@ -132,11 +132,7 @@ class LawyerController extends Controller
     public function destroy(Lawyer $id)
     {  $lawyer = Lawyer::find($id);
 
-        if (!$lawyer) {
-            return response()->json([
-                'message' => 'Pregunta no encontrada.'
-            ], 404);
-        }
+     
     
         // Eliminar la pregunta
         $lawyer->delete();
