@@ -57,103 +57,40 @@ class NotificationController extends Controller
         }
     }
 
-    /**
-     * Marcar como leída una notificación.
-     */
-    public function markAsRead($id)
+    public function markAsRead(Request $request, $id)
     {
         $notification = auth()->user()->notifications->find($id);
 
-        if ($notification) {
-            $notification->markAsRead();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Notificación marcada como leída',
-            ]);
+        if (!$notification) {
+            return response()->json(['error' => 'Notificación no encontrada.'], 404);
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Notificación no encontrada',
-        ], 404);
+        $notification->markAsRead();
+        return response()->json(['message' => 'Notificación marcada como leída.'], 200);
     }
 
-    /**
-     * Eliminar una notificación.
-     */
-    public function destroy($id)
+    public function delete($id)
     {
         $notification = auth()->user()->notifications->find($id);
 
-        if ($notification) {
-            $notification->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Notificación eliminada correctamente',
-            ]);
+        if (!$notification) {
+            return response()->json(['error' => 'Notificación no encontrada.'], 404);
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Notificación no encontrada',
-        ], 404);
+        $notification->delete();
+        return response()->json(['message' => 'Notificación eliminada.'], 200);
     }
 
-    /**
-     * Archivar una notificación.
-     */
-    public function archive($id)
-{
-    $notification = auth()->user()->notifications->find($id);
-
-    if ($notification) {
-        $data = $notification->data;
-        $data['archived'] = true; // Marca como archivada
-        $notification->update(['data' => $data]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Notificación archivada',
-        ]);
+    public function markAllAsRead()
+    {
+        auth()->user()->unreadNotifications->markAsRead();
+        return response()->json(['message' => 'Todas las notificaciones marcadas como leídas.'], 200);
     }
 
-    return response()->json([
-        'success' => false,
-        'message' => 'Notificación no encontrada',
-    ], 404);
-}
-
-
-    /**
-     * Eliminar todas las notificaciones.
-     */
-    public function destroyAll()
+    public function deleteAll()
     {
         auth()->user()->notifications->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Todas las notificaciones fueron eliminadas',
-        ]);
-    }
-
-    /**
-     * Archivar todas las notificaciones.
-     */
-    public function archiveAll()
-    {
-        auth()->user()->notifications->each(function ($notification) {
-            $data = $notification->data;
-            $data['archived'] = true;
-            $notification->update(['data' => $data]);
-        });
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Todas las notificaciones fueron archivadas',
-        ]);
+        return response()->json(['message' => 'Todas las notificaciones eliminadas.'], 200);
     }
 
     /**

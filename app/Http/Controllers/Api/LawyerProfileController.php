@@ -16,8 +16,8 @@ class LawyerProfileController extends Controller
      */
     public function index()
     {
-        // $lawyersProfile = LawyerProfile::all();
-        $lawyersProfile = LawyerProfile::included()->get();
+         $lawyersProfile = LawyerProfile::all();
+        
         return response()->json($lawyersProfile);
     }
 
@@ -54,7 +54,7 @@ class LawyerProfileController extends Controller
     public function show($id)
     {
         $lawyerProfile = LawyerProfile::findOrFail($id);
-        return response()->json($lawyerProfile);
+        return $lawyerProfile;
     }
 
     /**

@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\LawyerController;
 use App\Http\Controllers\Api\OverhaulReviewController;
 use App\Http\Controllers\Api\LawyerProfileController;
 use App\Http\Controllers\Api\PasswordResetController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MeetingController;
 
 /*
@@ -91,8 +92,8 @@ Route::put('answers/{answer}', [AnswerController::class, 'update'])->name('api.v
 Route::delete('answers/{answer}', [AnswerController::class, 'destroy'])->name('api.v1.answers.delete');
 
 
-Route::get('likes', [QuestionController::class, 'indexr'])->name('api.v1.likes.index');
-Route::get('likes/{like}', [QuestionController::class, 'shows'])->name('api.v1.likes.show');
+Route::get('li', [QuestionController::class, 'indexr'])->name('api.v1.likes.index');
+Route::get('li/{like}', [QuestionController::class, 'shows'])->name('api.v1.likes.show');
 
 
 
@@ -237,11 +238,11 @@ Route::get('overhaulreviews/{overhaulreview}',[OverhaulReviewController::class,'
 Route::put('overhaulreviews/{overhaulreview}',[OverhaulReviewController::class,'update'])->name('api.v1.overhaulreviews.update');
 Route::delete('overhaulreviews/{overhaulreview}',[OverhaulReviewController::class,'destroy'])->name('api.v1.overhaulreviews.delete');
 
-Route::get('lawyerProfiles',[LawyerProfileController::class,'index'])->name('api.v1.lawyerProfiles.index');
-Route::post('lawyerProfiles',[LawyerProfileController::class,'store'])->name('api.v1.lawyerProfiles.store');
-Route::get('lawyerProfiles/{lawyerProfile}',[LawyerProfileController::class,'show'])->name('api.v1.lawyerProfiles.show');
-Route::put('lawyerProfiles/{lawyerProfile}',[LawyerProfileController::class,'update'])->name('api.v1.lawyerProfiles.update');
-Route::delete('lawyerProfiles/{lawyerProfile}',[LawyerProfileController::class,'destroy'])->name('api.v1.lawyerProfiles.delete');
+Route::get('lawyerProfile', [LawyerProfileController::class, 'index'])->name('lawyerProfile.index');
+Route::post('lawyerProfile', [LawyerProfileController::class, 'store'])->name('lawyerProfile.store');
+Route::get('lawyerProfile/{lawyerProfile}', [LawyerProfileController::class, 'show'])->name('lawyerProfile.show');
+Route::put('lawyerProfile/{lawyerProfile}', [LawyerProfileController::class, 'update'])->name('lawyerProfile.update');
+Route::delete('lawyerProfile/{lawyerProfile}', [LawyerProfileController::class, 'destroy'])->name('lawyerProfile.delete');
 
 Route::get('searchs', [SearchController::class, 'index'])->name('api.v1.searchs.index');
 Route::post('searchs', [SearchController::class, 'store'])->name('api.v1.searchs.store');
@@ -274,7 +275,7 @@ Route::get('lawyers', [LawyerController::class, 'index'])->name('api.v1.lawyers.
 Route::post('/registrarLawyer', [LawyerController::class, 'registerLawyer'])->name('api.v1.lawyers.store');
 Route::get('lawyers/{lawyer}', [LawyerController::class, 'show'])->name('api.v1.lawyers.show');
 Route::put('lawyers/{lawyer}', [LawyerController::class, 'update'])->name('api.v1.lawyers.update');
-Route::delete('lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('api.v1.lawyers.delete');
+Route::delete('lawyers/{id}', [LawyerController::class, 'destroy'])->name('api.v1.lawyers.delete');
 
 // Route::post('v1/validate-code', [ForgetPasswordController::class, 'validateCode'])->name('api.v1.validate-code');
 // Route::post('/password', [ForgetPasswordController::class, 'store'])->name('api.v1.password.store');
@@ -290,6 +291,7 @@ Route::patch('/notifications/{id}/mark-as-read', [NotificationController::class,
 Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
 Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']);
 Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
+Route::post('notifications/mark-all', [NotificationController::class, 'markAllAsRead']);
 Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
 Route::get('/notifications/{id}', [NotificationController::class, 'show']);
 Route::post('/notifications/{id}/like', [NotificationController::class, 'likeNotification']);
@@ -304,5 +306,11 @@ Route::get('/chart-data/users-by-role', [DashboardController::class, 'usersByRol
 Route::post('/create-meeting', [MeetingController::class, 'createMeeting']);
 
 
+    Route::post('/react/{id}/react', [QuestionController::class, 'toggleLike']);
+    Route::get('/reactions/{id}/reactions', [QuestionController::class, 'getLikes'])->name('api.v1.slikes.show');
+
+
+    Route::get('/likes/{question_id}', [LikeController::class, 'getLikes']);
+    Route::post('/lk', [LikeController::class, 'store']);
     Route::post('/question/{id}/react', [QuestionController::class, 'toggleLike']);
     Route::get('/question/{id}/reactions', [QuestionController::class, 'getLikes'])->name('api.v1.slikes.show');
