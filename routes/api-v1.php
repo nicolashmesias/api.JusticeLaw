@@ -195,6 +195,9 @@ Route::get('/informations/{information}', [InformationController::class, 'search
 Route::get('dates', [DateController::class, 'index'])->name('api.v1.dates.index');
 Route::post('/guardarDisponibilidad', [DateController::class, 'store'])->name('api.v1.dates.store');
 Route::get('/disponibilidadesAbogado', [DateController::class, 'getAvailabilities'])->name('api.v1.disponibilidades');
+
+Route::get('/calendarioAbogado/{lawyerId}', [DateController::class, 'calendarioAbogado'])->name('api.v1.calendarioAbogado');
+
 Route::get('dates/{date}', [DateController::class, 'show'])->name('api.v1.dates.show');
 Route::put('dates/{date}', [DateController::class, 'update'])->name('api.v1.dates.update');
 Route::delete('dates/{date}', [DateController::class, 'destroy'])->name('api.v1.dates.delete');

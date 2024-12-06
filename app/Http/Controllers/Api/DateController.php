@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Date;
 use App\Http\Controllers\Controller;
+use App\Models\Lawyer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -55,7 +56,7 @@ class DateController extends Controller
         ], 201);
     }
 
- 
+
     public function getAvailabilities(Request $request)
 {
     // Obtener el abogado autenticado
@@ -89,6 +90,42 @@ class DateController extends Controller
     ], 200);
 }
 
+
+
+public function calendarioAbogado(Request $request, $lawyerId)
+{
+    // Buscar al abogado por su ID
+    $lawyer = Lawyer::find($lawyerId);
+
+    if (!$lawyer) {
+        return response()->json([
+            'message' => 'Abogado no encontrado.',
+        ], 404);
+    }
+
+    // Obtener las disponibilidades del abogado
+    $disponibilities = $lawyer->dates; // Suponiendo que el modelo 'Lawyer' tiene una relación con el modelo 'Date'
+
+    // Verificar si existen disponibilidades
+    if ($disponibilities->isEmpty()) {
+        return response()->json([
+            'message' => 'No se encontraron disponibilidades.',
+        ], 404);
+    }
+
+    // Retornar las disponibilidades
+    return response()->json([
+        'disponibilities' => $disponibilities->map(function ($date) {
+            return [
+
+                'date' => $date->date,
+                'state' => $date->state,
+                'startTime' => $date->startTime,
+                'endTime' => $date->endTime,
+            ];
+        }),
+    ], 200);
+}
 
 
     /**
