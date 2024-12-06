@@ -303,6 +303,8 @@ Route::get('/chart-data/sessions', [DashboardController::class, 'sessions']);
 Route::get('/chart-data/visitors', [DashboardController::class, 'visitors']);
 Route::get('/chart-data/users-by-role', [DashboardController::class, 'usersByRole']);
 
+
+Route::post('/accept-advisory/{id}', [ConsultingController::class, 'acceptAdvisory']);
 Route::post('/create-meeting', [MeetingController::class, 'createMeeting']);
 
 
