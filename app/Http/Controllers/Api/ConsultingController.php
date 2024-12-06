@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Consulting;
 use App\Http\Controllers\Controller;
+use App\Models\Answer;
 use App\Models\Date;
 use App\Services\GoogleCalendarService;
 use Illuminate\Http\Request;
