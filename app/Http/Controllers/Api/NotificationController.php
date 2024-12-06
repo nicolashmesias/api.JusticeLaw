@@ -95,8 +95,8 @@ class NotificationController extends Controller
 public function destroyAll()
 {
     try {
-        $user = auth()->user();
         // Eliminar todas las notificaciones del usuario autenticado
+        $user = auth()->user();
         $user->notifications->delete();
         return response()->json(['message' => 'Todas las notificaciones eliminadas.'], 200);
     } catch (\Exception $e) {
