@@ -58,9 +58,9 @@ class Lawyer extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
     ];
 
-    protected $allowIncluded = ['typeDocument','lawyerProfile', 'verificationLawyer','verificationLawyer.country','verificationLawyer.state','verificationLawyer.city','areas','reviews.user','answers','notifications','searches','searches.information'];
+    protected $allowIncluded = ['typeDocument', 'lawyerProfile', 'verificationLawyer', 'verificationLawyer.country', 'verificationLawyer.state', 'verificationLawyer.city', 'areas', 'reviews.user', 'answers', 'notifications', 'searches', 'searches.information'];
 
-    protected $allowFilter = ['id', 'name', 'last_names','type_document_id', 'document_number', 'email', 'password'];
+    protected $allowFilter = ['id', 'name', 'last_names', 'type_document_id', 'document_number', 'email', 'password'];
 
     public function getJWTIdentifier()
     {
@@ -72,54 +72,63 @@ class Lawyer extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function typeDocument(){
+    public function typeDocument()
+    {
         return $this->belongsTo(TypeDocument::class);
     }
 
-    public function profile(){
+    public function profile()
+    {
         return $this->hasOne(LawyerProfile::class);
     }
 
-    public function verificationLawyer(){
+    public function verificationLawyer()
+    {
         return $this->hasOne(VerificationLawyer::class);
     }
 
-    public function answers(){
+    public function answers()
+    {
         return $this->hasMany(Answer::class);
     }
 
-    public function searches(){
+    public function searches()
+    {
         return $this->hasMany(Search::class);
     }
 
-    public function reviews(){
+    public function reviews()
+    {
         return $this->hasMany(Review::class);
     }
-    
+
     public function notifications()
     {
         return $this->morphMany(\Illuminate\Notifications\DatabaseNotification::class, 'notifiable');
     }
 
-    public function areas():BelongsToMany
+    public function areas(): BelongsToMany
     {
         return $this->belongsToMany(Area::class, 'area_lawyers', 'lawyer_id', 'area_id');
     }
 
-    public function dates(){
-        return $this->belongsToMany(Date::class);
+    // En el modelo Lawyer
+    public function dates()
+    {
+        return $this->hasMany(Date::class, 'lawyer_id');
     }
+
 
     public function scopeIncluded(Builder $query)
     {
 
-        if(empty($this->allowIncluded)||empty(request('included'))){// validamos que la lista blanca y la variable included enviada a travez de HTTP no este en vacia.
+        if (empty($this->allowIncluded) || empty(request('included'))) { // validamos que la lista blanca y la variable included enviada a travez de HTTP no este en vacia.
             return;
         }
 
         $relations = explode(',', request('included')); //['posts','relation2']//recuperamos el valor de la variable included y separa sus valores por una coma
 
-       // return $relations;
+        // return $relations;
 
         $allowIncluded = collect($this->allowIncluded); //colocamos en una colecion lo que tiene $allowIncluded en este caso = ['posts','posts.user']
 
@@ -150,7 +159,7 @@ class Lawyer extends Authenticatable implements JWTSubject
 
             if ($allowFilter->contains($filter)) {
 
-                $query->where($filter, 'LIKE', '%' . $value . '%');//nos retorna todos los registros que conincidad, asi sea en una porcion del texto
+                $query->where($filter, 'LIKE', '%' . $value . '%'); //nos retorna todos los registros que conincidad, asi sea en una porcion del texto
             }
         }
 
@@ -158,5 +167,4 @@ class Lawyer extends Authenticatable implements JWTSubject
         //http://api.codersfree1.test/v1/categories?filter[name]=posts&filter[id]=2
 
     }
-
 }

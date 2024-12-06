@@ -14,7 +14,7 @@ class DateController extends Controller
      */
     public function index()
     {
-        $dates=Date::all();
+        $dates = Date::all();
         $forumCategories = Date::included()->get();
 
         return response()->json($dates);
@@ -55,13 +55,32 @@ class DateController extends Controller
         ], 201);
     }
 
+    public function getAvailabilities(Request $request)
+    {
+        $lawyer = Auth::guard('lawyer')->user();
+
+        if (!$lawyer) {
+            return response()->json([
+                'message' => 'Usuario no autenticado.',
+            ], 401);
+        }
+
+        // Obtener disponibilidades del abogado
+        $availabilities = Date::where('lawyer_id', $lawyer->id)->get();
+
+        return response()->json([
+            'availabilities' => $availabilities,
+        ], 200);
+    }
+
+
 
     /**
      * Display the specified resource.
      */
     public function show($id)
     {
-        $date=Date::included()->findOrFail($id);
+        $date = Date::included()->findOrFail($id);
 
         return response()->json($date);
     }
@@ -69,10 +88,10 @@ class DateController extends Controller
     public function update(Request $request, Date $date)
     {
         $request->validate([
-            'date'=>'required|max:255',
-            'state'=>'required|max:255',
-            'startTime'=>'require|max:255',
-            'endTime'=>'require|max:255',
+            'date' => 'required|max:255',
+            'state' => 'required|max:255',
+            'startTime' => 'require|max:255',
+            'endTime' => 'require|max:255',
         ]);
 
         $date->update($request->all());
