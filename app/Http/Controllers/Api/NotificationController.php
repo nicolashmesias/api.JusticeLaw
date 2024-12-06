@@ -70,16 +70,16 @@ class NotificationController extends Controller
     }
 
     public function delete($id)
-    {
-        $notification = auth()->user()->notifications->find($id);
+{
+    $notification = auth()->user()->notifications->find($id);  // Aseguramos que estamos buscando dentro de las notificaciones del usuario autenticado
 
-        if (!$notification) {
-            return response()->json(['error' => 'Notificación no encontrada.'], 404);
-        }
-
-        $notification->delete();
-        return response()->json(['message' => 'Notificación eliminada.'], 200);
+    if (!$notification) {
+        return response()->json(['error' => 'Notificación no encontrada.'], 404);
     }
+
+    $notification->delete();
+    return response()->json(['message' => 'Notificación eliminada.'], 200);
+}
 
     public function markAllAsRead()
     {
@@ -88,11 +88,11 @@ class NotificationController extends Controller
     }
 
     public function deleteAll()
-    {
-        auth()->user()->notifications->delete();
-        return response()->json(['message' => 'Todas las notificaciones eliminadas.'], 200);
-    }
-
+{
+    $user = auth()->user();
+    $user->notifications->delete();  // Elimina todas las notificaciones del usuario autenticado
+    return response()->json(['message' => 'Todas las notificaciones eliminadas.'], 200);
+}
     /**
      * Manejo de "me gusta" en una notificación.
      */
