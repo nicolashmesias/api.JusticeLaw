@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\LawyerController;
 use App\Http\Controllers\Api\OverhaulReviewController;
 use App\Http\Controllers\Api\LawyerProfileController;
 use App\Http\Controllers\Api\PasswordResetController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MeetingController;
 
 /*
@@ -91,8 +92,8 @@ Route::put('answers/{answer}', [AnswerController::class, 'update'])->name('api.v
 Route::delete('answers/{answer}', [AnswerController::class, 'destroy'])->name('api.v1.answers.delete');
 
 
-Route::get('likes', [QuestionController::class, 'indexr'])->name('api.v1.likes.index');
-Route::get('likes/{like}', [QuestionController::class, 'shows'])->name('api.v1.likes.show');
+Route::get('li', [QuestionController::class, 'indexr'])->name('api.v1.likes.index');
+Route::get('li/{like}', [QuestionController::class, 'shows'])->name('api.v1.likes.show');
 
 
 
@@ -191,6 +192,9 @@ Route::get('/informations/{information}', [InformationController::class, 'search
 //Route::put('informations/{information}', [InformationController::class, 'update'])->name('api.v1.informations.update');
 //Route::delete('informations/{information}', [InformationController::class, 'destroy'])->name('api.v1.informations.delete');
 
+Route::get('/user-questions-with-answers', [ConsultingController::class, 'getUserQuestionsWithAnswers']);
+
+
 
 Route::get('dates', [DateController::class, 'index'])->name('api.v1.dates.index');
 Route::post('/guardarDisponibilidad', [DateController::class, 'store'])->name('api.v1.dates.store');
@@ -210,7 +214,7 @@ Route::delete('searches/{search}',[SearchController::class,'destroy'])->name('ap
 
 
 Route::get('consultings', [ConsultingController::class, 'index'])->name('api.v1.consultings.index');
-Route::post('consultings', [ConsultingController::class, 'store'])->name('api.v1.consultings.store');
+Route::post('/guardarAsesoria', [ConsultingController::class, 'store'])->name('api.v1.consultings.store');
 Route::get('consultings/{consulting}', [ConsultingController::class, 'show'])->name('api.v1.consultings.show');
 Route::put('consultings/{consulting}', [ConsultingController::class, 'update'])->name('api.v1.consultings.update');
 Route::delete('consultings/{consulting}', [ConsultingController::class, 'destroy'])->name('api.v1.consultings.delete');
@@ -302,5 +306,11 @@ Route::get('/chart-data/users-by-role', [DashboardController::class, 'usersByRol
 Route::post('/create-meeting', [MeetingController::class, 'createMeeting']);
 
 
+    Route::post('/react/{id}/react', [QuestionController::class, 'toggleLike']);
+    Route::get('/reactions/{id}/reactions', [QuestionController::class, 'getLikes'])->name('api.v1.slikes.show');
+
+
+    Route::get('/likes/{question_id}', [LikeController::class, 'getLikes']);
+    Route::post('/lk', [LikeController::class, 'store']);
     Route::post('/question/{id}/react', [QuestionController::class, 'toggleLike']);
     Route::get('/question/{id}/reactions', [QuestionController::class, 'getLikes'])->name('api.v1.slikes.show');
