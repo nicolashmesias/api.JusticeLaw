@@ -55,23 +55,39 @@ class DateController extends Controller
         ], 201);
     }
 
+ 
     public function getAvailabilities(Request $request)
-    {
-        $lawyer = Auth::guard('lawyer')->user();
+{
+    // Obtener el abogado autenticado
+    $lawyer = Auth::guard('lawyer')->user();
 
-        if (!$lawyer) {
-            return response()->json([
-                'message' => 'Usuario no autenticado.',
-            ], 401);
-        }
-
-        // Obtener disponibilidades del abogado
-        $availabilities = Date::where('lawyer_id', $lawyer->id)->get();
-
+    if (!$lawyer) {
         return response()->json([
-            'availabilities' => $availabilities,
-        ], 200);
+            'message' => 'Usuario no autenticado.',
+        ], 401);
     }
+
+    // Obtener las disponibilidades del abogado autenticado
+    $disponibilities = $lawyer->dates; // Suponiendo que el modelo 'Lawyer' tiene una relación con el modelo 'Date'
+
+    if ($disponibilities->isEmpty()) {
+        return response()->json([
+            'message' => 'No se encontraron disponibilidades.',
+        ], 404);
+    }
+
+    // Retornar las disponibilidades
+    return response()->json([
+        'disponibilities' => $disponibilities->map(function ($date) {
+            return [
+                'date' => $date->date,
+                'state' => $date->state,
+                'startTime' => $date->startTime,
+                'endTime' => $date->endTime,
+            ];
+        }),
+    ], 200);
+}
 
 
 
