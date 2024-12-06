@@ -290,7 +290,7 @@ Route::get('/notifications', [NotificationController::class, 'index']);
 Route::patch('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
 Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
 Route::post('/notifications/{id}/archive', [NotificationController::class, 'archive']);
-Route::delete('/notifications', [NotificationController::class, 'destroyAll']);
+Route::delete('/notifications/delete-all', [NotificationController::class, 'destroyAll']);
 Route::post('notifications/mark-all', [NotificationController::class, 'markAllAsRead']);
 Route::post('/notifications/archive-all', [NotificationController::class, 'archiveAll']);
 Route::get('/notifications/{id}', [NotificationController::class, 'show']);
