@@ -54,7 +54,7 @@ class LawyerProfileController extends Controller
     public function show($id)
     {
         $lawyerProfile = LawyerProfile::findOrFail($id);
-        return response()->json($lawyerProfile);
+        return $lawyerProfile;
     }
 
     /**

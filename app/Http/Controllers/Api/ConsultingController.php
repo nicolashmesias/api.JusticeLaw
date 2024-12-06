@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Consulting;
 use App\Http\Controllers\Controller;
+use App\Models\Date;
 use App\Services\GoogleCalendarService;
 use Illuminate\Http\Request;
 
@@ -29,7 +30,16 @@ class ConsultingController extends Controller
             'question_id' => 'required|exists:questions,id',
         ]);
 
+        // Obtener la disponibilidad correspondiente
+        $date = Date::where('date', $validated['date'])
+                     ->where('startTime', $validated['time'])
+                     ->where('lawyer_id', $request->lawyer_id)
+                     ->firstOrFail();
+
         $consulting = Consulting::create($validated);
+
+        // Actualizar el estado de la disponibilidad
+        $date->update(['state' => 'Agendada']);
 
         return response()->json([
             'message' => 'Asesoría creada con éxito.',
