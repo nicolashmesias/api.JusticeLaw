@@ -131,16 +131,20 @@ class LawyerController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(  Lawyer $lawyer)
-    {  $law = Lawyer::find($lawyer);
-
-     
+    {
+        // Verificar si el modelo de abogado existe
+        if (!$lawyer) {
+            return response()->json([
+                'message' => 'Abogado no encontrado.'
+            ], 404);
+        }
     
-        // Eliminar la pregunta
-        $law->delete();
+        // Eliminar el abogado
+        $lawyer->delete();
     
         // Responder con un mensaje de éxito
         return response()->json([
-            'message' => 'Pregunta eliminada con éxito.'
+            'message' => 'Abogado eliminado con éxito.'
         ], 200);
     }
 
