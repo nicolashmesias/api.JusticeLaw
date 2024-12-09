@@ -28,6 +28,7 @@ use App\Http\Controllers\Api\LawyerProfileController;
 use App\Http\Controllers\Api\PasswordResetController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\ZoomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -316,3 +317,7 @@ Route::post('/create-meeting', [MeetingController::class, 'createMeeting']);
     Route::post('/lk', [LikeController::class, 'store']);
     Route::post('/question/{id}/react', [QuestionController::class, 'toggleLike']);
     Route::get('/question/{id}/reactions', [QuestionController::class, 'getLikes'])->name('api.v1.slikes.show');
+
+
+    //ruta para la reunion por zoom 
+    Route::post('/create-zoom-meeting', [ZoomController::class, 'createMeeting']);
