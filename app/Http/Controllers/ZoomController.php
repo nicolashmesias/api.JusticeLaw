@@ -29,7 +29,7 @@ class ZoomController extends Controller
                     'topic' => 'Asesoría Legal',
                     'type' => 2, // Reunión programada
                     'start_time' => $startTime, // Fecha y hora combinada
-                    'duration' => 30, // Duración fija o ajustable si es necesario
+                    'duration' => 60, // Duración fija o ajustable si es necesario
                     'settings' => [
                         'join_before_host' => true,
                         'mute_upon_entry' => true,
