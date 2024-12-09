@@ -320,4 +320,4 @@ Route::post('/create-meeting', [MeetingController::class, 'createMeeting']);
 
 
     //ruta para la reunion por zoom 
-    Route::post('/create-zoom-meeting', [ZoomController::class, 'createMeeting']);
+    Route::post('/create-zoom-meeting/{id}', [ZoomController::class, 'createMeeting']);
