@@ -310,7 +310,7 @@ Route::post('/create-meeting', [MeetingController::class, 'createMeeting']);
 
 
     Route::post('/react/{id}/react', [QuestionController::class, 'toggleLike']);
-    Route::get('/reactions/{id}/reactions', [QuestionController::class, 'getLikes'])->name('api.v1.slikes.show');
+    //Route::get('/reactions/{id}/reactions', [QuestionController::class, 'getLikes'])->name('api.v1.slikes.show');
 
 
     Route::get('/likes/{question_id}', [LikeController::class, 'getLikes']);
