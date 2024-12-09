@@ -55,7 +55,8 @@ class ConsultingController extends Controller
 
         return response()->json([
             'message' => 'Asesoría creada con éxito.',
-            'consulting' => $consulting
+            'consulting' => $consulting,
+            'zoom_url' => $consulting->zoom_url // Incluye el enlace de Zoom
         ], 201);
     }
 
