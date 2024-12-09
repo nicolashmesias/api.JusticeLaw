@@ -222,7 +222,7 @@ Route::delete('consultings/{consulting}', [ConsultingController::class, 'destroy
 
 
 Route::get('reviews',[ReviewController::class,'index'])->name('api.v1.reviews.index');
-Route::post('reviews',[ReviewController::class,'store'])->name('api.v1.reviews.store');
+//Route::post('reviews',[ReviewController::class,'store'])->name('api.v1.reviews.store');
 Route::get('reviews/{review}',[ReviewController::class,'show'])->name('api.v1.rivews.show');
 Route::put('reviews/{rivew}',[ReviewController::class,'update'])->name('api.v1.rivews.update');
 Route::delete('reviews/{review}',[ReviewController::class,'destroy'])->name('api.v1.rivews.delete');
