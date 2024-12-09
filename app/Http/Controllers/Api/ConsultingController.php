@@ -61,44 +61,45 @@ class ConsultingController extends Controller
     // }
 
     public function store(Request $request)
-    {
-        // Validar los datos recibidos
-        $validated = $request->validate([
-            'date' => 'required|date',
-            'zoom_url'=> 'required|date',
-            'time' => 'required',
-            'answer_id' => 'required|exists:answers,id',
-            'question_id' => 'required|exists:questions,id',
-        ]);
+{
+    // Validar los datos recibidos
+    $validated = $request->validate([
+        'date' => 'required|date',
+        'time' => 'required',
+        'question_id' => 'required|exists:questions,id',
+        'answer_id' => 'required|exists:answers,id',
+        'zoom_url' => 'nullable|url', // Cambiado a "nullable|url" en lugar de "date"
+    ]);
 
-        // Obtener el lawyer_id asociado al answer_id
-        $answer = Answer::findOrFail($validated['answer_id']);
-        $lawyerId = $answer->lawyer_id;
+    // Obtener el lawyer_id asociado al answer_id
+    $answer = Answer::findOrFail($validated['answer_id']);
+    $lawyerId = $answer->lawyer_id;
 
-        // Obtener la disponibilidad correspondiente
-        $date = Date::where('date', $validated['date'])
-                    ->where('startTime', $validated['time'])
-                    ->where('lawyer_id', $lawyerId)
-                    ->firstOrFail();
+    // Obtener la disponibilidad correspondiente
+    $date = Date::where('date', $validated['date'])
+                ->where('startTime', $validated['time'])
+                ->where('lawyer_id', $lawyerId)
+                ->firstOrFail();
 
-        // Guardar la consulta
-        $consulting = Consulting::create([
-            'date' => $validated['date'],
-            'zoom_url'=>$validated['zoom_url'],
-            'time' => $validated['time'],
-            'answer_id' => $validated['answer_id'],
-            'question_id' => $validated['question_id']
-        ]);
+    // Guardar la consulta
+    $consulting = Consulting::create([
+        'date' => $validated['date'],
+        'time' => $validated['time'],
+        'question_id' => $validated['question_id'],
+        'answer_id' => $validated['answer_id'],
+        'zoom_url' => $validated['zoom_url'] ?? null, // Asignar si está disponible
+    ]);
 
-        // Actualizar el estado de la disponibilidad
-        $date->update(['state' => 'Agendada']);
+    // Actualizar el estado de la disponibilidad
+    $date->update(['state' => 'Agendada']);
 
-        return response()->json([
-            'message' => 'Asesoría creada con éxito.',
-            'consulting' => $consulting,
-            'zoom_url' => $consulting->zoom_url // Incluye el enlace de Zoom
-        ], 201);
-    }
+    return response()->json([
+        'message' => 'Asesoría creada con éxito.',
+        'consulting' => $consulting,
+        'zoom_url' => $consulting->zoom_url // Incluye el enlace de Zoom
+    ], 201);
+}
+
 
 
 
