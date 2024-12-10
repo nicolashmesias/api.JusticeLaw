@@ -69,6 +69,17 @@ class ZoomController extends Controller
         ];
 
         return JWT::encode($payload, env('ZOOM_API_SECRET'), 'HS256'); // Firma con la clave secreta
+        
+    }
+
+    // Ruta para obtener el token JWT de Zoom
+    public function getZoomJwtToken()
+    {
+        // Generar el token JWT de Zoom
+        $zoomJwtToken = $this->generarTokenZoom();
+
+        // Retornar el token JWT al frontend
+        return response()->json(['zoomJwtToken' => $zoomJwtToken]);
     }
 
 }

@@ -321,3 +321,4 @@ Route::post('/create-meeting', [MeetingController::class, 'createMeeting']);
 
     //ruta para la reunion por zoom 
     Route::post('create-zoom-meeting/{consultingId}', [ZoomController::class, 'createMeeting']);
+    Route::get('/zoom-token', [ZoomController::class, 'getZoomJwtToken']);
