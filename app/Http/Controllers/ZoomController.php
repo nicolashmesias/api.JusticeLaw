@@ -51,8 +51,8 @@ class ZoomController extends Controller
                 'zoom_url' => $data['join_url'],
                 'consulting' => $consulting, // Opcional: para más contexto en la respuesta
             ]);
-        } catch (\Exception $e) {
-            Log::error("Error al crear la reunión de Zoom: " . $e->getMessage());
+        } catch (\GuzzleHttp\Exception\RequestException $e) {
+            Log::error("Error en la solicitud a Zoom: " . $e->getMessage());
             return response()->json(['error' => 'Error al crear la reunión de Zoom'], 500);
         }
     }
