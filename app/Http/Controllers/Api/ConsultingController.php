@@ -117,8 +117,13 @@ class ConsultingController extends Controller
         // Si la reunión no se creó correctamente
         return response()->json(['error' => 'No se pudo crear la reunión de Zoom'], 500);
 
-    } catch (\Exception $e) {
-        Log::error('Error al crear reunión de Zoom: ' . $e->getMessage());
+    } catch (\GuzzleHttp\Exception\RequestException $e) {
+        Log::error("Error en la solicitud a Zoom: " . $e->getMessage());
+        if ($e->hasResponse()) {
+            $responseBody = $e->getResponse()->getBody();
+            Log::error('Respuesta de error de Zoom: ' . $responseBody);
+            Log::error('Código de respuesta: ' . $e->getResponse()->getStatusCode());
+        }
         return response()->json(['error' => 'No se pudo crear la reunión de Zoom'], 500);
     }
 }
