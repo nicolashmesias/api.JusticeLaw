@@ -19,7 +19,7 @@ class ZoomController extends Controller
             $consulting = Consulting::findOrFail($consultingId);
 
             // Construir la fecha y hora de inicio en formato ISO 8601
-            $startTime = Carbon::parse($consulting->date . ' ' . $consulting->time)->toIso8601String();
+            $startTime = Carbon::parse($consulting->date . ' ' . $consulting->time)->toAtomString();
 
             // Crear la reunión en Zoom
             $client = new Client();
@@ -32,7 +32,7 @@ class ZoomController extends Controller
                     'topic' => 'Asesoría Legal',
                     'type' => 2, // Reunión programada
                     'start_time' => $startTime, // Fecha y hora combinada
-                    'duration' => 60, // Duración fija o ajustable si es necesario
+                    'duration' => 30, // Duración fija o ajustable si es necesario
                     'settings' => [
                         'join_before_host' => true,
                         'mute_upon_entry' => true,
@@ -53,6 +53,9 @@ class ZoomController extends Controller
             ]);
         } catch (\GuzzleHttp\Exception\RequestException $e) {
             Log::error("Error en la solicitud a Zoom: " . $e->getMessage());
+            if ($e->hasResponse()) {
+                Log::error('Respuesta de error de Zoom: ' . $e->getResponse()->getBody());
+            }
             return response()->json(['error' => 'Error al crear la reunión de Zoom'], 500);
         }
     }
