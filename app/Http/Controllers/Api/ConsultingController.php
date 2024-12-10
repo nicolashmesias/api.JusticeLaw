@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\ZoomController;
 use App\Models\Consulting;
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
 use App\Models\Date;
 use App\Services\GoogleCalendarService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ConsultingController extends Controller
 {
@@ -61,44 +63,67 @@ class ConsultingController extends Controller
     // }
 
     public function store(Request $request)
-    {
-        // Validar los datos recibidos
-        $validated = $request->validate([
-            'date' => 'required|date',
-            'time' => 'required',
-            'question_id' => 'required|exists:questions,id',
-            'answer_id' => 'required|exists:answers,id',
-            'zoom_url' => 'nullable|url', // Enlace de Zoom opcional
-        ]);
+{
+    // Validar los datos recibidos
+    $validated = $request->validate([
+        'date' => 'required|date',
+        'time' => 'required',
+        'question_id' => 'required|exists:questions,id',
+        'answer_id' => 'required|exists:answers,id',
+        'zoom_url' => 'nullable|url', // Enlace de Zoom opcional
+    ]);
 
-        // Obtener el lawyer_id asociado al answer_id
-        $answer = Answer::findOrFail($validated['answer_id']);
-        $lawyerId = $answer->lawyer_id;
+    // Obtener el lawyer_id asociado al answer_id
+    $answer = Answer::findOrFail($validated['answer_id']);
+    $lawyerId = $answer->lawyer_id;
 
-        // Validar la disponibilidad del abogado
-        $date = Date::where('date', $validated['date'])
-            ->where('startTime', $validated['time'])
-            ->where('lawyer_id', $lawyerId)
-            ->firstOrFail();
+    // Validar la disponibilidad del abogado
+    $date = Date::where('date', $validated['date'])
+        ->where('startTime', $validated['time'])
+        ->where('lawyer_id', $lawyerId)
+        ->firstOrFail();
 
-        // Guardar la consulta
-        $consulting = Consulting::create([
-            'date' => $validated['date'],
-            'time' => $validated['time'],
-            'question_id' => $validated['question_id'],
-            'answer_id' => $validated['answer_id'],
-            'zoom_url' => $validated['zoom_url'] ?? null,
-        ]);
+    // Guardar la consulta
+    $consulting = Consulting::create([
+        'date' => $validated['date'],
+        'time' => $validated['time'],
+        'question_id' => $validated['question_id'],
+        'answer_id' => $validated['answer_id'],
+        'zoom_url' => $validated['zoom_url'] ?? null,
+    ]);
 
-        // Actualizar el estado de la disponibilidad
-        $date->update(['state' => 'Agendada']);
+    // Actualizar el estado de la disponibilidad
+    $date->update(['state' => 'Agendada']);
 
-        return response()->json([
-            'message' => 'Asesoría creada con éxito.',
-            'consulting' => $consulting,
-            'zoom_url' => $consulting->zoom_url, // Incluye el enlace de Zoom
-        ], 201);
+    // Llamada al método para crear la reunión de Zoom
+    try {
+        // Crear una instancia del controlador de Zoom
+        $zoomController = new ZoomController();
+        // Llamar al método createMeeting y pasar el ID de la consulta
+        $zoomResponse = $zoomController->createMeeting($consulting->id);
+
+        // Si la reunión fue creada con éxito, se obtiene el zoom_url
+        if (isset($zoomResponse->original['zoom_url'])) {
+            // Actualizar el zoom_url en la base de datos
+            $consulting->update(['zoom_url' => $zoomResponse->original['zoom_url']]);
+
+            return response()->json([
+                'message' => 'Asesoría creada con éxito.',
+                'consulting' => $consulting,
+                'zoom_url' => $zoomResponse->original['zoom_url'], // Incluye el enlace de Zoom
+            ], 201);
+        }
+
+        // Si la reunión no se creó correctamente
+        return response()->json(['error' => 'No se pudo crear la reunión de Zoom'], 500);
+
+    } catch (\Exception $e) {
+        Log::error('Error al crear reunión de Zoom: ' . $e->getMessage());
+        return response()->json(['error' => 'No se pudo crear la reunión de Zoom'], 500);
     }
+}
+
+    
 
     public function getUserQuestionsWithAnswers(Request $request)
     {
